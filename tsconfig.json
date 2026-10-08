@@ -1,0 +1,57 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "docs",
+    "tools",
+    ".agents",
+    "src/components/CartaLista.tsx",
+    "src/components/cotizador",
+    "src/components/Estimador.tsx",
+    "src/components/PaqueteCard.tsx",
+    "src/data/carta.ts",
+    "src/data/carta-real.ts",
+    "src/data/carta-propuesta.ts",
+    "src/data/insumos.ts",
+    "src/data/negocio.ts",
+    "src/data/paquetes.ts",
+    "src/lib/costos.ts",
+    "src/lib/supuestos.ts",
+    "src/lib/diagnostico.ts"
+  ]
+}

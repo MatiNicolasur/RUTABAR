@@ -1,0 +1,450 @@
+/* ==========================================================================
+   Cotizador rápido: tres preguntas a la izquierda, el número a la derecha.
+   El precio nunca se esconde: aparece desde el primer render y solo se mueve
+   cuando el visitante mueve algo.
+   ========================================================================== */
+
+.est {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .est {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+}
+
+/* --- Preguntas ------------------------------------------------------------ */
+
+.est__preguntas {
+  display: grid;
+  gap: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+.est__campo {
+  display: grid;
+  gap: 0.75rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.est__etiqueta {
+  padding: 0;
+  font-family: var(--fuente-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.est__chips {
+  display: grid;
+  gap: 0.55rem;
+}
+
+@media (min-width: 40rem) {
+  .est__chips {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.est__chip {
+  display: grid;
+  gap: 0.2rem;
+  align-content: start;
+  padding: clamp(0.9rem, 2vw, 1.15rem);
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    border-color var(--m-dur-1) var(--m-ease-out),
+    background-color var(--m-dur-1) var(--m-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .est__chip:hover {
+    border-color: var(--rojo);
+  }
+}
+
+.est__chip[aria-pressed='true'] {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.06);
+}
+
+.est__chipTitulo {
+  font-family: var(--fuente-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.est__chipDetalle {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+  text-wrap: pretty;
+}
+
+.est__chip--compacto {
+  padding: 0.75rem 0.9rem;
+}
+
+/* --- Invitados ------------------------------------------------------------ */
+
+.est__valor {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.est__numero {
+  font-family: var(--fuente-display);
+  font-size: clamp(2.1rem, 4.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--rojo);
+  font-variant-numeric: tabular-nums;
+}
+
+.est__unidad {
+  font-size: var(--texto-menudo);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.est__rango {
+  width: 100%;
+  accent-color: var(--rojo);
+}
+
+.est__atajos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.est__atajo {
+  padding: 0.42rem 0.9rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-pastilla);
+  background: transparent;
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    border-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out);
+}
+
+.est__atajo[aria-pressed='true'] {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.08);
+  color: var(--rojo);
+}
+
+/* --- Horas ---------------------------------------------------------------- */
+
+.est__horas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.est__hora {
+  padding: 0.85rem 0.5rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  font-family: var(--fuente-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    border-color var(--m-dur-1) var(--m-ease-out),
+    background-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out);
+}
+
+.est__hora[aria-pressed='true'] {
+  border-color: var(--rojo);
+  background: var(--rojo);
+  color: var(--sobre-rojo);
+}
+
+.est__nota,
+.est__letra {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+/* --- Resultado ------------------------------------------------------------ */
+
+.est__resultado {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  padding: clamp(1.35rem, 3.5vw, 2.25rem);
+  border: 1px solid rgb(198 0 21 / 0.3);
+  border-radius: var(--radio-suave);
+  background: linear-gradient(180deg, rgb(198 0 21 / 0.06), rgb(198 0 21 / 0.015));
+  position: sticky;
+  inset-block-start: 7rem;
+}
+
+@media (max-width: 61.99rem) {
+  .est__resultado {
+    position: static;
+  }
+}
+
+.est__paquete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  font-family: var(--fuente-display);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.est__paqueteDato {
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.est__precio {
+  font-family: var(--fuente-display);
+  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--rojo);
+  font-variant-numeric: tabular-nums;
+}
+
+.est__precioNota {
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+}
+
+.est__aviso {
+  margin-block-start: 0.2rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgb(138 101 32 / 0.35);
+  border-inline-start-width: 3px;
+  border-radius: var(--radio);
+  background: rgb(138 101 32 / 0.06);
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+.est__datos {
+  display: grid;
+  gap: 0.55rem;
+  padding-block: 0.9rem;
+  border-block: 1px solid var(--papel-borde);
+}
+
+.est__datos > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.est__datos dt {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.est__datos dd {
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+/* --- Modalidad: aparece recién con el precio a la vista ------------------- */
+
+.est__modalidad {
+  display: grid;
+  gap: 0.7rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.est__chips--modalidad {
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+
+.est__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-block-start: 0.15rem;
+}
+
+.est__cambiar {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rojo);
+  font: inherit;
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.est__alternativa {
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* --- Sobre el rojo de marca ----------------------------------------------
+ *
+ * El cotizador vive en la única sección roja de la página, así que sus
+ * tarjetas no pueden ser blancas con texto de tinta: heredan el color claro
+ * del contenedor y el texto desaparece. Acá las tarjetas se quedan blancas
+ * —es lo que las hace leer como algo que se puede tocar— pero fuerzan tinta
+ * oscura adentro, y todo lo que va suelto sobre el rojo pasa a crema.
+ */
+
+.seccion--rojo .est__etiqueta {
+  color: var(--sobre-rojo);
+}
+
+.seccion--rojo .est__chip,
+.seccion--rojo .est__hora {
+  background: #fffbfa;
+  border-color: transparent;
+  color: var(--tinta);
+}
+
+.seccion--rojo .est__chip[aria-pressed='true'] {
+  border-color: var(--crema);
+  background: var(--crema);
+}
+
+.seccion--rojo .est__chipTitulo {
+  color: var(--tinta);
+}
+
+.seccion--rojo .est__chipDetalle {
+  color: var(--texto-suave);
+}
+
+.seccion--rojo .est__hora[aria-pressed='true'] {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--sobre-rojo);
+}
+
+.seccion--rojo .est__atajo {
+  border-color: var(--borde-rojo);
+  color: var(--sobre-rojo);
+}
+
+.seccion--rojo .est__atajo[aria-pressed='true'] {
+  border-color: var(--crema);
+  background: var(--crema);
+  color: var(--rojo-hondo);
+}
+
+.seccion--rojo .est__numero {
+  color: var(--crema);
+}
+
+.seccion--rojo .est__unidad,
+.seccion--rojo .est__nota,
+.seccion--rojo .est__letra,
+.seccion--rojo .est__precioNota,
+.seccion--rojo .est__alternativa {
+  color: var(--sobre-rojo-suave);
+}
+
+.seccion--rojo .est__resultado {
+  border-color: var(--borde-rojo);
+  background: rgb(255 245 244 / 0.07);
+}
+
+.seccion--rojo .est__paquete {
+  color: var(--sobre-rojo);
+}
+
+.seccion--rojo .est__paqueteDato {
+  color: var(--sobre-rojo-tenue);
+}
+
+.seccion--rojo .est__precio {
+  color: var(--crema);
+}
+
+.seccion--rojo .est__aviso {
+  border-color: rgb(255 227 228 / 0.35);
+  background: rgb(255 227 228 / 0.1);
+  color: var(--sobre-rojo-suave);
+}
+
+.seccion--rojo .est__datos {
+  border-block-color: var(--borde-rojo);
+}
+
+.seccion--rojo .est__datos dt {
+  color: var(--sobre-rojo-tenue);
+}
+
+.seccion--rojo .est__datos dd {
+  color: var(--sobre-rojo);
+}
+
+.seccion--rojo .est__cambiar {
+  color: var(--crema);
+}
+
+/* La modalidad entra con una máscara, no con opacidad: el precio que ya está
+ * en pantalla no se mueve ni un píxel cuando aparece la pregunta. */
+@media (prefers-reduced-motion: no-preference) {
+  .est__modalidad,
+  .est__acciones {
+    animation: est-entrar var(--m-dur-3) var(--m-ease-out) both;
+  }
+}
+
+@keyframes est-entrar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--m-lift) * 0.5), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

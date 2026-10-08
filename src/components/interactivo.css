@@ -1,0 +1,475 @@
+/* ==========================================================================
+   Componentes interactivos: carta filtrable y selector de servicios.
+   Todo el movimiento es CSS; el JavaScript solo cambia estado.
+   ========================================================================== */
+
+/* --- Carta filtrable ------------------------------------------------------ */
+
+/* La carta va dentro de un marco: un papel con su borde y su sombra suave, como
+ * la carta impresa que estaría sobre la barra. Es lo que la separa de ser una
+ * lista más sobre el fondo. */
+.carta-marco {
+  padding: clamp(1.25rem, 3.5vw, 2.5rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  box-shadow: 0 26px 60px -44px rgb(19 19 17 / 0.5);
+}
+
+.carta-int {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.carta-int__barra {
+  display: grid;
+  gap: 0.75rem;
+  padding-block-end: clamp(0.75rem, 2vw, 1.25rem);
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.carta-int__familias,
+.carta-int__perfiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.carta-int__tab {
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-pastilla);
+  background: transparent;
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    border-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out);
+}
+
+.carta-int__tab[aria-pressed='true'] {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--sobre-rojo);
+}
+
+.carta-int__chip {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-pastilla);
+  background: transparent;
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  cursor: pointer;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    border-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out);
+}
+
+.carta-int__chip[aria-pressed='true'] {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.08);
+  color: var(--rojo);
+}
+
+.carta-int__cuenta {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+.carta-lista {
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+/* Dos columnas en escritorio.
+ *
+ * La carta son 17 tragos: en una sola columna hay que recorrer más de dos
+ * pantallas para verla entera. Con dos columnas el recorrido se parte a la
+ * mitad sin perder el orden, porque el corte es por fila de rejilla.
+ *
+ * Cada trago lleva su propio filete arriba en vez de que lo ponga el
+ * contenedor: con dos columnas, un filete de contenedor dejaría la línea
+ * cortada justo en el medio. */
+@media (min-width: 62rem) {
+  .carta-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.75rem, 4.5vw, 4rem);
+    border-block-start: 0;
+  }
+
+  .carta-lista .trago {
+    border-block-start: 1px solid var(--papel-borde);
+    border-block-end: 0;
+  }
+}
+
+/* El filtrado lo hace el CSS: los tragos llegan renderizados desde el
+ * servidor y acá solo se ocultan los que no corresponden. Así los 35 iconos
+ * de marca nunca entran al bundle del navegador. */
+.carta-int[data-familia='con-alcohol'] .trago:not([data-familia='con-alcohol']),
+.carta-int[data-familia='sin-alcohol'] .trago:not([data-familia='sin-alcohol']),
+.carta-int[data-perfil='burbujeante'] .trago:not([data-perfil='burbujeante']),
+.carta-int[data-perfil='citrico'] .trago:not([data-perfil='citrico']),
+.carta-int[data-perfil='dulce'] .trago:not([data-perfil='dulce']),
+.carta-int[data-perfil='seco'] .trago:not([data-perfil='seco']),
+.carta-int[data-perfil='herbal'] .trago:not([data-perfil='herbal']) {
+  display: none;
+}
+
+.trago {
+  display: grid;
+  grid-template-columns: clamp(5rem, 18vw, 7.5rem) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: clamp(1.15rem, 2.6vw, 1.6rem);
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.trago__foto {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: clip;
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+}
+
+.trago__parallax {
+  inset-block: -1rem;
+}
+
+.trago__fotoImagen {
+  object-fit: cover;
+}
+
+.trago__icono {
+  color: var(--rojo);
+  padding-block-start: 0.1rem;
+}
+
+.trago__cuerpo {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.trago__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+}
+
+.trago__nombre {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.15rem, 1.9vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.trago__base {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.trago__descripcion {
+  max-width: 68ch;
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+.trago__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-start: 0.15rem;
+}
+
+.trago__ficha {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+}
+
+.trago__pendiente {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-start: 0.35rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgb(138 101 32 / 0.35);
+  border-inline-start-width: 3px;
+  border-radius: var(--radio);
+  background: rgb(138 101 32 / 0.06);
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* --- Tipos de evento ------------------------------------------------------ */
+
+.serv-int {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.serv-int__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.serv-int__card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 0.65rem;
+  min-height: 100%;
+  padding: clamp(1.1rem, 2.2vw, 1.5rem);
+  overflow: hidden;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  box-shadow: 0 10px 26px -26px rgb(19 19 17 / 0.45);
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.serv-int__card::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rojo), var(--rosa));
+  content: '';
+  transform: scaleX(0.22);
+  transform-origin: left;
+  transition: transform 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .serv-int__card:hover {
+    border-color: var(--rojo);
+    box-shadow: 0 18px 38px -27px rgb(138 0 25 / 0.38);
+    transform: translateY(-3px);
+  }
+
+  .serv-int__card:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+.serv-int__cardIcono {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  color: var(--rojo);
+}
+
+.serv-int__card .micro {
+  margin-block-start: 0.4rem;
+}
+
+.serv-int__cardTitulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.serv-int__cardGancho {
+  color: var(--rojo-hondo);
+  font-size: var(--texto-menudo);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.serv-int__cardTexto {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.serv-int__comun {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+}
+
+@media (min-width: 40rem) {
+  .serv-int__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 62rem) {
+  .serv-int__cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.serv-int__ficha {
+  display: grid;
+  gap: 0.7rem;
+  padding-block: clamp(0.7rem, 2vw, 1.05rem);
+  border-block: 1px solid var(--papel-borde);
+}
+
+.serv-int__ficha > div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.serv-int__ficha dt {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.serv-int__ficha dd {
+  text-wrap: pretty;
+}
+
+@media (min-width: 40rem) {
+  .serv-int__ficha {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .serv-int__card,
+  .serv-int__card::before {
+    transition: none;
+  }
+}
+
+/* --- Complementos de la carta pública ------------------------------------ */
+.carta-publica {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+.carta-publica__bebidas,
+.carta-publica__alternativas {
+  display: grid;
+  gap: 1rem;
+}
+
+.carta-publica__bebidas h2,
+.carta-publica__alternativas h2 {
+  font-family: var(--fuente-display);
+  font-size: var(--texto-h3);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.carta-publica__etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0;
+  list-style: none;
+}
+
+.carta-publica__etiquetas li {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-pastilla);
+  background: var(--papel-hondo);
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+}
+
+.carta-publica__opciones {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.carta-publica__opcion {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 1rem;
+  border-block-start: 2px solid var(--rojo);
+  background: var(--papel-hondo);
+}
+
+.carta-publica__opcion h3 {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.carta-publica__opcion > p:last-child {
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+  text-wrap: pretty;
+}
+
+@media (min-width: 40rem) {
+  .carta-publica__opciones {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.serv-int__paquetes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.serv-int__paquetes a {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.4em 0.85em;
+  border: 1px solid rgb(198 0 21 / 0.35);
+  border-radius: var(--radio-pastilla);
+  color: var(--rojo);
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out);
+}
+
+.serv-int__paquetes a span {
+  font-size: var(--texto-micro);
+  font-weight: 500;
+  color: var(--texto-tenue);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .serv-int__paquetes a:hover {
+    background: var(--rojo);
+    color: var(--sobre-rojo);
+  }
+
+  .serv-int__paquetes a:hover span {
+    color: rgb(255 245 244 / 0.8);
+  }
+}

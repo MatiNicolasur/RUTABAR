@@ -1,0 +1,38 @@
+node_modules
+.next/
+out/
+build/
+.vercel/
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+
+# Caché local de paquetes (el HOME puede no ser escribible en este entorno)
+.npm-cache/
+.pnpm-store/
+
+# Capturas de revisión visual y perfil temporal de Chrome
+capturas/
+.chrome-*/
+
+# Material de trabajo interno que no se publica con el sitio comercial
+.agents/
+branding/
+Copia de branding/
+docs/
+tools/
+src/components/cotizador/
+src/components/CartaLista.tsx
+src/components/Estimador.tsx
+src/components/PaqueteCard.tsx
+src/data/carta.ts
+src/data/carta-real.ts
+src/data/carta-propuesta.ts
+src/data/insumos.ts
+src/data/negocio.ts
+src/data/paquetes.ts
+src/lib/costos.ts
+src/lib/supuestos.ts
+src/lib/diagnostico.ts

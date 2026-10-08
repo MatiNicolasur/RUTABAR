@@ -1,0 +1,586 @@
+/* Hero con cortina sobre fotografía.
+ *
+ * Capas, de abajo hacia arriba:
+ *   0  foto
+ *   1  velo (degradado para dar contraste al texto)
+ *   2  cortina de columnas
+ *   3  contenido
+ *
+ * El contenido está por encima de la cortina a propósito: así el titular se
+ * pinta en el primer frame y el LCP no depende de que termine la animación.
+ */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: end;
+  min-height: min(100svh, 54rem);
+  padding-block: clamp(6rem, 16vh, 9rem) clamp(2.5rem, 7vh, 4.5rem);
+  overflow: clip;
+  background: var(--rojo-hondo);
+  color: var(--sobre-rojo);
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__foto {
+  object-fit: cover;
+  object-position: center 42%;
+}
+
+.hero__parallax,
+.hero2__parallax {
+  inset-block: -1rem;
+}
+
+/* El velo solo tiene que sostener el texto: un degradado desde abajo, no un
+ * oscurecido general que apague la foto. */
+.hero__velo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgb(19 19 17 / 0.46) 0%,
+    rgb(19 19 17 / 0.1) 24%,
+    rgb(19 19 17 / 0.5) 56%,
+    rgb(19 19 17 / 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+.hero__cortina {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--hero-segmentos, 6), 1fr);
+}
+
+.hero__panel {
+  display: block;
+  background: var(--rojo-hondo);
+  transform-origin: top center;
+  /* Un pelo de solape evita la costura de subpíxel entre columnas
+   * fraccionarias en pantallas que no son retina. */
+  margin-inline-end: -0.5px;
+}
+
+/* El contenido del hero son dos piezas: el texto y el dibujo de marca. En
+ * pantalla ancha van uno al lado del otro; en móvil el dibujo se va, porque el
+ * texto ocupa todo el ancho y superponerlos tapa el titular. */
+.hero__contenido {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  /* El texto se apoya abajo, como estaba; el dibujo se alinea con el titular y
+   * no con el pie, que es lo que lo dejaba encima de los botones. */
+  align-items: end;
+}
+
+.hero__texto {
+  display: grid;
+  gap: clamp(0.85rem, 2vh, 1.35rem);
+}
+
+.hero__figura {
+  display: none;
+  justify-self: end;
+  align-self: start;
+  /* El titular arranca más abajo que el borde superior del contenido: este
+   * margen alinea el dibujo con su primera línea, no con el kicker. */
+  margin-block-start: clamp(1.5rem, 5vh, 3.5rem);
+  color: var(--sobre-rojo);
+  line-height: 0;
+  /* Un resto de sombra para que el trazo se despegue de la foto cuando cae
+   * sobre una zona clara del jardín. */
+  filter: drop-shadow(0 8px 28px rgb(19 19 17 / 0.55));
+}
+
+@media (min-width: 62rem) {
+  .hero__contenido {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hero__figura {
+    display: block;
+    /* Grande y al costado del titular: acompaña al bloque de texto sin
+     * empujarlo. El tope en `rem` evita que en pantallas muy anchas se coma el
+     * titular. */
+    inline-size: clamp(14rem, 24vw, 26rem);
+  }
+}
+
+/* El dibujo hereda el tamaño del contenedor; el SVG del icono viene con su
+ * propio viewBox. */
+.hero__figura svg {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.hero__kicker {
+  margin: 0;
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sobre-rojo-suave);
+}
+
+.hero__titulo {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--fuente-display);
+  font-size: var(--texto-h1);
+  font-weight: 800;
+  line-height: 0.96;
+  letter-spacing: -0.042em;
+  text-wrap: balance;
+}
+
+.hero__linea {
+  display: block;
+  /* El relleno evita que el recorte se coma la cola de una "y" o una "q". */
+  padding-block: 0.06em;
+}
+
+.hero__lineaInt {
+  display: block;
+}
+
+.hero__mano {
+  margin: 0;
+  font-family: var(--fuente-mano);
+  font-size: clamp(1.7rem, 4vw, 3rem);
+  line-height: 1.1;
+  color: var(--crema);
+  transform: rotate(-1.6deg);
+  transform-origin: left center;
+}
+
+.hero__pie {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: end;
+  max-width: 44rem;
+  padding-block-start: clamp(0.75rem, 2vh, 1.35rem);
+  border-block-start: 1px solid var(--borde-rojo);
+}
+
+.hero__lead {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--texto-lead);
+  line-height: 1.58;
+  color: var(--sobre-rojo-suave);
+  text-wrap: pretty;
+}
+
+.hero__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* El botón fantasma del hero cae sobre la foto, no sobre papel: necesita el
+ * borde y el texto claros. Sin esto queda tinta oscura sobre una imagen oscura
+ * y desaparece. */
+.hero .boton--fantasma {
+  border-color: var(--borde-rojo);
+  color: var(--sobre-rojo);
+}
+
+.hero .boton--fantasma::before {
+  background: var(--sobre-rojo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero .boton--fantasma:hover {
+    color: var(--rojo-hondo);
+    border-color: var(--sobre-rojo);
+  }
+}
+
+.hero__nota {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--texto-menudo);
+  color: var(--sobre-rojo-tenue);
+  text-wrap: pretty;
+}
+
+@media (min-width: 60rem) {
+  .hero__pie {
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hero__acciones {
+    justify-content: flex-end;
+  }
+
+  .hero__nota {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------------------------------------------------------------- motion --
+ * El titular NO se anima: es el elemento de LCP y cualquier entrada lo
+ * retrasa. El movimiento lo cargan la cortina y el asentamiento de la foto,
+ * que es una sola idea ejecutada completa. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__foto {
+    /* La foto ya se está moviendo cuando sube la primera columna: los dos
+     * tiempos se solapan en vez de hacer cola. */
+    animation: hero-asentar 1200ms var(--m-ease-out) both;
+  }
+
+  .hero__panel {
+    animation: hero-subir 760ms var(--m-ease-inout) both;
+    animation-delay: calc(var(--i, 0) * 85ms);
+  }
+
+  .hero__paso {
+    animation: hero-entrar 720ms var(--m-ease-out) both;
+    animation-delay: calc(420ms + var(--i, 0) * var(--m-stagger-line));
+  }
+
+  .hero__cta {
+    animation: hero-entrar 720ms var(--m-ease-out) both;
+    animation-delay: calc(480ms + var(--i, 0) * var(--m-stagger-line));
+  }
+}
+
+/* No se acorta: se elimina. Una cortina más corta seguiría tapando la foto. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__cortina {
+    display: none;
+  }
+}
+
+@keyframes hero-subir {
+  from {
+    transform: scaleY(1);
+  }
+
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes hero-asentar {
+  from {
+    transform: scale(1.12);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-entrar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--m-lift), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Variante `retrato` — pieza gráfica de marca sobre rojo hondo.
+   No lleva texto de campaña ni botones: el hero es la marca. El único texto
+   visible es la frase dentro de la foto y la firma debajo. El titular de la
+   página existe, pero oculto, para que la portada tenga `h1`.
+
+   Capas, de abajo hacia arriba:
+     0  el dibujo de marca, gigante y centrado, en el rojo de marca
+     1  el rectángulo con la foto y la frase adentro
+     2  la firma, debajo del rectángulo
+   ========================================================================== */
+
+.hero--retrato {
+  --alto-cabecera: var(--cabecera-alto);
+  --alto-util: calc(100lvh - var(--alto-cabecera) - 4rem);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2.6vh, 2rem);
+  min-height: 100svh;
+  /* La cabecera se superpone al inicio; este espacio mantiene la pieza debajo
+   * de la navegación sin descubrir el fondo claro del body. */
+  padding-block: calc(var(--alto-cabecera) + 2rem) 2rem;
+  background: var(--rojo-hondo);
+  color: var(--sobre-rojo);
+  overflow: clip;
+}
+
+@media (min-width: 48rem) {
+  .hero--retrato {
+    --alto-cabecera: var(--cabecera-alto);
+  }
+}
+
+/* El dibujo, centrado y por detrás de todo. Al ser un rojo más claro que el
+ * fondo se lee como textura, pero a tamaño completo pesa demasiado: la opacidad
+ * lo manda al fondo sin que desaparezca.
+ *
+ * Va en `position: absolute` por una razón de layout, no de diseño: como ítem
+ * del flex aportaría su alto intrínseco —unos 330 px— y empujaría el contenido
+ * del hero más allá de la ventana. Al salir del flujo, el alto del hero lo
+ * deciden solo el marco y la cabecera, y el dibujo puede ser tan grande como
+ * haga falta. */
+.hero2__figura {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  z-index: 0;
+  color: var(--rojo);
+  opacity: 0.55;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.hero2__figura svg {
+  /* El dibujo es el fondo de la composición, no un adorno al lado: ocupa más
+   * que el ancho de la ventana a propósito, así el encuadre lo recorta por los
+   * costados y se lee como textura de fondo. */
+  inline-size: clamp(42rem, 148vw, 140rem);
+  block-size: auto;
+}
+
+/* --- El rectángulo ------------------------------------------------------- */
+
+.hero2__marco {
+  position: relative;
+  z-index: 2;
+  /* Estrecho y alto. El radio máximo lo redondea hasta los extremos, y si la
+   * caja se acerca al cuadrado el resultado deja de ser un rectángulo vertical
+   * y pasa a ser un círculo. La proporción es lo que sostiene la forma.
+   *
+   * Sin placa ni contorno: la pieza es la foto recortada, nada más. El borde
+   * semitransparente que había antes era un marco dentro del marco y le quitaba
+   * fuerza a la imagen. */
+  inline-size: min(86vw, 24rem);
+  /* Atado al alto disponible, no a un valor fijo: en una pantalla baja el marco
+   * se achica con ella y el hero sigue entrando completo. El tope en `rem` evita
+   * que en una pantalla muy alta el marco se estire más de lo que aguanta la
+   * foto. */
+  block-size: min(var(--alto-util, 42rem), 50rem);
+  border-radius: var(--radio-pastilla);
+  overflow: clip;
+  /* La sombra no es decoración: separa la pieza del fondo cuando el dibujo pasa
+   * justo por detrás y los dos rojos se tocan. */
+  box-shadow: 0 40px 90px -50px rgb(19 19 17 / 0.9);
+}
+
+.hero2__media {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--radio-pastilla);
+  overflow: clip;
+  background: var(--rojo-profundo);
+}
+
+/* La foto entra con poca opacidad: sobre el rojo de marca se lee como una
+ * impresión, no como una ventana. */
+.hero2__foto {
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0.62;
+}
+
+/* El bloque de texto, centrado y por encima del recorte.
+ *
+ * Centrado geométrico con una corrección hacia arriba: el centro óptico de un
+ * rectángulo se lee un poco por encima del centro matemático, así que el texto
+ * exactamente en el medio parece caído. El 46% lo sube lo justo. */
+.hero2__texto {
+  position: absolute;
+  inset-block-start: 46%;
+  inset-inline: 0;
+  z-index: 1;
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.4rem, 1.4vh, 0.9rem);
+  padding-inline: 1.1rem;
+}
+
+/* La frase, centrada en la foto. Es el único texto que se lee en el hero, así
+ * que va grande —pero no tanto como para desbordar el marco. */
+.hero2__frase {
+  margin: 0;
+  max-inline-size: 12ch;
+  text-align: center;
+  font-family: var(--fuente-display);
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: var(--sobre-rojo);
+  text-shadow: 0 4px 30px rgb(19 19 17 / 0.85), 0 2px 8px rgb(19 19 17 / 0.6);
+}
+
+/* La palabra manuscrita dentro de la frase.
+ *
+ * Mairo es una tipografía de trazo: a tamaño de texto corrido pierde
+ * legibilidad, pero acá funciona como acento —una sola palabra— y es lo que
+ * ata la frase a la firma de abajo. Va un poco más grande que el resto porque
+ * su altura de x es menor y a igual cuerpo se lee más chica. */
+.hero2__movil {
+  font-family: var(--fuente-mano);
+  font-weight: 400;
+  font-size: 1.18em;
+  letter-spacing: 0.01em;
+  color: var(--rosa);
+}
+
+/* La firma, debajo de la frase. Mairo a este tamaño es firma, no texto. */
+.hero2__firma {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1;
+  color: var(--crema);
+  text-shadow: 0 6px 30px rgb(19 19 17 / 0.7);
+}
+
+/* En móvil la pieza baja un punto de alto para entrar completa en el primer
+ * pantallazo, y la frase se achica con ella. */
+@media (max-width: 47.99rem) {
+  .hero2__marco {
+    /* En móvil el ancho admite más, pero el alto lo sigue mandando la pantalla. */
+    inline-size: min(80vw, 19rem);
+  }
+
+  .hero2__frase {
+    max-inline-size: 12ch;
+    font-size: clamp(1.35rem, 5.4vw, 1.75rem);
+  }
+}
+
+/* --- Entrada ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* La apertura es un círculo que no existe y se agranda hasta llenar el
+   * rectángulo. Arranca en un radio chico y visible —no en cero— porque un
+   * círculo de radio cero no se lee como "se abre", se lee como "no está".
+   *
+   * El remate lento lo da la curva, no la duración: `cubic-bezier(0.22, 1, 0.36, 1)`
+   * resuelve el grueso del recorrido en la primera mitad y dedica la segunda a
+   * los últimos centímetros. Alargar el total sin cambiar la curva solo hace
+   * que todo vaya más lento, que no es lo mismo. */
+  .hero2__media {
+    animation: hero2-abrir 2800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero2__figura {
+    animation: hero2-entrar 1400ms var(--m-ease-out) 300ms both;
+  }
+
+  /* La frase aparece cuando el círculo ya pasó de la mitad: la revela el propio
+   * recorte, no un fundido que compite con él. */
+  .hero2__frase {
+    animation: hero2-entrar 900ms var(--m-ease-out) 1150ms both;
+  }
+
+  .hero2__firma {
+    animation: hero2-firmar 1100ms var(--m-ease-out) 1700ms both;
+  }
+}
+
+/* Con movimiento reducido no hay apertura: la composición está puesta. */
+@media (prefers-reduced-motion: reduce) {
+  .hero2__media {
+    clip-path: none;
+  }
+
+  .hero2__figura {
+    opacity: 1;
+  }
+}
+
+@keyframes hero2-abrir {
+  /* Las dos puntas del recorrido van en la MISMA unidad.
+   *
+   * Este es el detalle que hacía que la animación se trabara: antes empezaba en
+   * `2.5rem` y pasaba por `58%`. Entre unidades distintas el navegador no
+   * interpola el radio, lo sustituye, y ese cambio se ve como un salto a mitad
+   * de camino. Con las dos en `rem`, el radio crece de forma continua.
+   *
+   * Una sola curva para todo el recorrido. El remate lento sale de la curva
+   * —que desacelera sola hasta el final— y no de un tramo extra en el medio,
+   * que era la otra mitad del problema. */
+  from {
+    clip-path: circle(1.5rem at 50% 50%);
+  }
+
+  to {
+    /* Tiene que cubrir las esquinas del rectángulo más alto que ancho: la
+     * mitad de la diagonal ronda los 350 px, así que 46rem sobra en cualquier
+     * pantalla. */
+    clip-path: circle(46rem at 50% 50%);
+  }
+}
+
+@keyframes hero2-entrar {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero2-firmar {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.4rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* La oferta y la cotización caben en el primer tramo de la portada. */
+.hero--retrato {
+  --alto-util: calc(100svh - 20rem);
+  min-height: 100svh;
+}
+.hero2__marco { block-size: clamp(17rem, var(--alto-util), 36rem); }
+.hero2__intro { position: relative; z-index: 2; max-inline-size: 42rem; padding-inline: var(--gutter); text-align: center; }
+.hero2__intro p { max-inline-size: 48ch; margin-inline: auto; line-height: 1.6; }
+.hero2__intro .fila { justify-content: center; margin-block-start: 1rem; }
+@media (max-width: 47.99rem) {
+  .hero--retrato { --alto-cabecera: var(--cabecera-alto); padding-block-start: 5rem; }
+  .hero2__marco { block-size: clamp(16rem, calc(100svh - 20rem), 28rem); }
+  .hero2__intro { font-size: 0.875rem; }
+}
+
+@media (max-width: 47.99rem) {
+  .hero2__frase { font-size: clamp(1.9rem, 8vw, 2.5rem); }
+}
+
+/* Fondo de marca al 110% del hero, desenfocado detrás de la foto. */
+.hero2__figura { inline-size: 110%; filter: blur(12px); opacity: 0.38; }
+.hero2__figura svg { inline-size: 100%; block-size: auto; }
+.hero2__foto { object-position: center 64%; }

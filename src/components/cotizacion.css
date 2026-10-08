@@ -1,0 +1,488 @@
+/* Cotizador público: tres pasos, primero una sola columna y controles táctiles. */
+.cotizacion-flujo {
+  display: grid;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  max-width: 56rem;
+  margin-inline: auto;
+}
+
+.cotizacion-flujo__progreso {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.cotizacion-flujo__paso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0.5rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  color: var(--texto-tenue);
+  font-size: clamp(0.66rem, 2.8vw, 0.8125rem);
+  line-height: 1.25;
+}
+
+.cotizacion-flujo__paso--activo {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.05);
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.cotizacion-flujo__numero {
+  display: grid;
+  width: 1.7rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--papel-hondo);
+  color: var(--rojo);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.cotizacion-flujo__paso--activo .cotizacion-flujo__numero {
+  background: var(--rojo);
+  color: var(--sobre-rojo);
+}
+
+.cotizacion-flujo__panel {
+  display: grid;
+  gap: clamp(1.1rem, 3vw, 1.6rem);
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  box-shadow: 0 18px 42px -34px rgb(19 19 17 / 0.5);
+}
+
+.cotizacion-flujo__encabezado {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.cotizacion-flujo__encabezado h2 {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.cotizacion-flujo__encabezado > p:last-child,
+.cotizacion-flujo__ayuda {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  text-wrap: pretty;
+}
+
+.cotizacion-flujo__campos {
+  display: grid;
+  gap: 1rem;
+}
+
+.cotizacion-flujo__campos .campo__input {
+  min-height: 3rem;
+  font-size: 1rem;
+}
+
+.cotizacion-flujo__selector {
+  display: grid;
+  gap: 0.65rem;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cotizacion-flujo__selector legend {
+  margin-block-end: 0.2rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.cotizacion-flujo__cartas {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.cotizacion-flujo__opcion,
+.cotizacion-flujo__duracion {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  min-height: 4rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-suave);
+  background: var(--papel);
+  cursor: pointer;
+}
+
+.cotizacion-flujo__opcion--activa,
+.cotizacion-flujo__duracion--activa {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.055);
+  box-shadow: inset 0 0 0 1px var(--rojo);
+}
+
+.cotizacion-flujo__opcion input,
+.cotizacion-flujo__duracion input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  accent-color: var(--rojo);
+  grid-row: span 2;
+}
+
+.cotizacion-flujo__opcion-titulo {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cotizacion-flujo__opcion-detalle {
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+}
+
+.cotizacion-flujo__horas {
+  max-width: 22rem;
+}
+
+.cotizacion-flujo__precio {
+  display: grid;
+  gap: 0.25rem;
+  padding: clamp(1rem, 4vw, 1.5rem);
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+}
+
+.cotizacion-flujo__total {
+  color: var(--rojo-hondo);
+  font-family: var(--fuente-display);
+  font-size: clamp(2.1rem, 8vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.cotizacion-flujo__por-persona {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.cotizacion-flujo__formula {
+  color: var(--texto-tenue);
+  font-size: var(--texto-micro);
+}
+
+.cotizacion-flujo__acciones,
+.cotizacion-flujo__envio {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.cotizacion-flujo__acciones .boton,
+.cotizacion-flujo__envio .boton {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.cotizacion-flujo__acciones--final {
+  justify-items: stretch;
+}
+
+.cotizacion-flujo__beneficio {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.cotizacion-flujo__beneficio input {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-block-start: 0.1rem;
+  accent-color: var(--rojo);
+}
+
+.cotizacion-flujo__error {
+  padding: 0.75rem 0.9rem;
+  border-inline-start: 3px solid var(--error);
+  background: rgb(140 47 42 / 0.07);
+  color: var(--error);
+  font-size: 0.88rem;
+}
+
+.cotizacion-flujo__resumen {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 1.4rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: var(--papel);
+}
+
+.cotizacion-flujo__resumen-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cotizacion-flujo__resumen-cabecera h3 {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.cotizacion-flujo__datos {
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.cotizacion-flujo__datos > div {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 0.7fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.65rem;
+  border-block-end: 1px solid var(--papel-borde);
+  font-size: 0.85rem;
+}
+
+.cotizacion-flujo__datos dt {
+  color: var(--texto-suave);
+}
+
+.cotizacion-flujo__datos dd {
+  font-weight: 600;
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+
+.cotizacion-flujo__montos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.cotizacion-flujo__montos > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border-radius: var(--radio);
+  background: #fff;
+}
+
+.cotizacion-flujo__montos span {
+  color: var(--texto-suave);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.cotizacion-flujo__montos strong {
+  font-size: clamp(0.88rem, 3.5vw, 1rem);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.cotizacion-flujo__montos > p {
+  grid-column: 1 / -1;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.cotizacion-flujo__nota-digital,
+.cotizacion-flujo__ayuda {
+  font-size: 0.82rem;
+}
+
+.cotizacion-flujo button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (min-width: 40rem) {
+  .cotizacion-flujo__campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cotizacion-flujo__cartas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cotizacion-flujo__opcion {
+    align-content: start;
+    min-height: 6rem;
+    padding: 0.8rem;
+  }
+
+  .cotizacion-flujo__acciones,
+  .cotizacion-flujo__envio--whatsapp {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    justify-content: end;
+  }
+
+  .cotizacion-flujo__envio:not(.cotizacion-flujo__envio--whatsapp) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cotizacion-flujo__acciones:not(.cotizacion-flujo__acciones--final) {
+    grid-template-columns: auto auto;
+  }
+
+  .cotizacion-flujo__acciones--final {
+    grid-template-columns: minmax(0, 15rem);
+    justify-items: end;
+  }
+
+  .cotizacion-flujo__acciones--final .boton {
+    width: 100%;
+  }
+}
+
+.cotizacion-flujo__exito {
+  position: relative;
+  display: grid;
+  min-height: 25rem;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(1.25rem, 5vw, 3rem);
+  border: 1px solid rgb(198 0 21 / 0.28);
+  border-radius: var(--radio-suave);
+  background: linear-gradient(135deg, #fffafa 0%, #fff0f1 44%, #ffc2c8 100%);
+  box-shadow: 0 24px 55px -42px rgb(115 0 18 / 0.5);
+}
+
+.cotizacion-flujo__confeti {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cotizacion-flujo__confeti-pieza {
+  position: absolute;
+  top: -1rem;
+  width: 0.58rem;
+  height: 1rem;
+  border-radius: 0.15rem;
+  opacity: 0;
+  animation: cotizacion-confeti-caida 2.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cotizacion-flujo__confeti-pieza--0 {
+  background: linear-gradient(145deg, #ffe2e5 0%, #ef5260 54%, #a40018 100%);
+}
+
+.cotizacion-flujo__confeti-pieza--1 {
+  width: 0.45rem;
+  height: 0.82rem;
+  background: linear-gradient(145deg, #fff3f4 0%, #ff8992 48%, #c60015 100%);
+}
+
+.cotizacion-flujo__confeti-pieza--2 {
+  width: 0.72rem;
+  height: 0.48rem;
+  background: linear-gradient(120deg, #fbb5bc 0%, #df1730 56%, #820014 100%);
+}
+
+.cotizacion-flujo__confeti-pieza--3 {
+  width: 0.42rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffccd1 0%, #e6293b 52%, #8a0019 100%);
+}
+
+.cotizacion-flujo__exito-contenido {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  width: min(100%, 36rem);
+  margin-inline: auto;
+}
+
+.cotizacion-flujo__exito-contenido .micro {
+  color: var(--rojo-hondo);
+}
+
+.cotizacion-flujo__exito-contenido .h2 {
+  max-width: 15ch;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 0.98;
+}
+
+.cotizacion-flujo__exito-contenido .lead {
+  color: #4b3336;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+}
+
+.cotizacion-flujo__exito-total {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgb(164 0 24 / 0.18);
+  border-radius: var(--radio);
+  background: rgb(255 255 255 / 0.74);
+}
+
+.cotizacion-flujo__exito-total span {
+  color: var(--texto-suave);
+  font-size: 0.84rem;
+}
+
+.cotizacion-flujo__exito-total strong {
+  color: var(--rojo-hondo);
+  font-family: var(--fuente-display);
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes cotizacion-confeti-caida {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -1rem, 0) rotate(0deg);
+  }
+
+  10% { opacity: 0.95; }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--confeti-deriva), 28rem, 0) rotate(var(--confeti-giro));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cotizacion-flujo__confeti-pieza {
+    animation: none;
+    opacity: 0.28;
+  }
+}

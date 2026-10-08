@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Confeti de iconos de marca sobre la foto de la carta.
+   Se dispara una vez, cuando la sección entra en pantalla, y los dibujos
+   quedan dispersos sobre la foto. Es decoración: no intercepta el puntero.
+   ========================================================================== */
+
+.confeti {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Cada pieza se posiciona contra la foto, no contra su propio tamaño: las
+ * unidades `cqw`/`cqh` son del contenedor. Es la diferencia entre un desparramo
+ * y ocho iconos apilados en el mismo lugar. */
+.confeti__pieza {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: var(--tam, 6cqw);
+  /* El desplazamiento se hace con `translate` sobre el punto de anclaje, así
+   * que hay que corregir el centro para que la posición declarada sea el centro
+   * de la pieza y no su esquina. */
+  margin-block-start: calc(var(--tam, 6cqw) * -0.6);
+  margin-inline-start: calc(var(--tam, 6cqw) * -0.5);
+  color: var(--sobre-rojo);
+  /* El trazo es blanco cálido y la foto tiene zonas claras: sin este halo los
+   * iconos desaparecen sobre el pasto iluminado. */
+  filter: drop-shadow(0 3px 10px rgb(19 19 17 / 0.6)) drop-shadow(0 0 2px rgb(19 19 17 / 0.45));
+  line-height: 0;
+  opacity: 0;
+  translate: var(--x, 0) var(--y, 0);
+  rotate: var(--giro, 0deg);
+}
+
+.confeti__pieza svg {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* El disparo lo provoca el revelado de la foto: cuando `Reveal` marca el
+   * contenedor como visible, la animación arranca. Así el confeti y la llegada
+   * de la foto son el mismo gesto y no dos que compiten. */
+  .ranura__media[data-visible='true'] .confeti__pieza {
+    animation: confeti-volar 900ms var(--m-ease-out) var(--retraso, 0ms) both;
+  }
+}
+
+/* Sin movimiento el adorno existe, pero ya puesto: no hay vuelo ni espera. */
+@media (prefers-reduced-motion: reduce) {
+  .confeti__pieza {
+    opacity: 1;
+  }
+}
+
+/* La entrada arranca 130 unidades de contenedor fuera del costado que le toca,
+ * que es siempre fuera de cuadro sin depender del ancho de la ventana. */
+@keyframes confeti-volar {
+  from {
+    opacity: 0;
+    translate: calc(var(--lado, 1) * 130cqw) var(--y, 0);
+    rotate: calc(var(--giro, 0deg) * 2.4);
+    scale: 0.55;
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    translate: var(--x, 0) var(--y, 0);
+    rotate: var(--giro, 0deg);
+    scale: 1;
+  }
+}
+
+/* En pantallas angostas el confeti taparía el texto del titular, así que se
+ * queda fuera: el efecto es un lujo de pantalla ancha, no un requisito. */
+@media (max-width: 61.99rem) {
+  .confeti {
+    display: none;
+  }
+}

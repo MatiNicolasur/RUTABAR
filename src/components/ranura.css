@@ -1,0 +1,126 @@
+/* ==========================================================================
+   Ranura: foto y texto, lado a lado.
+   Es el bloque con el que las fotos del branding se reparten por todo el
+   sitio. Cada medida fija una proporción, y la proporción fija el ancho: por
+   eso la foto nunca se estira a sangre ni se recorta en una franja.
+   ========================================================================== */
+
+.ranura {
+  position: relative;
+  padding-block: clamp(2.75rem, 7vh, 5.5rem);
+}
+
+/* La ilustración del estándar se apoya en el borde superior de esta foto. */
+.ranura__interior {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+/* --- Medidas -------------------------------------------------------------- */
+
+.ranura--retrato {
+  --r-ratio: 4 / 5;
+  --r-ancho: 28rem;
+}
+
+.ranura--cuadrado {
+  --r-ratio: 1 / 1;
+  --r-ancho: 25rem;
+}
+
+.ranura--paisaje {
+  --r-ratio: 5 / 4;
+  --r-ancho: 32rem;
+}
+
+.ranura--ancho {
+  --r-ratio: 16 / 10;
+  --r-ancho: 40rem;
+}
+
+/* --- Foto ----------------------------------------------------------------- */
+
+.ranura__media {
+  position: relative;
+  width: 100%;
+  max-width: var(--r-ancho, 28rem);
+  margin-inline: auto;
+  /* El recorte se hace dentro de la caja: la foto se adapta al formato en vez
+   * de que el formato se adapte a la foto. */
+  aspect-ratio: var(--r-ratio, 4 / 5);
+  overflow: clip;
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+  /* El confeti se posiciona con unidades del contenedor (`cqw`/`cqh`), así que
+   * la foto tiene que declararse contenedor. Sin esto las unidades no resuelven
+   * y las piezas quedan todas en el mismo punto. */
+  container-type: inline-size;
+}
+
+.ranura__foto {
+  object-fit: cover;
+  object-position: center 38%;
+}
+
+.ranura__parallax {
+  inset-block: -1rem;
+}
+
+/* --- Texto ---------------------------------------------------------------- */
+
+.ranura__cuerpo {
+  display: grid;
+  gap: 0.9rem;
+  align-content: center;
+  max-width: 36rem;
+}
+
+.ranura__titulo {
+  max-width: 22ch;
+}
+
+.ranura__mano {
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+  color: var(--rojo);
+  transform: rotate(-1.4deg);
+  transform-origin: left center;
+  justify-self: start;
+}
+
+.ranura__accion {
+  margin-block-start: 0.35rem;
+}
+
+/* --- Dos columnas --------------------------------------------------------- */
+
+@media (min-width: 62rem) {
+  .ranura__interior {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  }
+
+  .ranura--invertida .ranura__media {
+    order: 2;
+  }
+
+  /* En columna ancha la foto ocupa su columna, no su ancho natural: si no,
+   * quedaría un hueco entre la foto y el texto. */
+  .ranura__media {
+    max-width: none;
+  }
+}
+
+/* --- Sección oscura ------------------------------------------------------- */
+
+.ranura--tinta {
+  background: var(--tinta);
+  color: var(--sobre-rojo);
+}
+
+.ranura--tinta .micro {
+  color: var(--sobre-rojo-tenue);
+}
+
+.ranura--tinta .ranura__mano {
+  color: var(--rosa);
+}

@@ -1,0 +1,338 @@
+/* Cabecera y pie. El revelado al hacer scroll vive en globals.css. */
+
+/* --- Cabecera -------------------------------------------------------------
+ *
+ * Tres columnas: navegación, marca, acciones. La marca va al centro porque es
+ * la columna del medio, y el logo es lo primero en el DOM para que un lector de
+ * pantalla lo encuentre al entrar.
+ */
+
+.cabecera {
+  /* Un solo número manda sobre el alto de la cabecera y el tamaño del logo.
+   * El sello va deliberadamente grande: es la marca entera —isotipo y nombre
+   * en el mismo trazo— así que no necesita que nadie le escriba el nombre al
+   * lado. En móvil baja lo justo para que el botón de acción siga entrando. */
+  --marca: calc(var(--cabecera-alto) - 1.2rem - 1px);
+
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  background: rgb(255 251 250 / 0.9);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-block-end: 1px solid var(--papel-borde);
+  /* La transición es lo que hace que la cabecera se asiente en vez de saltar de
+   * un estado al otro al cruzar el pliegue. */
+  transition:
+    background-color var(--m-dur-3) var(--m-ease-out),
+    border-color var(--m-dur-3) var(--m-ease-out),
+    backdrop-filter var(--m-dur-3) var(--m-ease-out);
+}
+
+/* --- Sobre el hero --------------------------------------------------------
+ *
+ * Mientras la pieza de marca está en pantalla, la cabecera no tiene fondo ni
+ * filete: se mezcla con el rojo del hero y el sello va en blanco. Al salir el
+ * hero aparecen el fondo translúcido y el filete, y el sello vuelve al rojo.
+ */
+
+.cabecera[data-sobre-hero='true'] {
+  background: transparent;
+  backdrop-filter: none;
+  border-block-end-color: transparent;
+}
+
+.cabecera[data-sobre-hero='true'] .cabecera__sello {
+  color: #fff;
+  /* Sobre la foto el trazo blanco necesita un contorno tenue para no perderse
+   * en las zonas claras. */
+  filter: drop-shadow(0 2px 10px rgb(19 19 17 / 0.5));
+}
+
+.cabecera[data-sobre-hero='true'] .cabecera__enlace {
+  color: var(--sobre-rojo);
+  text-shadow: 0 1px 12px rgb(19 19 17 / 0.55);
+}
+
+.cabecera[data-sobre-hero='true'] .cabecera__menu summary {
+  border-color: rgb(255 245 244 / 0.45);
+  color: var(--sobre-rojo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cabecera[data-sobre-hero='true'] .cabecera__enlace:hover {
+    color: #fff;
+  }
+}
+
+/* Flex y no grid.
+ *
+ * Con grid de tres columnas, en móvil —donde la navegación no existe— la
+ * columna del medio colapsa y la marca queda pegada a la acción. Con flex los
+ * extremos se van a los bordes y lo que quede en el medio se centra solo, sin
+ * depender de cuántos hijos haya. */
+.cabecera__interior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding-block: 0.6rem;
+  min-height: calc(var(--marca) + 1.2rem);
+}
+
+.cabecera__marca {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.cabecera__sello {
+  color: var(--rojo);
+  flex-shrink: 0;
+  display: block;
+  width: var(--marca);
+  height: auto;
+  transition: transform var(--m-dur-3) var(--m-ease-back);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cabecera__marca:hover .cabecera__sello {
+    transform: rotate(-8deg) scale(1.06);
+  }
+}
+
+.cabecera__acciones {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-inline-start: auto;
+}
+
+.cabecera__nav {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+}
+
+.cabecera__enlace {
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  color: var(--texto-suave);
+  transition: color var(--m-dur-1) var(--m-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cabecera__enlace:hover {
+    color: var(--rojo);
+  }
+}
+
+.cabecera__enlace[aria-current='page'] {
+  color: var(--rojo);
+}
+
+.cabecera__cta {
+  padding: 0.7em 1.35em;
+  font-size: var(--texto-menudo);
+}
+
+/* A partir de 48rem entran los enlaces y la acción. Debajo de eso la cabecera
+ * se queda con lo esencial: la marca a la izquierda y el menú a la derecha. */
+@media (min-width: 62rem) {
+  .cabecera__nav {
+    display: flex;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .cabecera__cta {
+    display: inline-flex;
+    min-height: 44px;
+  }
+}
+
+/* La acción dentro del panel del menú: ocupa el ancho y se lee como el cierre
+ * de la lista, no como un ítem más. */
+.cabecera__menuCta {
+  margin-block-start: 0.35rem;
+  border-radius: var(--radio);
+  background: var(--rojo) !important;
+  color: var(--sobre-rojo) !important;
+  font-weight: 700 !important;
+  text-align: center;
+}
+
+/* El menú desplegable desaparece recién cuando ya hay ancho para los cuatro
+ * enlaces más la acción: si se esconde antes, la navegación queda sin lugar. */
+@media (min-width: 62rem) {
+  .cabecera__menu {
+    display: none;
+  }
+}
+
+.cabecera__menu {
+  position: relative;
+}
+
+.cabecera__menu summary {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.cabecera__menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.cabecera__menu[open] summary {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--sobre-rojo);
+}
+
+.cabecera__menuPanel {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + 0.6rem);
+  display: grid;
+  min-width: 12rem;
+  padding: 0.4rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: var(--papel);
+  box-shadow: 0 20px 44px -26px rgb(19 19 17 / 0.45);
+}
+
+.cabecera__menuPanel a {
+  padding: 0.62rem 0.75rem;
+  border-radius: var(--radio);
+  font-size: var(--texto-menudo);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cabecera__menuPanel a:hover {
+    background: var(--crema);
+    color: var(--rojo-hondo);
+  }
+}
+
+/* --- Pie ------------------------------------------------------------------ */
+
+.pie {
+  padding-block: clamp(3rem, 8vh, 5rem) 1.75rem;
+  background: var(--tinta);
+  color: var(--sobre-rojo);
+}
+
+.pie__interior {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 60rem) {
+  .pie__interior {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.7fr) minmax(0, 1.4fr);
+  }
+}
+
+.pie__marca {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  justify-items: start;
+}
+
+.pie__sello {
+  color: var(--rosa);
+  display: block;
+  width: clamp(4.5rem, 3rem + 5vw, 6.5rem);
+  height: auto;
+}
+
+.pie__bajada {
+  color: var(--sobre-rojo-suave);
+  font-size: var(--texto-menudo);
+}
+
+.pie__nav {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.pie__nav .micro,
+.pie__notas .micro {
+  color: var(--sobre-rojo-tenue);
+  margin-block-end: 0.3rem;
+}
+
+.pie__nav a {
+  font-size: var(--texto-menudo);
+  font-weight: 500;
+  color: var(--sobre-rojo-suave);
+  text-decoration: none;
+  justify-self: start;
+  /* Blanco táctil: con el interlineado del texto cada enlace medía 21px de
+   * alto. En el pie, que es donde más se toca desde el teléfono, eso queda por
+   * debajo del mínimo cómodo. */
+  display: inline-block;
+  padding-block: 0.5rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pie__nav a:hover {
+    color: var(--sobre-rojo);
+    text-decoration: underline;
+  }
+}
+
+.pie__notas {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  font-size: var(--texto-menudo);
+  color: var(--sobre-rojo-suave);
+  text-wrap: pretty;
+}
+
+.pie__notas a {
+  color: var(--crema);
+  /* Últimos blancos táctiles del pie que quedaban por debajo del mínimo. */
+  display: inline-block;
+  padding-block: 0.5rem;
+}
+
+.pie__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  justify-content: space-between;
+  margin-block-start: clamp(2.5rem, 6vh, 4rem);
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--borde-rojo);
+  font-size: var(--texto-micro);
+  color: var(--sobre-rojo-tenue);
+}
+
+.pie__legal a {
+  color: inherit;
+  /* Mismo motivo que en la navegación del pie: son enlaces que se tocan. */
+  display: inline-block;
+  padding-block: 0.45rem;
+}
+
+.cabecera__menu summary, .cabecera__menuPanel a { min-height: 44px; }
+
+.pie__legal p { max-inline-size: 70ch; }
+
+@media (min-width: 62rem) {
+  .cabecera__nav { flex: 1; }
+  .cabecera__acciones { margin-inline-start: 0; }
+}

@@ -1,0 +1,496 @@
+/* ==========================================================================
+   Carrusel de lugares, sistema del servicio y preguntas frecuentes.
+   Las tres piezas vienen de los sitios de referencia: una banda de fotos que
+   se recorre, la oferta abierta en piezas modulares, y el cierre de objeciones.
+   Ninguna usa JavaScript.
+   ========================================================================== */
+
+/* --- Carrusel de lugares --------------------------------------------------
+ *
+ * Scroll horizontal nativo con `scroll-snap`. La clave es que el ancho de cada
+ * pieza sea menor al del contenedor: así la siguiente se ve cortada y se
+ * entiende que hay más. Sin eso, un carrusel parece una foto y nadie lo mueve.
+ */
+
+.carrusel {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.carrusel__pista {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  margin: 0;
+  /* El sangrado va solo a la izquierda: la última pieza tiene que poder
+   * llegar al borde derecho sin quedar recortada por el padding. */
+  padding: 0.25rem var(--gutter) 1rem;
+  margin-inline: calc(var(--gutter) * -1);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline-start: var(--gutter);
+  overscroll-behavior-x: contain;
+  /* La barra de scroll se reemplaza por el gesto y por las flechas. */
+  scrollbar-width: none;
+}
+
+.carrusel__pista::-webkit-scrollbar {
+  display: none;
+}
+
+.carrusel__pista:focus-visible {
+  outline: 2px solid var(--rojo);
+  outline-offset: 4px;
+  border-radius: var(--radio);
+}
+
+.carrusel__pieza {
+  flex: 0 0 auto;
+  /* Tres piezas y media cuando hay ancho, dos y media cuando no. La fracción
+   * que sobra es la que avisa que hay más a la derecha; un número entero deja
+   * una foto cortada justo en el borde, que se lee como error y no como pista. */
+  width: min(19rem, 38%);
+  scroll-snap-align: start;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.carrusel__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+}
+
+.carrusel__foto {
+  object-fit: cover;
+  object-position: center 40%;
+  transition: transform var(--m-dur-4) var(--m-ease-out);
+}
+
+.carrusel__parallax {
+  inset-block: -1rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .carrusel__pieza:hover .carrusel__foto {
+    transform: scale(1.04);
+  }
+}
+
+.carrusel__titulo {
+  margin-block-start: 0.35rem;
+  font-family: var(--fuente-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.carrusel__texto {
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+.carrusel__pie {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+}
+
+/* El enlace del pie del carrusel es un blanco táctil: con el interlineado solo
+ * medía 18px de alto y quedaba por debajo del mínimo cómodo para el dedo. */
+.carrusel__pie .enlace {
+  display: inline-block;
+  padding-block: 0.45rem;
+}
+
+/* Pista de que se puede desplazar: una línea corta que se desvanece, sin
+ * flechas ni controles que habría que construir y mantener en dos estados. */
+@media (hover: hover) and (pointer: fine) {
+  .carrusel__pista {
+    /* Reserva el alto de la barra de scroll aunque esté oculta, para que las
+     * tarjetas no salten al aparecer. */
+    scrollbar-gutter: stable;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carrusel__pista {
+    scroll-behavior: smooth;
+  }
+}
+
+/* --- Sistema del servicio -------------------------------------------------
+ *
+ * Dos grupos de tarjetas: lo que viene en el precio y lo que se cotiza aparte.
+ * Cada pieza es una tarjeta con su borde, para que la información se lea en
+ * bloques y no como una lista corrida de nueve puntos.
+ */
+
+.sistema {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 62rem) {
+  .sistema {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .sistema__bloque--extras {
+    padding-inline-start: clamp(2.5rem, 6vw, 5rem);
+    border-inline-start: 1px solid var(--papel-borde);
+  }
+}
+
+.sistema__bloque {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.sistema__titulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.sistema__intro {
+  font-size: 0.9375rem;
+  color: var(--texto-suave);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+.sistema__lista {
+  display: grid;
+  gap: 0.6rem;
+  margin-block-start: 0.75rem;
+}
+
+/* En pantallas anchas las piezas van de a dos: seis tarjetas en una sola
+ * columna obligan a recorrer demasiado. */
+@media (min-width: 34rem) {
+  .sistema__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sistema__item {
+  display: grid;
+  gap: 0.2rem;
+  align-content: start;
+  padding: clamp(0.85rem, 2vw, 1.1rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+  /* El filete superior rojo ata cada tarjeta al sistema de marca, igual que
+   * las tarjetas de servicio. */
+  border-block-start: 2px solid var(--rojo);
+}
+
+.sistema__itemTitulo {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sistema__itemTexto {
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* Los extras no son lo mismo que lo incluido, y el color lo dice antes de
+ * leerlo: filete tenue y fondo sin blanco pleno. */
+.sistema__lista--extras .sistema__item {
+  border-block-start-color: var(--papel-borde-fuerte);
+  background: transparent;
+}
+
+.sistema__nota {
+  margin-block-start: 0.5rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+/* Fichas de servicio con el mismo papel, filetes y ritmo visual que la carta. */
+.servicio-carta__marco {
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.servicio-carta__lista .trago {
+  border-inline-start: 2px solid rgb(198 0 21 / 0.35);
+}
+
+.servicio-carta__item .trago__icono {
+  display: flex;
+  justify-content: center;
+}
+
+.servicio-carta__extras {
+  margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+  padding-block-start: clamp(1rem, 2.5vw, 1.5rem);
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.servicio-carta__extras .bloque-titulo h3 {
+  margin: 0;
+  font-size: var(--texto-menudo);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.servicio-carta__lista-extra {
+  display: grid;
+  gap: 1rem 1.75rem;
+  margin-block-start: 1rem;
+}
+
+.servicio-carta__lista-extra li {
+  display: grid;
+  gap: 0.2rem;
+  padding-inline-start: 0.8rem;
+  border-inline-start: 2px solid rgb(198 0 21 / 0.35);
+}
+
+.servicio-carta__lista-extra strong {
+  font-family: var(--fuente-display);
+  font-size: var(--texto-menudo);
+}
+
+.servicio-carta__lista-extra span {
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+}
+
+.servicio-carta__nota {
+  margin-block-start: 1.25rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+}
+
+@media (min-width: 48rem) {
+  .servicio-carta__lista-extra {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* La sección de todo lo necesario se presenta como un bloque oscuro y de alto
+ * contraste, desde el encabezado hasta cada elemento de la carta. */
+.seccion--sistema {
+  background-color: #050505;
+  color: #fff;
+}
+
+.seccion--sistema .micro {
+  color: #fff;
+}
+
+.seccion--sistema .micro::before {
+  background: var(--rosa);
+}
+
+.seccion--sistema .lead {
+  color: #fff;
+}
+
+.seccion--sistema .servicio-carta__marco {
+  background: #0d0d0d;
+  border-color: rgb(255 255 255 / 0.16);
+  box-shadow: none;
+}
+
+.seccion--sistema .servicio-carta__lista {
+  border-block-start-color: rgb(255 255 255 / 0.16);
+}
+
+.seccion--sistema .servicio-carta__item {
+  border-block-end-color: rgb(255 255 255 / 0.16);
+  border-inline-start-color: rgb(221 102 115 / 0.72);
+}
+
+.seccion--sistema .servicio-carta__item .trago__icono {
+  color: var(--rosa);
+}
+
+.seccion--sistema .servicio-carta__item .trago__descripcion,
+.seccion--sistema .servicio-carta__lista-extra span,
+.seccion--sistema .servicio-carta__nota {
+  color: #fff;
+}
+
+.seccion--sistema .servicio-carta__extras {
+  border-block-start-color: rgb(255 255 255 / 0.2);
+}
+
+.seccion--sistema .servicio-carta__lista-extra li {
+  border-inline-start-color: rgb(221 102 115 / 0.72);
+}
+
+.seccion--sistema .enlace {
+  color: #f3a1aa;
+}
+
+/* Cierre sobre rojo con el alfabeto visual completo de la marca en segundo plano. */
+.cierre-visual {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.cierre-visual__iconos {
+  position: absolute;
+  inset: -18% -6%;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  place-items: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  overflow: hidden;
+  color: var(--rosa);
+  opacity: 0.56;
+  filter: blur(2.6px);
+  pointer-events: none;
+}
+
+.cierre-visual__icono {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.cierre-visual__icono svg {
+  width: clamp(2.6rem, 6vw, 5.8rem);
+  height: auto;
+  max-height: 7rem;
+  color: var(--rosa);
+}
+
+.cierre-visual__contenido {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  max-width: 82rem;
+}
+
+.cierre-visual__contenido .h2,
+.cierre-visual__contenido .lead {
+  max-width: 15ch;
+}
+
+.cierre-visual__contenido .lead { max-width: 55ch; }
+
+.cierre-visual__contenido .cierre__acciones {
+  margin-block-start: 0.5rem;
+}
+
+@media (max-width: 47.99rem) {
+  .cierre-visual__iconos {
+    inset-inline: -40%;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    opacity: 0.38;
+  }
+
+  .cierre-visual__contenido .h2 { max-width: 13ch; }
+}
+
+/* --- Preguntas frecuentes ------------------------------------------------- */
+
+.faq {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.faq__lista {
+  display: grid;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.faq__item {
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.faq__pregunta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-block: clamp(1rem, 2.4vw, 1.35rem);
+  font-family: var(--fuente-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__pregunta::-webkit-details-marker {
+  display: none;
+}
+
+/* El signo es un trazo que gira, no un carácter: así no depende de la
+ * tipografía ni cambia de ancho entre navegadores. */
+.faq__pregunta::after {
+  content: '';
+  flex: 0 0 auto;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-inline-end: 2px solid var(--rojo);
+  border-block-end: 2px solid var(--rojo);
+  transform: rotate(45deg) translateY(-0.15rem);
+  transition: transform var(--m-dur-2) var(--m-ease-out);
+}
+
+.faq__item[open] .faq__pregunta::after {
+  transform: rotate(225deg) translateY(-0.15rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq__pregunta:hover {
+    color: var(--rojo);
+  }
+}
+
+.faq__respuesta {
+  max-width: 68ch;
+  padding-block-end: clamp(1rem, 2.4vw, 1.35rem);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+.faq__pie {
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+}
+
+/* La respuesta entra deslizándose. `details` no anima su apertura por sí solo,
+ * así que la animación va en el párrafo: cuando el navegador lo muestra, ya
+ * viene con la entrada puesta. */
+@media (prefers-reduced-motion: no-preference) {
+  .faq__item[open] .faq__respuesta {
+    animation: faq-abrir var(--m-dur-3) var(--m-ease-out) both;
+  }
+}
+
+@keyframes faq-abrir {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--m-lift) * -0.4), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

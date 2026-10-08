@@ -1,0 +1,504 @@
+/* ==========================================================================
+   Cotizador interno: controles, resultados, desglose y panel de supuestos.
+   Es una herramienta de uso diario, así que prioriza densidad y lectura rápida
+   por sobre el aire del sitio público.
+   ========================================================================== */
+
+/* Herramienta interna: el encabezado no puede comerse la primera pantalla. */
+.pagina-cabecera--compacta {
+  padding-block: clamp(1.4rem, 4vh, 2.1rem) clamp(1.1rem, 3vh, 1.6rem);
+}
+
+.pagina-cabecera--compacta h1 {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+}
+
+.pagina-cabecera--compacta .pagina-cabecera__interior {
+  gap: 0.6rem;
+}
+
+.cotizador {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+  padding-block: clamp(1.75rem, 5vh, 3rem) clamp(4rem, 10vh, 7rem);
+}
+
+@media (min-width: 68rem) {
+  .cotizador {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+  }
+
+  .cotizador__resultado {
+    position: sticky;
+    inset-block-start: 5.25rem;
+  }
+}
+
+.cotizador__controles {
+  display: grid;
+  gap: clamp(1.15rem, 3vw, 1.75rem);
+  align-content: start;
+}
+
+.bloque-control {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+}
+
+.bloque-control__titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bloque-control__titulo h2,
+.bloque-control__titulo h3 {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* --- Campos --------------------------------------------------------------- */
+
+.campos {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .campos--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.campo {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.campo__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+}
+
+.campo__valor {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.campo__input {
+  width: 100%;
+  padding: 0.58rem 0.7rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio);
+  background: var(--papel);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo__input:focus-visible {
+  outline: 2px solid var(--rojo);
+  outline-offset: 2px;
+  border-color: var(--rojo);
+}
+
+.campo__ayuda {
+  font-size: var(--texto-micro);
+  color: var(--texto-tenue);
+  text-wrap: pretty;
+}
+
+.campo input[type='range'] {
+  width: 100%;
+  accent-color: var(--rojo);
+}
+
+.campo--interruptor {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.campo--interruptor input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--rojo);
+}
+
+/* --- Selector segmentado -------------------------------------------------- */
+
+.segmentado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.segmentado button {
+  padding: 0.48rem 1rem;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-pastilla);
+  background: transparent;
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    color var(--m-dur-1) var(--m-ease-out),
+    border-color var(--m-dur-1) var(--m-ease-out);
+}
+
+.segmentado button[aria-pressed='true'] {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--sobre-rojo);
+}
+
+/* --- Chips de carta ------------------------------------------------------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-pastilla);
+  background: transparent;
+  font-size: var(--texto-menudo);
+  cursor: pointer;
+  transition:
+    background-color var(--m-dur-1) var(--m-ease-out),
+    border-color var(--m-dur-1) var(--m-ease-out);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--rojo);
+  background: rgb(198 0 21 / 0.09);
+}
+
+.chip__costo {
+  font-size: var(--texto-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-tenue);
+}
+
+/* --- Resultado ------------------------------------------------------------ */
+
+.cotizador__resultado {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.resultado {
+  display: grid;
+  gap: 0.8rem;
+  padding: clamp(1.2rem, 3vw, 1.6rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+}
+
+.resultado--tinta {
+  background: var(--rojo-hondo);
+  border-color: var(--rojo-hondo);
+  color: var(--sobre-rojo);
+}
+
+.resultado__monto {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.9rem, 4.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.resultado__rotulo {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.resultado--tinta .resultado__rotulo {
+  color: var(--sobre-rojo-tenue);
+}
+
+.resultado__filas {
+  display: grid;
+  gap: 0.45rem;
+  padding-block-start: 0.8rem;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.resultado--tinta .resultado__filas {
+  border-block-start-color: var(--borde-rojo);
+}
+
+.resultado__fila {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9375rem;
+}
+
+.resultado__fila dt {
+  color: var(--texto-suave);
+}
+
+.resultado--tinta .resultado__fila dt {
+  color: var(--sobre-rojo-suave);
+}
+
+.resultado__fila dd {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: end;
+}
+
+.resultado__fila--total {
+  padding-block-start: 0.45rem;
+  border-block-start: 1px solid var(--papel-borde);
+  font-size: 1rem;
+}
+
+.resultado--tinta .resultado__fila--total {
+  border-block-start-color: var(--borde-rojo);
+}
+
+.semaforo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.75em;
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-micro);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.semaforo--sano {
+  background: rgb(47 107 79 / 0.16);
+  color: #9ad3b4;
+}
+
+.semaforo--ajustado {
+  background: rgb(255 245 244 / 0.16);
+  color: var(--crema);
+}
+
+.semaforo--perdida {
+  background: rgb(19 19 17 / 0.35);
+  color: #ffb3ae;
+}
+
+/* --- Tablas del cotizador ------------------------------------------------- */
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabla caption {
+  margin-block-end: 0.7rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-align: start;
+}
+
+.tabla th,
+.tabla td {
+  padding: 0.52rem 0.45rem;
+  border-block-end: 1px solid var(--papel-borde);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.tabla thead th {
+  font-size: var(--texto-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.tabla td.numero,
+.tabla th.numero {
+  text-align: end;
+  white-space: nowrap;
+}
+
+.tabla tfoot th,
+.tabla tfoot td {
+  border-block-end: 0;
+  border-block-start: 1px solid var(--papel-borde-fuerte);
+  font-weight: 700;
+}
+
+.tabla__detalle {
+  display: block;
+  font-size: var(--texto-micro);
+  color: var(--texto-tenue);
+}
+
+/* --- Supuestos ------------------------------------------------------------ */
+
+.supuestos {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.supuestos details {
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: var(--papel);
+}
+
+.supuestos summary {
+  padding: 0.8rem 1.05rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.supuestos summary::-webkit-details-marker {
+  display: none;
+}
+
+.supuestos summary::after {
+  content: '+';
+  float: right;
+  color: var(--rojo);
+  font-weight: 700;
+}
+
+.supuestos details[open] summary::after {
+  content: '−';
+}
+
+.supuestos__cuerpo {
+  display: grid;
+  gap: 1rem;
+  padding: 0 clamp(1rem, 3vw, 1.4rem) clamp(1rem, 3vw, 1.4rem);
+}
+
+@media (min-width: 40rem) {
+  .supuestos__cuerpo--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* --- Inventario de insumos ------------------------------------------------ */
+
+.insumos {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.insumo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8rem;
+  gap: 0.75rem;
+  align-items: center;
+  padding-block-end: 0.7rem;
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.insumo__nombre {
+  font-size: 0.9375rem;
+}
+
+.insumo__meta {
+  display: block;
+  font-size: var(--texto-micro);
+  color: var(--texto-tenue);
+}
+
+.insumo__precio {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.insumo__unidad {
+  font-size: var(--texto-micro);
+  color: var(--texto-tenue);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Puerta de acceso ----------------------------------------------------- */
+
+.puerta {
+  display: grid;
+  gap: 1.15rem;
+  align-content: start;
+  max-width: 26rem;
+  margin-inline: auto;
+  margin-block: clamp(3rem, 14vh, 8rem);
+  padding: clamp(1.5rem, 4vw, 2.1rem);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
+  background: #fff;
+}
+
+.puerta__error {
+  font-size: var(--texto-menudo);
+  color: var(--error);
+}
+
+/* --- Alertas -------------------------------------------------------------- */
+
+.alertas {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.alerta {
+  display: grid;
+  gap: 0.22rem;
+  padding: 0.75rem 0.95rem;
+  border-inline-start: 3px solid var(--aviso);
+  border-radius: var(--radio);
+  background: rgb(138 101 32 / 0.07);
+  font-size: var(--texto-menudo);
+  text-wrap: pretty;
+}
+
+.alerta--alta {
+  border-inline-start-color: var(--error);
+  background: rgb(140 47 42 / 0.07);
+}
+
+.alerta--ok {
+  border-inline-start-color: var(--ok);
+  background: rgb(47 107 79 / 0.08);
+}
+
+.alerta__titulo {
+  font-weight: 700;
+}

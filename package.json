@@ -1,0 +1,23 @@
+{
+  "name": "rutabar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sitio y cotizador de RUTABAR — barra móvil de coctelería para eventos, Santiago de Chile",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.9.2"
+  }
+}

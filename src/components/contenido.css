@@ -1,0 +1,872 @@
+/* ==========================================================================
+   Bloques de contenido: carta, paquetes, comparativa, condiciones, proceso,
+   servicios, galería de fotos y formulario.
+   ========================================================================== */
+
+/* --- Franja de datos ------------------------------------------------------ */
+
+.franja {
+  border-block: 1px solid var(--papel-borde);
+  background: var(--crema);
+}
+
+.franja__interior {
+  display: grid;
+  gap: 1px;
+  background: var(--papel-borde);
+}
+
+@media (min-width: 48rem) {
+  .franja__interior {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .franja__interior {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.franja__dato {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+  /* Mismo tono que la banda: el único trazo visible son los filetes entre
+   * celdas, sin franjas de otro color en los bordes. */
+  background: var(--crema);
+}
+
+.franja__valor {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--rojo-hondo);
+}
+
+.franja__rotulo {
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* --- Principios ----------------------------------------------------------- */
+
+.principio {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  padding-block-start: 1.1rem;
+  border-block-start: 2px solid var(--rojo);
+}
+
+.principio__titulo {
+  font-family: var(--fuente-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.principio p {
+  color: var(--texto-suave);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+/* --- El estándar ----------------------------------------------------------
+ *
+ * Tres palabras en display, con el dibujo de la persona tras la barra al lado.
+ * El número las hace leer como un sistema y no como tres párrafos sueltos; la
+ * palabra sola, en display, es lo que se recuerda. El punto rojo marca las dos
+ * que el visitante puede comprobar por su cuenta.
+ */
+
+.estandar {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .estandar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+  }
+}
+
+.estandar__lista {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (min-width: 48rem) {
+  .estandar__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.estandar__bloque {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  padding-block-start: clamp(1rem, 2.4vw, 1.5rem);
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.estandar__numero {
+  font-family: var(--fuente-display);
+  font-size: var(--texto-menudo);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--rojo);
+  font-variant-numeric: tabular-nums;
+}
+
+.estandar__palabra {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.estandar__texto {
+  margin-block-start: 0.35rem;
+  color: var(--texto-suave);
+  font-size: 0.9375rem;
+  max-width: 42ch;
+  text-wrap: pretty;
+}
+
+.estandar__figura {
+  display: grid;
+  justify-items: end;
+  color: var(--rojo);
+  line-height: 0;
+}
+
+.estandar__figura .icono {
+  width: clamp(8rem, 46vw, 15rem);
+  height: auto;
+}
+
+/* --- Carta ---------------------------------------------------------------- */
+
+.carta {
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+/* Dos columnas en escritorio: la carta completa son 16 tragos, y en una sola
+ * columna obliga a recorrer más de dos pantallas. El corte es por fila de
+ * rejilla, así que el orden de lectura sigue siendo el mismo. */
+@media (min-width: 62rem) {
+  .carta-lista,
+  .carta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+}
+
+.carta__item {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: clamp(1.25rem, 3vw, 1.75rem);
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.carta__icono {
+  color: var(--rojo);
+  opacity: 0.9;
+  padding-block-start: 0.15rem;
+}
+
+.seccion--rojo .carta__icono {
+  color: var(--crema);
+}
+
+.carta__cuerpo {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.carta__linea {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+.carta__nombre {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.carta__base {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.seccion--rojo .carta__base {
+  color: var(--sobre-rojo-tenue);
+}
+
+.carta__descripcion {
+  max-width: 62ch;
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+.seccion--rojo .carta__descripcion {
+  color: var(--sobre-rojo-suave);
+}
+
+.carta__ficha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+}
+
+.seccion--rojo .carta__ficha {
+  color: var(--sobre-rojo-tenue);
+}
+
+.carta__pendiente {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-start: 0.35rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgb(138 101 32 / 0.35);
+  border-inline-start-width: 3px;
+  border-radius: var(--radio);
+  background: rgb(138 101 32 / 0.06);
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* --- Paquetes ------------------------------------------------------------- */
+
+.paquete {
+  display: grid;
+  gap: clamp(1.15rem, 2.5vw, 1.6rem);
+  align-content: start;
+  height: 100%;
+  padding: clamp(1.5rem, 3vw, 2.1rem);
+  border: 1px solid var(--borde-rojo);
+  border-radius: var(--radio-suave);
+  background: rgb(255 245 244 / 0.05);
+}
+
+.paquete--destacado {
+  border-color: var(--rosa);
+  background: rgb(255 245 244 / 0.09);
+}
+
+.paquete__cabecera {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.paquete__titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.paquete__para {
+  color: var(--sobre-rojo-suave);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+.paquete__precio {
+  display: grid;
+  gap: 0.2rem;
+  padding-block: clamp(0.7rem, 2vw, 1.1rem);
+  border-block: 1px solid var(--borde-rojo);
+}
+
+.paquete__monto {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--crema);
+  font-variant-numeric: tabular-nums;
+}
+
+.paquete__unidad {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sobre-rojo-tenue);
+}
+
+.paquete__minimo {
+  margin-block-start: 0.3rem;
+  font-size: var(--texto-menudo);
+  color: var(--sobre-rojo-suave);
+}
+
+.paquete__datos {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.paquete__datos > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.paquete__datos dt {
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sobre-rojo-tenue);
+}
+
+.paquete__datos dd {
+  font-size: 0.9375rem;
+  color: var(--sobre-rojo);
+}
+
+.paquete__listas {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.paquete__listas .micro {
+  color: var(--sobre-rojo-tenue);
+  margin-block-end: 0.45rem;
+}
+
+.paquete__listas .lista-marcada li {
+  font-size: 0.875rem;
+}
+
+.paquete__pie {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+  padding-block-start: clamp(0.7rem, 2vw, 1.1rem);
+  border-block-start: 1px solid var(--borde-rojo);
+}
+
+.paquete__condicion {
+  font-size: var(--texto-menudo);
+  color: var(--sobre-rojo-tenue);
+  text-wrap: pretty;
+}
+
+.paquete__condicion--ok {
+  color: #9ad3b4;
+}
+
+.paquete__pie .boton {
+  justify-self: start;
+}
+
+/* --- Comparativa ---------------------------------------------------------- */
+
+.comparativa {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.comparativa caption {
+  margin-block-end: 1rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-align: start;
+  text-wrap: pretty;
+}
+
+.comparativa th,
+.comparativa td {
+  padding: 0.85rem 0.7rem;
+  border-block-end: 1px solid var(--papel-borde);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.comparativa thead th {
+  font-size: var(--texto-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.comparativa tbody th {
+  font-weight: 600;
+}
+
+.comparativa td.numero,
+.comparativa th.numero {
+  text-align: end;
+  white-space: nowrap;
+}
+
+.comparativa__delta {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.comparativa__nota {
+  margin-block-start: 1.15rem;
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+  max-width: 72ch;
+  text-wrap: pretty;
+}
+
+.seccion--rojo .comparativa th,
+.seccion--rojo .comparativa td {
+  border-block-end-color: var(--borde-rojo);
+}
+
+.seccion--rojo .comparativa caption,
+.seccion--rojo .comparativa__nota {
+  color: var(--sobre-rojo-tenue);
+}
+
+.seccion--rojo .comparativa thead th {
+  color: var(--sobre-rojo-tenue);
+}
+
+.seccion--rojo .comparativa__delta {
+  color: #9ad3b4;
+}
+
+/* --- Condiciones ---------------------------------------------------------- */
+
+.condicion {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+  padding-block-start: 1.1rem;
+  border-block-start: 2px solid var(--rojo);
+}
+
+.seccion--rojo .condicion {
+  border-block-start-color: var(--rosa);
+}
+
+.condicion__titulo {
+  font-family: var(--fuente-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* --- Cierre / llamada final ----------------------------------------------- */
+
+.cierre {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: end;
+}
+
+@media (min-width: 60rem) {
+  .cierre {
+    grid-template-columns: minmax(0, 1.4fr) auto;
+  }
+}
+
+.cierre__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* --- Encabezado de página interior ---------------------------------------- */
+
+.pagina-cabecera {
+  padding-block: clamp(2.5rem, 9vh, 5.5rem) clamp(1.75rem, 4vh, 3rem);
+  border-block-end: 1px solid rgb(255 255 255 / 0.22);
+  background-color: var(--rojo-hondo);
+  background-image: url('/papel-grano.svg');
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  background-blend-mode: soft-light;
+  color: #fff;
+}
+
+.pagina-cabecera .micro,
+.pagina-cabecera .lead {
+  color: #fff;
+}
+
+.pagina-cabecera__interior {
+  display: grid;
+  gap: 1rem;
+  max-width: 54rem;
+}
+
+.pagina-cabecera h1 {
+  font-family: var(--fuente-display);
+  font-size: clamp(2.1rem, 5.6vw, 3.9rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+/* --- Proceso -------------------------------------------------------------- */
+
+.proceso {
+  display: grid;
+  gap: 0;
+  border-block-start: 1px solid var(--papel-borde);
+  counter-reset: paso;
+}
+
+.proceso__paso {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-block: clamp(1.1rem, 3vw, 1.65rem);
+  border-block-end: 1px solid var(--papel-borde);
+  counter-increment: paso;
+}
+
+.seccion--rojo .proceso,
+.seccion--rojo .proceso__paso {
+  border-color: var(--borde-rojo);
+}
+
+.proceso__paso::before {
+  content: counter(paso, decimal-leading-zero);
+  font-family: var(--fuente-display);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--rojo);
+  padding-block-start: 0.2rem;
+}
+
+.seccion--rojo .proceso__paso::before {
+  color: var(--rosa);
+}
+
+.proceso__cuerpo {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.proceso__titulo {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.proceso__cuerpo p {
+  color: var(--texto-suave);
+  max-width: 64ch;
+  text-wrap: pretty;
+}
+
+.seccion--rojo .proceso__cuerpo p {
+  color: var(--sobre-rojo-suave);
+}
+
+/* --- Servicios ------------------------------------------------------------
+ *
+ * Una fila de tres tarjetas del mismo peso, con el icono de marca mandando.
+ * El borde superior grueso es el mismo recurso que usan los principios: le da
+ * a la fila una línea de horizonte común en vez de tres cajas sueltas.
+ */
+
+.serv {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  height: 100%;
+  padding-block-start: 1.25rem;
+  border-block-start: 3px solid var(--rojo);
+}
+
+.serv__icono {
+  display: block;
+  color: var(--rojo);
+  margin-block-end: 0.1rem;
+}
+
+.serv__nombre {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.serv__para {
+  color: var(--texto-suave);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+.serv__entrada {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-block-start: 0.15rem;
+  padding-block: 0.7rem;
+  border-block: 1px solid var(--papel-borde);
+  font-family: var(--fuente-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--rojo-hondo);
+}
+
+.serv__entradaRotulo {
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-micro);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.serv__puntos {
+  margin-block-start: 0.15rem;
+}
+
+.serv__puntos li {
+  font-size: 0.9375rem;
+}
+
+.serv__pie {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+  margin-block-start: auto;
+  padding-block-start: 1rem;
+}
+
+.serv__mas {
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+/* Nota al pie de una sección: una línea, no un párrafo. */
+.nota-pie {
+  margin-block-start: var(--bloque);
+  padding-block-start: 1.1rem;
+  border-block-start: 1px solid var(--papel-borde);
+  font-size: var(--texto-menudo);
+  color: var(--texto-suave);
+  text-wrap: pretty;
+}
+
+/* --- Lista de paquetes (dentro de una ranura) ----------------------------- */
+
+.paquetes-lista {
+  display: grid;
+  margin-block-start: 0.35rem;
+  border-block-start: 1px solid var(--papel-borde);
+}
+
+.paquetes-lista__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.2rem 1rem;
+  align-items: baseline;
+  padding-block: 0.7rem;
+  border-block-end: 1px solid var(--papel-borde);
+}
+
+.paquetes-lista__nombre {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.paquetes-lista__detalle {
+  grid-column: 1;
+  font-size: var(--texto-menudo);
+  color: var(--texto-tenue);
+}
+
+.paquetes-lista__precio {
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-family: var(--fuente-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--rojo);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* --- Fotografía ----------------------------------------------------------- */
+
+/* Dos columnas: foto y texto. La foto manda cuando hay una buena. */
+.dupla {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 60rem) {
+  .dupla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dupla--invertida .dupla__media {
+    order: 2;
+  }
+}
+
+.dupla__media {
+  position: relative;
+  border-radius: var(--radio-suave);
+  overflow: clip;
+  background: var(--papel-hondo);
+}
+
+.dupla__foto {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.dupla__cuerpo {
+  display: grid;
+  gap: 1rem;
+  align-content: center;
+}
+
+/* Rejilla de galería con piezas de distinto peso. */
+.galeria {
+  display: grid;
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 48rem) {
+  .galeria {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.galeria__pieza {
+  position: relative;
+  overflow: clip;
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+  /* La proporción va en el contenedor, no en la imagen: con `fill` la imagen
+   * es absoluta, así que si el alto lo define ella misma el contenedor colapsa
+   * a cero. */
+  aspect-ratio: 3 / 4;
+}
+
+.galeria__foto {
+  object-fit: cover;
+  transition: transform var(--m-dur-4) var(--m-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .galeria__pieza:hover .galeria__foto {
+    transform: scale(1.04);
+  }
+}
+
+/* Las piezas anchas y altas rompen la uniformidad de la rejilla. */
+@media (min-width: 48rem) {
+  .galeria__pieza--ancha {
+    grid-column: span 2;
+    aspect-ratio: 3 / 2;
+  }
+
+  .galeria__pieza--alta {
+    grid-row: span 2;
+    aspect-ratio: 3 / 5;
+  }
+}
+
+/* Variante compacta: cuatro piezas del mismo peso, sin celdas que se
+ * extiendan. Para cuando la galería acompaña y no es la protagonista. */
+@media (min-width: 48rem) {
+  .galeria--cuatro .galeria__pieza {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.galeria__texto {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: 1.5rem 1.1rem 0.9rem;
+  background: linear-gradient(180deg, transparent, rgb(19 19 17 / 0.78));
+  color: var(--sobre-rojo);
+  font-size: var(--texto-menudo);
+  font-weight: 600;
+}
+
+/* --- Formulario de cotización --------------------------------------------- */
+
+.formulario {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-content: start;
+  max-width: 56rem;
+}
+
+.formulario textarea.campo__input {
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.55;
+}
+
+.mensaje {
+  margin: 0.75rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--texto-menudo);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.tabla-desplazable { overflow-x: auto; }
+.tabla-desplazable .comparativa { min-inline-size: 34rem; }
+.paquete__unidad, .paquete__condicion { color: var(--sobre-rojo-suave); }
+[id] { scroll-margin-block-start: 7rem; }
+
+.pagina-cabecera h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+.formulario .campo__ayuda, .condicion p { max-inline-size: 70ch; }
+
+.bloque-control__titulo h2 { font-size: clamp(1.5rem, 2.3vw, 1.9rem); }
+input[type="range"] { min-block-size: 44px; }
