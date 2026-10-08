@@ -286,6 +286,7 @@
 /* La sección de todo lo necesario se presenta como un bloque oscuro y de alto
  * contraste, desde el encabezado hasta cada elemento de la carta. */
 .seccion--sistema {
+  --rojo-sistema-intenso: #ff263e;
   background-color: #050505;
   color: #fff;
 }
@@ -295,7 +296,7 @@
 }
 
 .seccion--sistema .micro::before {
-  background: var(--rosa);
+  background: var(--rojo-sistema-intenso);
 }
 
 .seccion--sistema .lead {
@@ -314,11 +315,11 @@
 
 .seccion--sistema .servicio-carta__item {
   border-block-end-color: rgb(255 255 255 / 0.16);
-  border-inline-start-color: rgb(221 102 115 / 0.72);
+  border-inline-start-color: rgb(255 38 62 / 0.82);
 }
 
 .seccion--sistema .servicio-carta__item .trago__icono {
-  color: var(--rosa);
+  color: var(--rojo-sistema-intenso);
 }
 
 .seccion--sistema .servicio-carta__item .trago__descripcion,
@@ -332,11 +333,11 @@
 }
 
 .seccion--sistema .servicio-carta__lista-extra li {
-  border-inline-start-color: rgb(221 102 115 / 0.72);
+  border-inline-start-color: rgb(255 38 62 / 0.82);
 }
 
 .seccion--sistema .enlace {
-  color: #f3a1aa;
+  color: var(--rojo-sistema-intenso);
 }
 
 /* Cierre sobre rojo con el alfabeto visual completo de la marca en segundo plano. */
