@@ -12,7 +12,7 @@
    * El sello va deliberadamente grande: es la marca entera —isotipo y nombre
    * en el mismo trazo— así que no necesita que nadie le escriba el nombre al
    * lado. En móvil baja lo justo para que el botón de acción siga entrando. */
-  --marca: calc(var(--cabecera-alto) - 1.2rem - 1px);
+  --marca: calc(var(--cabecera-alto) - 0.7rem - 1px);
 
   position: sticky;
   inset-block-start: 0;
@@ -75,8 +75,8 @@
   align-items: center;
   justify-content: space-between;
   gap: clamp(1rem, 3vw, 3rem);
-  padding-block: 0.6rem;
-  min-height: calc(var(--marca) + 1.2rem);
+  padding-block: 0.35rem;
+  min-height: calc(var(--marca) + 0.7rem);
 }
 
 .cabecera__marca {

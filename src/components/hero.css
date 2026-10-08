@@ -316,7 +316,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 2.6vh, 2rem);
+  gap: clamp(2.25rem, 5vh, 3rem);
   min-height: 100svh;
   /* La cabecera se superpone al inicio; este espacio mantiene la pieza debajo
    * de la navegación sin descubrir el fondo claro del body. */
@@ -373,7 +373,7 @@
    * Sin placa ni contorno: la pieza es la foto recortada, nada más. El borde
    * semitransparente que había antes era un marco dentro del marco y le quitaba
    * fuerza a la imagen. */
-  inline-size: min(86vw, 24rem);
+  inline-size: min(90vw, 28rem);
   /* Atado al alto disponible, no a un valor fijo: en una pantalla baja el marco
    * se achica con ella y el hero sigue entrando completo. El tope en `rem` evita
    * que en una pantalla muy alta el marco se estire más de lo que aguanta la
@@ -404,20 +404,18 @@
   opacity: 0.62;
 }
 
-/* El bloque de texto, centrado y por encima del recorte.
- *
- * Centrado geométrico con una corrección hacia arriba: el centro óptico de un
- * rectángulo se lee un poco por encima del centro matemático, así que el texto
- * exactamente en el medio parece caído. El 46% lo sube lo justo. */
+/* El bloque de texto queda centrado sobre la foto, tanto horizontal como
+ * verticalmente, para que el titular y la firma compartan el mismo eje. */
 .hero2__texto {
   position: absolute;
-  inset-block-start: 46%;
+  inset-block-start: 50%;
   inset-inline: 0;
   z-index: 1;
   translate: 0 -50%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: clamp(0.4rem, 1.4vh, 0.9rem);
   padding-inline: 1.1rem;
 }
@@ -429,7 +427,7 @@
   max-inline-size: 12ch;
   text-align: center;
   font-family: var(--fuente-display);
-  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-size: clamp(2.2rem, 4.6vw, 3.8rem);
   font-weight: 800;
   line-height: 1.06;
   letter-spacing: -0.035em;
@@ -455,8 +453,11 @@
 /* La firma, debajo de la frase. Mairo a este tamaño es firma, no texto. */
 .hero2__firma {
   margin: 0;
-  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  inline-size: 100%;
+  font-size: clamp(2.8rem, 7.2vw, 5rem);
   line-height: 1;
+  text-align: center;
+  white-space: nowrap;
   color: var(--crema);
   text-shadow: 0 6px 30px rgb(19 19 17 / 0.7);
 }
@@ -466,12 +467,16 @@
 @media (max-width: 47.99rem) {
   .hero2__marco {
     /* En móvil el ancho admite más, pero el alto lo sigue mandando la pantalla. */
-    inline-size: min(80vw, 19rem);
+    inline-size: min(88vw, 22rem);
   }
 
   .hero2__frase {
     max-inline-size: 12ch;
     font-size: clamp(1.35rem, 5.4vw, 1.75rem);
+  }
+
+  .hero2__firma {
+    font-size: clamp(2.7rem, 11vw, 3.2rem);
   }
 }
 
@@ -566,18 +571,18 @@
   --alto-util: calc(100svh - 20rem);
   min-height: 100svh;
 }
-.hero2__marco { block-size: clamp(17rem, var(--alto-util), 36rem); }
+.hero2__marco { block-size: clamp(19rem, var(--alto-util), 40rem); }
 .hero2__intro { position: relative; z-index: 2; max-inline-size: 42rem; padding-inline: var(--gutter); text-align: center; }
 .hero2__intro p { max-inline-size: 48ch; margin-inline: auto; line-height: 1.6; }
 .hero2__intro .fila { justify-content: center; margin-block-start: 1rem; }
 @media (max-width: 47.99rem) {
   .hero--retrato { --alto-cabecera: var(--cabecera-alto); padding-block-start: 5rem; }
-  .hero2__marco { block-size: clamp(16rem, calc(100svh - 20rem), 28rem); }
+  .hero2__marco { block-size: clamp(18rem, calc(100svh - 18rem), 34rem); }
   .hero2__intro { font-size: 0.875rem; }
 }
 
 @media (max-width: 47.99rem) {
-  .hero2__frase { font-size: clamp(1.9rem, 8vw, 2.5rem); }
+  .hero2__frase { font-size: clamp(2rem, 8.5vw, 2.8rem); }
 }
 
 /* Fondo de marca al 110% del hero, desenfocado detrás de la foto. */

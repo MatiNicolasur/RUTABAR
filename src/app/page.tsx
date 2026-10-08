@@ -33,7 +33,6 @@ export default function Home() {
         imagen="/fotos/cocteles-editorial.webp"
         imagenAlt="Imagen ilustrativa de un pisco sour y un mocktail de pomelo y romero sobre una barra al atardecer"
         lineas={['Barra móvil para eventos en Santiago']}
-        lead="Barra libre con cócteles y mocktails, cristalería y equipo. Elige la carta y las horas; recibe una cotización por escrito."
         accion={{ label: 'Cotizar mi evento', href: '/cotizar' }}
         accionSecundaria={{ label: 'Ver la carta', href: '/carta' }}
         marca="ruta bar"
@@ -88,6 +87,9 @@ export default function Home() {
       </Ranura>
 
       <section className="seccion seccion--sistema" aria-labelledby="titulo-sistema">
+        <div className="sistema__barra-fondo" aria-hidden="true">
+          <Icono nombre="33" tamano={160} />
+        </div>
         <div className="lienzo">
           <div className="seccion__encabezado">
             <p className="micro">Todo lo necesario</p>

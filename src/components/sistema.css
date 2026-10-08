@@ -287,8 +287,35 @@
  * contraste, desde el encabezado hasta cada elemento de la carta. */
 .seccion--sistema {
   --rojo-sistema-intenso: #ff263e;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   background-color: #050505;
   color: #fff;
+}
+
+.sistema__barra-fondo {
+  position: absolute;
+  z-index: -1;
+  inset-block: 50% auto;
+  inset-inline-start: 50%;
+  width: 120%;
+  transform: translate(-50%, -50%);
+  color: #a3a3a3;
+  opacity: 0.28;
+  filter: blur(9px);
+  pointer-events: none;
+}
+
+.sistema__barra-fondo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.seccion--sistema > .lienzo {
+  position: relative;
+  z-index: 1;
 }
 
 .seccion--sistema .micro {
@@ -300,6 +327,10 @@
 }
 
 .seccion--sistema .lead {
+  color: #fff;
+}
+
+.seccion--sistema .seccion__encabezado .h2 {
   color: #fff;
 }
 
@@ -322,10 +353,18 @@
   color: var(--rojo-sistema-intenso);
 }
 
+.seccion--sistema .servicio-carta__extras .bloque-titulo h3 {
+  color: #fff;
+}
+
 .seccion--sistema .servicio-carta__item .trago__descripcion,
 .seccion--sistema .servicio-carta__lista-extra span,
 .seccion--sistema .servicio-carta__nota {
   color: #fff;
+}
+
+.seccion--sistema .servicio-carta__lista-extra strong {
+  color: var(--rojo-sistema-intenso);
 }
 
 .seccion--sistema .servicio-carta__extras {
