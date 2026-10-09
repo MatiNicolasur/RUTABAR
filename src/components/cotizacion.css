@@ -90,6 +90,34 @@
   font-size: 1rem;
 }
 
+/* Safari en iPhone usa su propio control para fechas. Limitar el ancho interno
+ * y alinear su valor evita que el día/mes/año quede cortado o desplazado. */
+.cotizacion-flujo__campos input[type='date'] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 3.25rem;
+  padding: 0.65rem 0.75rem;
+  line-height: 1.25;
+  text-align: left;
+  color-scheme: light;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.cotizacion-flujo__campos input[type='date']::-webkit-date-and-time-value {
+  min-width: 0;
+  height: 1.5em;
+  margin: 0;
+  text-align: left;
+}
+
+.cotizacion-flujo__campos input[type='date']::-webkit-calendar-picker-indicator {
+  margin-inline-start: 0.5rem;
+  padding: 0;
+}
+
 .cotizacion-flujo__selector {
   display: grid;
   gap: 0.65rem;

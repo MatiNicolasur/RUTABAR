@@ -229,7 +229,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__campos">
             <label className="campo">
               <span className="campo__label">Fecha del evento <span className="campo__valor">*</span></span>
-              <input className="campo__input" type="date" value={fecha} onChange={(evento) => setFecha(evento.target.value)} required />
+              <input className="campo__input" type="date" lang="es-CL" value={fecha} onChange={(evento) => setFecha(evento.target.value)} required />
             </label>
             <label className="campo">
               <span className="campo__label">Ciudad o comuna <span className="campo__valor">*</span></span>
