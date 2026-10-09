@@ -85,9 +85,65 @@
   gap: 1rem;
 }
 
-.cotizacion-flujo__campos .campo__input {
-  min-height: 3rem;
+.cotizacion-flujo .campo {
+  gap: 0.5rem;
+}
+
+.cotizacion-flujo .campo__label {
+  color: var(--texto);
+  font-size: 0.875rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.cotizacion-flujo .campo__opcional {
+  color: var(--texto-tenue);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.cotizacion-flujo .campo__input {
+  min-height: 3.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgb(19 19 17 / 0.18);
+  border-radius: var(--radio-suave);
+  background-color: #fff;
+  color: var(--texto);
   font-size: 1rem;
+  line-height: 1.35;
+  transition:
+    border-color var(--m-dur-1) var(--m-ease-out),
+    box-shadow var(--m-dur-1) var(--m-ease-out),
+    background-color var(--m-dur-1) var(--m-ease-out);
+}
+
+.cotizacion-flujo .campo__input::placeholder {
+  color: var(--texto-tenue);
+  opacity: 1;
+}
+
+.cotizacion-flujo .campo__input:hover:not(:focus-visible) {
+  border-color: rgb(19 19 17 / 0.36);
+}
+
+.cotizacion-flujo .campo:focus-within .campo__label {
+  color: var(--rojo-hondo);
+}
+
+.cotizacion-flujo .campo__input:focus-visible {
+  border-color: var(--rojo);
+  outline: 3px solid rgb(198 0 21 / 0.16);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px var(--rojo);
+}
+
+.cotizacion-flujo select.campo__input {
+  appearance: none;
+  padding-inline-end: 3rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238a0019' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
 }
 
 /* Safari en iPhone usa su propio control para fechas. Limitar el ancho interno
@@ -97,8 +153,8 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  min-height: 3.25rem;
-  padding: 0.65rem 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.8rem 1rem;
   line-height: 1.25;
   text-align: left;
   color-scheme: light;
@@ -156,6 +212,26 @@
   border-color: var(--rojo);
   background: rgb(198 0 21 / 0.055);
   box-shadow: inset 0 0 0 1px var(--rojo);
+}
+
+.cotizacion-flujo__opcion {
+  transition:
+    border-color var(--m-dur-1) var(--m-ease-out),
+    background-color var(--m-dur-1) var(--m-ease-out),
+    box-shadow var(--m-dur-1) var(--m-ease-out);
+}
+
+.cotizacion-flujo__opcion:hover {
+  border-color: var(--rojo-medio);
+}
+
+.cotizacion-flujo__opcion--activa:hover {
+  border-color: var(--rojo);
+}
+
+.cotizacion-flujo__opcion:focus-within {
+  outline: 3px solid rgb(198 0 21 / 0.16);
+  outline-offset: 2px;
 }
 
 .cotizacion-flujo__opcion input,

@@ -8,7 +8,7 @@
 :root {
   /* Alto exacto de la cabecera: el inicio puede extender su fondo por debajo
    * de ella sin dejar a la vista el color del body. */
-  --cabecera-alto: calc(clamp(4.95rem, 3.6rem + 3.96vw, 7.65rem) + 3.8rem + 1px);
+  --cabecera-alto: calc(clamp(3.96rem, 2.88rem + 3.168vw, 6.12rem) + 3.44rem + 1px);
 
   /* --- Color de marca --------------------------------------------------- */
   /* Rojos */
@@ -85,8 +85,8 @@
 
 @media (min-width: 62rem) {
   :root {
-    /* En escritorio, reduce otro 10% el sello y conserva el espacio del header. */
-    --cabecera-alto: calc(clamp(4.455rem, 3.24rem + 3.564vw, 6.885rem) + 3.62rem + 1px);
+    /* En escritorio, el sello conserva la misma reducción proporcional. */
+    --cabecera-alto: calc(clamp(3.564rem, 2.592rem + 2.8512vw, 5.508rem) + 3.296rem + 1px);
   }
 }
 
@@ -113,9 +113,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* La cabecera sticky mide ~6rem con el logo grande: el ancla tiene que
-   * dejar aire debajo y no esconder el titular de la sección destino. */
-  scroll-padding-block-start: 6.5rem;
+  /* Respeta la altura real del header para que los anclajes no queden debajo. */
+  scroll-padding-block-start: calc(var(--cabecera-alto) + 0.5rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

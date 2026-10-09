@@ -328,11 +328,11 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               <input className="campo__input" value={nombre} onChange={(evento) => { setNombre(evento.target.value); setErrorContacto('') }} autoComplete="name" required />
             </label>
             <label className="campo">
-              <span className="campo__label">Correo</span>
+              <span className="campo__label">Correo <span className="campo__opcional">Opcional</span></span>
               <input className="campo__input" type="email" value={correo} onChange={(evento) => { setCorreo(evento.target.value); setErrorContacto('') }} autoComplete="email" placeholder="tu@correo.cl" />
             </label>
             <label className="campo">
-              <span className="campo__label">Número de WhatsApp</span>
+              <span className="campo__label">Número de WhatsApp <span className="campo__opcional">Opcional</span></span>
               <input className="campo__input" type="tel" value={whatsapp} onChange={(evento) => { setWhatsapp(evento.target.value); setErrorContacto('') }} autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" />
             </label>
           </div>
