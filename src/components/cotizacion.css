@@ -570,6 +570,44 @@
   font-variant-numeric: tabular-nums;
 }
 
+.cotizacion-flujo__exito-gif {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 24rem);
+  aspect-ratio: 16 / 9;
+  margin: 0.25rem auto 0;
+  overflow: hidden;
+  border: 1px solid rgb(164 0 24 / 0.22);
+  border-radius: var(--radio-suave);
+  background: #131311;
+  box-shadow: 0 16px 34px -24px rgb(19 19 17 / 0.6);
+}
+
+.cotizacion-flujo__exito-gif img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 48rem) {
+  .cotizacion-flujo__exito {
+    grid-template-columns: minmax(0, 1.15fr) minmax(15rem, 0.85fr);
+    gap: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .cotizacion-flujo__exito-contenido {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .cotizacion-flujo__exito-gif {
+    width: min(100%, 25rem);
+    margin: 0;
+    justify-self: end;
+  }
+}
+
 @keyframes cotizacion-confeti-caida {
   0% {
     opacity: 0;

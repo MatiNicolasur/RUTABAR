@@ -422,6 +422,14 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             </div>
             <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
           </div>
+          <figure className="cotizacion-flujo__exito-gif">
+            <img
+              src="/celebracion-cotizacion.gif"
+              alt="Jimmy Fallon aplaude para celebrar el envío de la cotización"
+              width={480}
+              height={270}
+            />
+          </figure>
         </section>
       )}
     </div>
