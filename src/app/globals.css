@@ -8,7 +8,7 @@
 :root {
   /* Alto exacto de la cabecera: el inicio puede extender su fondo por debajo
    * de ella sin dejar a la vista el color del body. */
-  --cabecera-alto: calc(clamp(3.24rem, 2.232rem + 2.448vw, 4.824rem) + 3.44rem + 1px);
+  --cabecera-alto: calc(clamp(4.95rem, 3.6rem + 3.96vw, 7.65rem) + 3.8rem + 1px);
 
   /* --- Color de marca --------------------------------------------------- */
   /* Rojos */
