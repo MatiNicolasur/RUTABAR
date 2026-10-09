@@ -83,6 +83,13 @@
   --m-rise: 110%;
 }
 
+@media (min-width: 62rem) {
+  :root {
+    /* En escritorio, reduce otro 10% el sello y conserva el espacio del header. */
+    --cabecera-alto: calc(clamp(4.455rem, 3.24rem + 3.564vw, 6.885rem) + 3.62rem + 1px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --m-dur-1: 1ms;
