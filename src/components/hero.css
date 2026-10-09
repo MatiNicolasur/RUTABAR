@@ -568,7 +568,8 @@
 
 /* La oferta y la cotización caben en el primer tramo de la portada. */
 .hero--retrato {
-  --alto-util: calc(100svh - 20rem);
+  --alto-util: calc(100svh - var(--cabecera-alto) - 11rem);
+  min-height: 100vh;
   min-height: 100svh;
 }
 .hero2__marco { block-size: clamp(19rem, var(--alto-util), 40rem); }
@@ -576,13 +577,25 @@
 .hero2__intro p { max-inline-size: 48ch; margin-inline: auto; line-height: 1.6; }
 .hero2__intro .fila { justify-content: center; margin-block-start: 1rem; }
 @media (max-width: 47.99rem) {
-  .hero--retrato { --alto-cabecera: var(--cabecera-alto); padding-block-start: 5rem; }
-  .hero2__marco { block-size: clamp(18rem, calc(100svh - 18rem), 34rem); }
+  .hero--retrato {
+    --alto-cabecera: var(--cabecera-alto);
+    --alto-util: calc(100dvh - var(--cabecera-alto) - 10rem);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-block-start: calc(var(--cabecera-alto) + 1rem);
+  }
+  .hero2__marco { block-size: clamp(16rem, var(--alto-util), 34rem); }
   .hero2__intro { font-size: 0.875rem; }
 }
 
 @media (max-width: 47.99rem) {
   .hero2__frase { font-size: clamp(2rem, 8.5vw, 2.8rem); }
+
+  .hero2__figura {
+    inline-size: 145%;
+    filter: blur(9px);
+    opacity: 0.56;
+  }
 }
 
 /* Fondo de marca al 110% del hero, desenfocado detrás de la foto. */

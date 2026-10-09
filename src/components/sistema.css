@@ -296,14 +296,14 @@
 
 .sistema__barra-fondo {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset-block: 50% auto;
   inset-inline-start: 50%;
   width: 120%;
   transform: translate(-50%, -50%);
-  color: #a3a3a3;
-  opacity: 0.28;
-  filter: blur(9px);
+  color: #b8b8b8;
+  opacity: 0.42;
+  filter: blur(8px);
   pointer-events: none;
 }
 
@@ -335,7 +335,7 @@
 }
 
 .seccion--sistema .servicio-carta__marco {
-  background: #0d0d0d;
+  background: rgb(13 13 13 / 0.76);
   border-color: rgb(255 255 255 / 0.16);
   box-shadow: none;
 }
