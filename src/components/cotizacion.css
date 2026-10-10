@@ -4,6 +4,7 @@
   gap: clamp(1rem, 3vw, 1.5rem);
   max-width: 56rem;
   margin-inline: auto;
+  overflow-anchor: none;
 }
 
 .cotizacion-flujo__progreso {

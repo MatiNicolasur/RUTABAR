@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 
 type Props = {
@@ -24,6 +24,7 @@ const COMUNAS_POR_PROVINCIA = [
 ] as const
 
 export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInicial }: Props) {
+  const flujoRef = useRef<HTMLDivElement>(null)
   const [paso, setPaso] = useState<1 | 2 | 3>(1)
   const [fecha, setFecha] = useState('')
   const [ciudad, setCiudad] = useState('')
@@ -55,6 +56,32 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   useEffect(() => () => {
     if (animacionHorasRef.current !== null) cancelAnimationFrame(animacionHorasRef.current)
   }, [])
+
+  useLayoutEffect(() => {
+    if (paso !== 3) return
+
+    const frame = requestAnimationFrame(() => {
+      const flujo = flujoRef.current
+      if (!flujo) return
+
+      const altoVisible = window.visualViewport?.height ?? window.innerHeight
+      const altoCabecera = document.querySelector<HTMLElement>('.cabecera')?.getBoundingClientRect().height ?? 0
+      const margen = 16
+      const espacioDisponible = Math.max(0, altoVisible - altoCabecera - margen * 2)
+      const rectangulo = flujo.getBoundingClientRect()
+      const posicionVisible = altoCabecera + margen + Math.max(0, (espacioDisponible - rectangulo.height) / 2)
+      const destino = Math.max(0, window.scrollY + rectangulo.top - posicionVisible)
+
+      if (Math.abs(window.scrollY - destino) > 12) {
+        window.scrollTo({
+          top: destino,
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        })
+      }
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [paso])
 
   function detenerAnimacionHoras() {
     if (animacionHorasRef.current !== null) cancelAnimationFrame(animacionHorasRef.current)
@@ -237,7 +264,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }
 
   return (
-    <div className="cotizacion-flujo">
+    <div className="cotizacion-flujo" ref={flujoRef}>
       {!cotizacionEnviada ? (
         <>
           <ol className="cotizacion-flujo__progreso" aria-label="Pasos de la cotización">
