@@ -89,7 +89,6 @@ export default function Home() {
         id="titulo-barra"
         micro="El servicio"
         titulo="La ruta de tragos llega a tu evento."
-        mano="tragos de la ruta chilena"
         imagen="/fotos/bartender-patio-editorial.webp"
         imagenAlt="Imagen ilustrativa de un bartender sirviendo un cóctel a invitados en una barra móvil negra con base de madera, en un patio al atardecer"
         medida="retrato"
@@ -98,7 +97,7 @@ export default function Home() {
         invertida
       >
         <p className="lead">
-          Elige tu carta. Nosotros nos encargamos de servirla.
+          Vamos cambiando la carta por época del año. Estamos en primavera y por eso nuestros tragos son más cítricos y dulces.
         </p>
       </Ranura>
 
