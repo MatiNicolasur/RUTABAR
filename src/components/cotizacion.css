@@ -176,76 +176,111 @@
 
 .cotizacion-flujo__horas {
   min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
+  display: grid;
+  gap: 0.6rem;
 }
 
-.cotizacion-flujo__horas legend {
-  margin-block-end: 0.75rem;
+.cotizacion-flujo__horas-encabezado,
+.cotizacion-flujo__horas-extremos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cotizacion-flujo__horas-encabezado label {
   color: var(--texto);
   font-size: 0.875rem;
   font-weight: 650;
 }
 
-.cotizacion-flujo__horas-lista {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding: 0.25rem 0.1rem 0.65rem;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-}
-
-.cotizacion-flujo__hora {
-  position: relative;
-  flex: 0 0 3.7rem;
-  scroll-snap-align: start;
-  cursor: pointer;
-}
-
-.cotizacion-flujo__hora input {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.cotizacion-flujo__hora span {
-  display: grid;
-  min-height: 3.25rem;
-  place-items: center;
-  border: 1px solid var(--papel-borde-fuerte);
-  border-radius: var(--radio-suave);
-  background: var(--papel);
-  color: var(--texto);
-  font-size: 0.95rem;
-  font-weight: 700;
+.cotizacion-flujo__horas-encabezado output {
+  color: var(--rojo-hondo);
+  font-size: 1rem;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
-  transition: background-color var(--m-dur-1) var(--m-ease-out), border-color var(--m-dur-1) var(--m-ease-out);
 }
 
-.cotizacion-flujo__hora input:checked + span {
-  border-color: var(--rojo);
+.cotizacion-flujo__horas-control {
+  position: relative;
+  min-width: 0;
+}
+
+.cotizacion-flujo__horas-pulso {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--horas-progreso) + var(--horas-pulso-inicio));
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 2px solid var(--rojo);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: cotizacion-pulso-horas 2.8s ease-out infinite;
+}
+
+.cotizacion-flujo__horas-deslizador {
+  position: relative;
+  width: 100%;
+  height: 2.8rem;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.cotizacion-flujo__horas-deslizador::-webkit-slider-runnable-track {
+  height: 0.65rem;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--rojo) var(--horas-progreso), var(--papel-borde-fuerte) var(--horas-progreso));
+}
+
+.cotizacion-flujo__horas-deslizador::-moz-range-track {
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--papel-borde-fuerte);
+}
+
+.cotizacion-flujo__horas-deslizador::-moz-range-progress {
+  height: 0.65rem;
+  border-radius: 999px;
   background: var(--rojo);
-  color: var(--sobre-rojo);
 }
 
-.cotizacion-flujo__hora input:focus-visible + span {
+.cotizacion-flujo__horas-deslizador::-webkit-slider-thumb {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-block-start: -0.525rem;
+  appearance: none;
+  border: 0.3rem solid #fff;
+  border-radius: 50%;
+  background: var(--rojo);
+  box-shadow: 0 0 0 1px var(--rojo), 0 3px 10px rgb(19 19 17 / 0.18);
+}
+
+.cotizacion-flujo__horas-deslizador::-moz-range-thumb {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 0.3rem solid #fff;
+  border-radius: 50%;
+  background: var(--rojo);
+  box-shadow: 0 0 0 1px var(--rojo), 0 3px 10px rgb(19 19 17 / 0.18);
+}
+
+@keyframes cotizacion-pulso-horas {
+  0% { opacity: 0.42; transform: translate(-50%, -50%) scale(1); }
+  70%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.65); }
+}
+
+.cotizacion-flujo__horas-deslizador:focus-visible {
   outline: 3px solid rgb(198 0 21 / 0.25);
-  outline-offset: 2px;
+  outline-offset: 0.2rem;
 }
 
-.cotizacion-flujo__hora:hover input:not(:checked) + span {
-  border-color: var(--rojo-medio);
-}
-
-.cotizacion-flujo__horas-ayuda {
-  margin-block-start: 0.3rem;
+.cotizacion-flujo__horas-extremos {
   color: var(--texto-tenue);
   font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .cotizacion-flujo__precio {
@@ -334,10 +369,6 @@
 }
 
 @media (min-width: 40rem) {
-  .cotizacion-flujo__horas-ayuda {
-    display: none;
-  }
-
   .cotizacion-flujo__campos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -523,6 +554,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cotizacion-flujo__horas-pulso {
+    animation: none;
+    opacity: 0;
+  }
+
   .cotizacion-flujo__confeti-pieza {
     animation: none;
     opacity: 0.28;

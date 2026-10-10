@@ -13,6 +13,8 @@ type Props = {
 
 const WHATSAPP_COMERCIAL = process.env.NEXT_PUBLIC_WHATSAPP ?? ''
 const PASOS = ['Datos del evento', 'Elegir servicio', 'Revisar y enviar'] as const
+const DURACION_MINIMA = CONFIG_COTIZACION.duraciones[0]
+const DURACION_MAXIMA = CONFIG_COTIZACION.duraciones[CONFIG_COTIZACION.duraciones.length - 1]
 const OTRA_COMUNA = 'otra'
 const COMUNAS_POR_PROVINCIA = [
   { provincia: 'Provincia de Santiago', comunas: ['Cerrillos', 'Cerro Navia', 'Conchalí', 'El Bosque', 'Estación Central', 'Huechuraba', 'Independencia', 'La Cisterna', 'La Florida', 'La Granja', 'La Pintana', 'La Reina', 'Las Condes', 'Lo Barnechea', 'Lo Espejo', 'Lo Prado', 'Macul', 'Maipú', 'Ñuñoa', 'Pedro Aguirre Cerda', 'Peñalolén', 'Providencia', 'Pudahuel', 'Quilicura', 'Quinta Normal', 'Recoleta', 'Renca', 'San Joaquín', 'San Miguel', 'San Ramón', 'Santiago', 'Vitacura'] },
@@ -53,6 +55,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const montoReserva = Math.round((total * PAGO.reservaPct) / 100)
   const montoSaldo = total - montoReserva
   const fechaVisible = fecha ? fecha.split('-').reverse().join('/') : 'Por definir'
+  const progresoHoras = (duracion - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
 
   const resumen = useMemo(() => {
     const contacto = [correo.trim() ? `Correo: ${correo.trim()}` : '', whatsapp.trim() ? `WhatsApp: ${whatsapp.trim()}` : '']
@@ -286,24 +289,36 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             <span className="cotizacion-flujo__ayuda">{carta.resumen}</span>
           </label>
 
-          <fieldset className="cotizacion-flujo__horas">
-            <legend>Cantidad de horas</legend>
-            <div className="cotizacion-flujo__horas-lista">
-              {CONFIG_COTIZACION.duraciones.map((opcion) => (
-                <label className="cotizacion-flujo__hora" key={opcion}>
-                  <input
-                    type="radio"
-                    name="duracion-cotizacion"
-                    value={opcion}
-                    checked={duracion === opcion}
-                    onChange={() => setDuracion(opcion)}
-                  />
-                  <span>{opcion} h</span>
-                </label>
-              ))}
+          <div className="cotizacion-flujo__horas">
+            <div className="cotizacion-flujo__horas-encabezado">
+              <label htmlFor="duracion-cotizacion">Cantidad de horas</label>
+              <output htmlFor="duracion-cotizacion">{duracion} horas</output>
             </div>
-            <p className="cotizacion-flujo__horas-ayuda">Desliza para ver todas las horas.</p>
-          </fieldset>
+            <div
+              className="cotizacion-flujo__horas-control"
+              style={{
+                '--horas-progreso': `${progresoHoras * 100}%`,
+                '--horas-pulso-inicio': `${(1 - progresoHoras) * 0.85}rem`,
+              } as CSSProperties}
+            >
+              <span className="cotizacion-flujo__horas-pulso" aria-hidden="true" />
+              <input
+                id="duracion-cotizacion"
+                className="cotizacion-flujo__horas-deslizador"
+                type="range"
+                min={DURACION_MINIMA}
+                max={DURACION_MAXIMA}
+                step={1}
+                value={duracion}
+                aria-valuetext={`${duracion} horas`}
+                onChange={(evento) => setDuracion(Number(evento.target.value) as DuracionCotizacion)}
+              />
+            </div>
+            <div className="cotizacion-flujo__horas-extremos" aria-hidden="true">
+              <span>{DURACION_MINIMA} h</span>
+              <span>{DURACION_MAXIMA} h</span>
+            </div>
+          </div>
 
           <div className="cotizacion-flujo__precio" aria-live="polite" aria-atomic="true">
             <p className="micro">Total final con IVA incluido</p>
