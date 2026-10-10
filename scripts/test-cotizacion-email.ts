@@ -49,7 +49,8 @@ async function main() {
     assert.equal(adjuntos[0].filename, 'Cotizacion-y-carta-RUTABAR.pdf')
     const pdf = Buffer.from(adjuntos[0].content, 'base64')
     assert.equal(pdf.subarray(0, 4).toString(), '%PDF')
-    assert.equal((await PDFDocument.load(pdf)).getPageCount(), 5)
+    assert.equal((await PDFDocument.load(pdf)).getPageCount(), 1)
+    assert.equal(pdf.includes(Buffer.from('/DCTDecode')), false, 'El PDF no debe incluir fotos JPEG')
     assert.equal(llamadas, 1)
     for (const cartaId of ['reducida', 'sin-alcohol'] as CartaCotizacionId[]) {
       const total = calcularPrecioCotizacion(cartaId, 4, 40)
@@ -58,7 +59,7 @@ async function main() {
         asistentes: 40, cartaId, duracion: 4, total, porPersona: Math.round(total / 40),
         montoReserva: total / 2, montoSaldo: total / 2, solicitaCartaDigital: false,
       })
-      assert.equal((await PDFDocument.load(archivo)).getPageCount(), 3)
+      assert.equal((await PDFDocument.load(archivo)).getPageCount(), 1)
     }
     process.stdout.write('Envío simulado correcto: cliente, copia comercial, precio, condiciones y PDF.\n')
   } finally {

@@ -124,7 +124,7 @@ export async function POST(request: Request) {
   ).join('')
   const condicionesTexto = CONDICIONES.map((bloque) => `${bloque.titulo}:\n${bloque.puntos.map((punto) => `- ${punto}`).join('\n')}`).join('\n\n')
   const condicionesHtml = CONDICIONES.map((bloque) => `<h3 style="margin:14px 0 5px;color:#8a0019;font-size:13px">${escaparHtml(bloque.titulo)}</h3><ul style="margin:0;padding-left:19px;color:#4b3336;font-size:13px;line-height:1.6">${bloque.puntos.map((punto) => `<li>${escaparHtml(punto)}</li>`).join('')}</ul>`).join('')
-  const detalleTextoPlano = `Hola, ${datos.nombre}:\n\nSoy Matías Urquiza, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con fotos en el PDF adjunto.\n\n${detalleTexto}\n\nCondiciones del servicio:\n${condicionesTexto}\n\nSi tienes cualquier consulta, o si el precio es un problema para tu evento, dímelo y lo conversamos.\n\nUn abrazo,\nMatías Urquiza\nRUTABAR`
+  const detalleTextoPlano = `Hola, ${datos.nombre}:\n\nSoy Matías Urquiza, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con íconos en el PDF adjunto.\n\n${detalleTexto}\n\nCondiciones del servicio:\n${condicionesTexto}\n\nSi tienes cualquier consulta, o si el precio es un problema para tu evento, dímelo y lo conversamos.\n\nUn abrazo,\nMatías Urquiza\nRUTABAR`
   const html = `<!doctype html>
 <html lang="es">
   <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tu cotización RUTABAR</title></head>
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
             <p style="margin:8px 0 0;color:#ffe3e4;font-size:15px">${datos.duracion} horas · ${escaparHtml(fechaVisible)}</p>
           </td></tr>
           <tr><td style="padding:28px 32px 12px">
-            <p style="margin:0 0 18px;color:#262622;font-size:15px;line-height:1.65">Hola, <strong>${escaparHtml(datos.nombre)}</strong>. Soy <strong>Matías Urquiza</strong>, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con fotos en el <strong>PDF adjunto</strong>.</p>
+            <p style="margin:0 0 18px;color:#262622;font-size:15px;line-height:1.65">Hola, <strong>${escaparHtml(datos.nombre)}</strong>. Soy <strong>Matías Urquiza</strong>, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con íconos en el <strong>PDF adjunto</strong>.</p>
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 22px;border:1px solid #f0dadd;border-radius:12px;background-color:#fff5f4">
               <tr><td style="padding:17px 20px">
                 <p style="margin:0 0 5px;color:#6b5254;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Total final con IVA incluido</p>
