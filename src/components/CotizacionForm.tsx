@@ -298,7 +298,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               className="cotizacion-flujo__horas-control"
               style={{
                 '--horas-progreso': `${progresoHoras * 100}%`,
-                '--horas-pulso-inicio': `${(1 - progresoHoras) * 0.85}rem`,
+                '--horas-pulso-offset': `${(1 - 2 * progresoHoras) * 0.85}rem`,
               } as CSSProperties}
             >
               <span className="cotizacion-flujo__horas-pulso" aria-hidden="true" />
