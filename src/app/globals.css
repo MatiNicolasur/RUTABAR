@@ -92,7 +92,7 @@
 
 @media (max-width: 47.99rem) {
   :root {
-    --cabecera-alto: 5.5rem;
+    --cabecera-alto: calc(5.5rem + env(safe-area-inset-top));
   }
 }
 
@@ -180,6 +180,24 @@ body > footer {
   z-index: 100;
 }
 
+#contenido.contenido--preloader {
+  z-index: 100;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html { background-color: var(--rojo-profundo); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 120;
+    block-size: env(safe-area-inset-top);
+    background: var(--rojo-profundo);
+    pointer-events: none;
+  }
+}
+
 .imagen-parallax {
   position: absolute;
   inset-inline: 0;
@@ -201,6 +219,10 @@ body > footer {
 /* En la portada, el hero comienza bajo la cabecera sticky en el flujo normal.
  * Este solape hace que ambos compartan el primer píxel de la ventana. */
 #contenido:has(> .hero--retrato) {
+  margin-block-start: calc(-1 * var(--cabecera-alto));
+}
+
+#contenido.contenido--portada {
   margin-block-start: calc(-1 * var(--cabecera-alto));
 }
 
@@ -262,7 +284,9 @@ textarea {
   width: 100%;
   max-width: 82rem;
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline:
+    max(var(--gutter), env(safe-area-inset-left))
+    max(var(--gutter), env(safe-area-inset-right));
 }
 
 .lienzo--ancho {

@@ -18,12 +18,13 @@
  *    fondos, el blanco cálido funciona en ambos.
  *
  * En `retrato`, el preloader espera la foto y da paso a las animaciones CSS.
- * Con `prefers-reduced-motion: reduce` se omite el movimiento espacial.
+ * En escritorio se respeta `prefers-reduced-motion`; la intro móvil mantiene
+ * su secuencia porque el cliente pidió verla también en su iPhone.
  */
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useId, useState, type CSSProperties } from 'react'
+import { useEffect, useId, useLayoutEffect, useState, type CSSProperties } from 'react'
 import { Icono } from './Icono'
 import { ParallaxScroll } from './ParallaxScroll'
 
@@ -89,11 +90,34 @@ export function Hero({
     (_, indice) => indice,
   )
 
+  useLayoutEffect(() => {
+    if (diseno !== 'retrato') return
+
+    const contenido = document.getElementById('contenido')
+    contenido?.classList.add('contenido--portada')
+    return () => contenido?.classList.remove('contenido--portada')
+  }, [diseno])
+
+  useLayoutEffect(() => {
+    if (diseno !== 'retrato') return
+
+    const contenido = document.getElementById('contenido')
+    const cabecera = document.querySelector('.cabecera')
+    contenido?.classList.toggle('contenido--preloader', faseEntrada !== 'hero')
+    cabecera?.setAttribute('data-entrada', faseEntrada)
+
+    return () => {
+      contenido?.classList.remove('contenido--preloader')
+      cabecera?.removeAttribute('data-entrada')
+    }
+  }, [diseno, faseEntrada])
+
   useEffect(() => {
     if (diseno !== 'retrato') return
 
-    const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const pausa = window.setTimeout(() => setPausaCompleta(true), movimientoReducido ? 200 : 2450)
+    const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
+      || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 2450 : 200)
     const respaldo = window.setTimeout(() => setFotoLista(true), 5000)
 
     return () => {
@@ -111,7 +135,9 @@ export function Hero({
   useEffect(() => {
     if (faseEntrada !== 'sale') return
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
+      || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!animarIntro) {
       setFaseEntrada('hero')
       return
     }
@@ -222,23 +248,25 @@ export function Hero({
          * para poder extenderse un poco más allá de los bordes de la imagen. */}
         <div className="hero2__marco">
           <div className="hero2__media">
-            <ParallaxScroll className="hero2__parallax">
-              <Image
-                src={usarImagenRespaldo && imagenRespaldo ? imagenRespaldo : imagen}
-                alt={imagenAlt}
-                fill
-                priority
-                fetchPriority="high"
-                unoptimized
-                sizes="(min-width: 48rem) 25rem, 70vw"
-                className="hero2__foto"
-                onLoad={() => setFotoLista(true)}
-                onError={() => {
-                  if (imagenRespaldo && !usarImagenRespaldo) setUsarImagenRespaldo(true)
-                  else setFotoLista(true)
-                }}
-              />
-            </ParallaxScroll>
+            <div className="hero2__recorte">
+              <ParallaxScroll className="hero2__parallax">
+                <Image
+                  src={usarImagenRespaldo && imagenRespaldo ? imagenRespaldo : imagen}
+                  alt={imagenAlt}
+                  fill
+                  priority
+                  fetchPriority="high"
+                  unoptimized
+                  sizes="(min-width: 48rem) 25rem, 70vw"
+                  className="hero2__foto"
+                  onLoad={() => setFotoLista(true)}
+                  onError={() => {
+                    if (imagenRespaldo && !usarImagenRespaldo) setUsarImagenRespaldo(true)
+                    else setFotoLista(true)
+                  }}
+                />
+              </ParallaxScroll>
+            </div>
           </div>
 
           <div className="hero2__texto">

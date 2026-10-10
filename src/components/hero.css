@@ -366,7 +366,7 @@
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference), (max-width: 47.99rem) {
   .hero2__preloader p span:first-child {
     animation: hero2-preloader-linea 900ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
   }
@@ -393,7 +393,7 @@
   will-change: transform;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (min-width: 48rem) and (prefers-reduced-motion: reduce) {
   .hero2__preloader {
     transition: none;
   }
@@ -418,7 +418,7 @@
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  translate: -50% -50%;
+  transform: translate(-50%, -50%);
   z-index: 0;
   color: var(--rojo);
   opacity: 0.55;
@@ -439,7 +439,7 @@
 .hero2__marco {
   position: relative;
   z-index: 2;
-  translate: 0 -1rem;
+  transform: translateY(-1rem);
   /* Estrecho y alto. El radio máximo lo redondea hasta los extremos, y si la
    * caja se acerca al cuadrado el resultado deja de ser un rectángulo vertical
    * y pasa a ser un círculo. La proporción es lo que sostiene la forma.
@@ -465,9 +465,18 @@
   inline-size: 100%;
   block-size: 100%;
   border-radius: var(--radio-pastilla);
-  overflow: clip;
   background: var(--tinta);
+  -webkit-clip-path: none;
   clip-path: none;
+}
+
+/* Safari compone mejor el círculo cuando el recorte de la pastilla vive en
+ * otra capa. La foto conserva su forma mientras el círculo se expande. */
+.hero2__recorte {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
 }
 
 /* Una leve transparencia sobre fondo oscuro baja la luz sin cubrir la foto. */
@@ -483,7 +492,7 @@
   inset-block-start: 50%;
   inset-inline: 0;
   z-index: 1;
-  translate: 0 -50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -524,8 +533,9 @@
 
 /* --- Entrada ------------------------------------------------------------- */
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference), (max-width: 47.99rem) {
   .hero--retrato:not(.hero--playing) .hero2__media {
+    -webkit-clip-path: circle(0% at 50% 50%);
     clip-path: circle(0% at 50% 50%);
   }
 
@@ -562,19 +572,22 @@
   }
 }
 
-/* Con movimiento reducido no hay apertura: la composición está puesta. */
-@media (prefers-reduced-motion: reduce) {
+/* En escritorio, la preferencia de movimiento reducido deja la foto abierta. */
+@media (min-width: 48rem) and (prefers-reduced-motion: reduce) {
   .hero2__media {
+    -webkit-clip-path: none;
     clip-path: none;
   }
 }
 
 @keyframes hero2-abrir {
   from {
+    -webkit-clip-path: circle(0% at 50% 50%);
     clip-path: circle(0% at 50% 50%);
   }
 
   to {
+    -webkit-clip-path: circle(72% at 50% 50%);
     clip-path: circle(72% at 50% 50%);
   }
 }
@@ -620,42 +633,28 @@
 .hero2__intro .fila { justify-content: center; margin-block-start: 1rem; }
 @media (max-width: 47.99rem) {
   .hero--retrato {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-    align-content: stretch;
-    justify-items: center;
-    gap: clamp(0.5rem, 1.5dvh, 0.9rem);
+    gap: clamp(0.5rem, 1.5vh, 0.9rem);
+    block-size: 100vh;
     block-size: 100svh;
     block-size: 100dvh;
     min-block-size: 0;
     padding-block: calc(var(--cabecera-alto) + 0.75rem) max(1rem, env(safe-area-inset-bottom));
+    overflow: visible;
   }
 
   .hero2__marco {
+    flex: 1 1 0;
     inline-size: min(70vw, 17.5rem);
-    block-size: 100%;
+    block-size: auto;
     max-block-size: 32rem;
     min-block-size: 0;
-    align-self: center;
-    translate: 0;
+    transform: none;
   }
 
-  .hero2__foto {
-    opacity: 1;
-    filter: brightness(1.18);
-  }
-  .hero2__firma { font-size: clamp(4.25rem, 19vw, 6rem); }
+  .hero2__foto { opacity: 1; }
+  .hero2__firma { font-size: clamp(4.5rem, 21vw, 7rem); }
   .hero2__ubicacion { font-size: clamp(1.4rem, 5.2vw, 1.8rem); }
-  .hero2__intro { inline-size: 100%; font-size: 0.875rem; }
-}
-
-@media (max-width: 47.99rem) {
-  .hero2__figura {
-    inline-size: 145%;
-    filter: blur(9px);
-    opacity: 0.56;
-  }
+  .hero2__intro { flex-shrink: 0; inline-size: 100%; font-size: 0.875rem; }
 }
 
 /* Fondo de marca al 110% del hero, desenfocado detrás de la foto. */
@@ -663,10 +662,6 @@
 .hero2__figura svg { inline-size: 100%; block-size: auto; }
 .hero2__foto { object-position: center 64%; }
 
-@media (max-width: 47.99rem) and (prefers-reduced-motion: no-preference) {
-  .hero--playing .hero2__media { animation-duration: 2600ms; }
-  .hero--playing .hero2__foto { animation-duration: 2600ms; }
-  .hero--playing .hero2__firma { animation-delay: 700ms; }
-  .hero--playing .hero2__ubicacion { animation-delay: 1150ms; }
-  .hero--playing .hero2__intro .fila { animation-delay: 1550ms; }
+@media (max-width: 47.99rem) {
+  .hero2__figura { inline-size: 100%; }
 }
