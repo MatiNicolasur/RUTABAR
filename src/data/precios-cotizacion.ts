@@ -24,7 +24,7 @@ export const CONFIG_COTIZACION = {
       id: 'completa',
       nombre: 'Carta completa',
       bebidas: 25,
-      resumen: '13 cócteles, 4 mocktails y 8 bebidas y agua.',
+      resumen: '13 cócteles, 4 mocktails, bebidas, jugos y agua.',
       precios: { 3: 528_000, 4: 596_000, 5: 652_000, 6: 708_000, 7: 764_000, 8: 820_000, 9: 876_000, 10: 932_000, 11: 988_000, 12: 1_044_000 },
     },
   ],
