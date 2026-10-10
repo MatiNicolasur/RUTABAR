@@ -522,23 +522,6 @@
   color: #ffb4bd;
 }
 
-/* En móvil la pieza baja un punto de alto para entrar completa en el primer
- * pantallazo. */
-@media (max-width: 47.99rem) {
-  .hero2__marco {
-    /* En móvil el ancho admite más, pero el alto lo sigue mandando la pantalla. */
-    inline-size: min(82vw, 20rem);
-  }
-
-  .hero2__firma {
-    font-size: clamp(5rem, 25vw, 7rem);
-  }
-
-  .hero2__ubicacion {
-    font-size: clamp(1.35rem, 6vw, 1.85rem);
-  }
-}
-
 /* --- Entrada ------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
@@ -637,14 +620,34 @@
 .hero2__intro .fila { justify-content: center; margin-block-start: 1rem; }
 @media (max-width: 47.99rem) {
   .hero--retrato {
-    --alto-cabecera: var(--cabecera-alto);
-    --alto-util: calc(100dvh - var(--cabecera-alto) - 10rem);
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding-block-start: calc(var(--cabecera-alto) + 1rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-content: stretch;
+    justify-items: center;
+    gap: clamp(0.5rem, 1.5dvh, 0.9rem);
+    block-size: 100svh;
+    block-size: 100dvh;
+    min-block-size: 0;
+    padding-block: calc(var(--cabecera-alto) + 0.75rem) max(1rem, env(safe-area-inset-bottom));
   }
-  .hero2__marco { block-size: clamp(16rem, var(--alto-util), 34rem); }
-  .hero2__intro { font-size: 0.875rem; }
+
+  .hero2__marco {
+    inline-size: min(70vw, 17.5rem);
+    block-size: 100%;
+    max-block-size: 32rem;
+    min-block-size: 0;
+    align-self: center;
+    translate: 0;
+  }
+
+  .hero2__foto {
+    opacity: 1;
+    filter: brightness(1.18);
+  }
+  .hero2__firma { font-size: clamp(4.25rem, 19vw, 6rem); }
+  .hero2__ubicacion { font-size: clamp(1.4rem, 5.2vw, 1.8rem); }
+  .hero2__intro { inline-size: 100%; font-size: 0.875rem; }
 }
 
 @media (max-width: 47.99rem) {
@@ -659,3 +662,11 @@
 .hero2__figura { inline-size: 110%; filter: blur(12px); opacity: 0.38; }
 .hero2__figura svg { inline-size: 100%; block-size: auto; }
 .hero2__foto { object-position: center 64%; }
+
+@media (max-width: 47.99rem) and (prefers-reduced-motion: no-preference) {
+  .hero--playing .hero2__media { animation-duration: 2600ms; }
+  .hero--playing .hero2__foto { animation-duration: 2600ms; }
+  .hero--playing .hero2__firma { animation-delay: 700ms; }
+  .hero--playing .hero2__ubicacion { animation-delay: 1150ms; }
+  .hero--playing .hero2__intro .fila { animation-delay: 1550ms; }
+}

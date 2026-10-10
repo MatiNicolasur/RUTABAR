@@ -36,6 +36,7 @@ export default function Home() {
       <Hero
         diseno="retrato"
         imagen="/fotos/cocteles-speakeasy-grano.jpg"
+        imagenRespaldo="/fotos/cocteles-speakeasy.jpg"
         imagenAlt="Cócteles en primer plano en una barra speakeasy iluminada en rojo, con personas conversando al fondo"
         lineas={['Servicio de barra móvil', 'a la puerta de tu evento']}
         accion={{ label: 'Cotizar mi evento', href: '/cotizar' }}

@@ -42,6 +42,7 @@ type Diseno = 'cortina' | 'retrato'
 
 type Props = {
   imagen: string
+  imagenRespaldo?: string
   /** Texto alternativo real: la foto muestra el servicio, no es decoración. */
   imagenAlt: string
   kicker?: string
@@ -63,6 +64,7 @@ type Props = {
 
 export function Hero({
   imagen,
+  imagenRespaldo,
   imagenAlt,
   kicker,
   lineas,
@@ -78,6 +80,7 @@ export function Hero({
 }: Props) {
   const titleId = useId()
   const [fotoLista, setFotoLista] = useState(false)
+  const [usarImagenRespaldo, setUsarImagenRespaldo] = useState(false)
   const [pausaCompleta, setPausaCompleta] = useState(false)
   const [faseEntrada, setFaseEntrada] = useState<'espera' | 'sale' | 'hero'>('espera')
   const fraseRetrato = lineas.join(' ')
@@ -221,15 +224,19 @@ export function Hero({
           <div className="hero2__media">
             <ParallaxScroll className="hero2__parallax">
               <Image
-                src={imagen}
+                src={usarImagenRespaldo && imagenRespaldo ? imagenRespaldo : imagen}
                 alt={imagenAlt}
                 fill
                 priority
                 fetchPriority="high"
-                sizes="(min-width: 62rem) 34rem, 88vw"
+                unoptimized
+                sizes="(min-width: 48rem) 25rem, 70vw"
                 className="hero2__foto"
                 onLoad={() => setFotoLista(true)}
-                onError={() => setFotoLista(true)}
+                onError={() => {
+                  if (imagenRespaldo && !usarImagenRespaldo) setUsarImagenRespaldo(true)
+                  else setFotoLista(true)
+                }}
               />
             </ParallaxScroll>
           </div>

@@ -90,6 +90,12 @@
   }
 }
 
+@media (max-width: 47.99rem) {
+  :root {
+    --cabecera-alto: 5.5rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --m-dur-1: 1ms;
