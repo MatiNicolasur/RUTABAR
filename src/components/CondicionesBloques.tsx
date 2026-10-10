@@ -10,7 +10,7 @@ export function CondicionesBloques({ limite }: Props) {
   const bloques = typeof limite === 'number' ? CONDICIONES.slice(0, limite) : CONDICIONES
 
   return (
-    <div className="rejilla rejilla--2">
+    <div className={`rejilla rejilla--${bloques.length === 3 ? '3' : '2'}`}>
       {bloques.map((bloque, indice) => (
         <Reveal className="condicion" key={bloque.id} retraso={(indice % 2) * 60}>
           <h3 className="condicion__titulo">{bloque.titulo}</h3>

@@ -25,47 +25,35 @@ export default function PaginaCondiciones() {
 
       <section className="seccion" aria-label="Condiciones del servicio">
         <div className="lienzo">
-          <CondicionesBloques />
+          <CondicionesBloques limite={3} />
         </div>
       </section>
 
-      <section className="seccion seccion--papel-hondo" aria-labelledby="titulo-pago">
-        <div className="lienzo">
+      <section className="pago-mitades" aria-labelledby="titulo-pago">
+        <h2 className="solo-lectores" id="titulo-pago">Pago en dos partes</h2>
+        <div className="pago-mitades__panel pago-mitades__panel--reserva">
+          <h3 className="pago-mitades__numero">{PAGO.reservaPct}%</h3>
+          <p className="pago-mitades__texto">para reservar</p>
+        </div>
+        <div className="pago-mitades__panel pago-mitades__panel--evento">
+          <h3 className="pago-mitades__numero">{PAGO.saldoPct}%</h3>
+          <p className="pago-mitades__texto">el día del evento</p>
+        </div>
+      </section>
+
+      <section className="seccion seccion--papel-hondo" aria-labelledby="titulo-abono">
+        <div className="lienzo pago-abono">
           <div className="seccion__encabezado">
             <p className="micro">Pago</p>
-            <h2 className="h2" id="titulo-pago">
-              {PAGO.resumen}
-            </h2>
-            <p className="lead">{PAGO.detalle}</p>
+            <h2 className="h2" id="titulo-abono">Antes de pagar el abono</h2>
           </div>
-
-          <div className="rejilla rejilla--2">
-            <Reveal className="condicion">
-              <h3 className="condicion__titulo">Antes de pagar el abono</h3>
-              <ul className="lista-marcada">
-                <li>Recibes la cotización por escrito con el detalle de lo incluido.</li>
-                <li>Recibes las condiciones de cambio y devolución.</li>
-                <li>Confirmas la carta cerrada y la dirección exacta del evento.</li>
-              </ul>
-            </Reveal>
-
-            <Reveal className="condicion" retraso={60}>
-              <h3 className="condicion__titulo">Casos particulares</h3>
-              <ul className="lista-marcada">
-                <li>
-                  <strong>Corporativos:</strong> emitimos factura y mantenemos el esquema 50/50 indicado en la cotización.
-                </li>
-                <li>
-                  <strong>Catering y productoras:</strong> acuerdo por evento, según volumen y
-                  repetición.
-                </li>
-                <li>
-                  <strong>Cambios de fecha:</strong> sujetos a disponibilidad y a lo que diga la
-                  cotización firmada.
-                </li>
-              </ul>
-            </Reveal>
-          </div>
+          <Reveal className="condicion">
+            <ul className="lista-marcada">
+              <li>Recibes la cotización por escrito con el detalle de lo incluido.</li>
+              <li>Recibes las condiciones de cambio y devolución.</li>
+              <li>Confirmas la carta cerrada y la dirección exacta del evento.</li>
+            </ul>
+          </Reveal>
         </div>
       </section>
 

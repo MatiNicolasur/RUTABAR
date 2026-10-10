@@ -522,6 +522,49 @@
 
 /* --- Condiciones ---------------------------------------------------------- */
 
+.pago-mitades {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pago-mitades__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  min-block-size: clamp(12rem, 22vw, 20rem);
+  padding: 2rem clamp(0.75rem, 4vw, 4rem);
+  text-align: center;
+  color: #fff;
+}
+
+.pago-mitades__panel--reserva { background: var(--rojo-medio); }
+.pago-mitades__panel--evento { background: var(--rojo-profundo); }
+
+.pago-mitades__numero {
+  margin: 0;
+  font-family: var(--fuente-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: #fff;
+}
+
+.pago-mitades__texto {
+  margin: 0;
+  font-family: var(--fuente-texto);
+  font-size: clamp(0.95rem, 2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.pago-abono .seccion__encabezado { margin-block-end: 1.5rem; }
+.pago-abono .condicion { max-inline-size: 44rem; }
+
 .condicion {
   display: grid;
   gap: 0.8rem;
