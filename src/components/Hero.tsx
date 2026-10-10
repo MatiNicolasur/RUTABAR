@@ -257,7 +257,7 @@ export function Hero({
                   priority
                   fetchPriority="high"
                   unoptimized
-                  sizes="(min-width: 48rem) 25rem, 70vw"
+                  sizes="(min-width: 48rem) 25rem, 58vw"
                   className="hero2__foto"
                   onLoad={() => setFotoLista(true)}
                   onError={() => {

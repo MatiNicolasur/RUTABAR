@@ -634,25 +634,40 @@
 @media (max-width: 47.99rem) {
   .hero--retrato {
     gap: clamp(0.5rem, 1.5vh, 0.9rem);
+    justify-content: flex-start;
     block-size: 100vh;
     block-size: 100svh;
     block-size: 100dvh;
-    min-block-size: 0;
+    /* Safari puede reducir el viewport dinámico al mostrar sus barras. El
+     * fondo debe cubrir también el viewport grande sin bajar los botones. */
+    min-block-size: 100vh;
+    min-block-size: 100lvh;
     padding-block: calc(var(--cabecera-alto) + 0.75rem) max(1rem, env(safe-area-inset-bottom));
     overflow: visible;
   }
 
   .hero2__marco {
     flex: 1 1 0;
-    inline-size: min(70vw, 17.5rem);
+    inline-size: min(58vw, 15rem);
     block-size: auto;
-    max-block-size: 32rem;
+    max-block-size: min(32rem, calc(100dvh - var(--cabecera-alto) - 8rem));
     min-block-size: 0;
     transform: none;
   }
 
+  /* Centrar la capa en la pantalla, no dentro del ancho angosto de la foto:
+   * Safari puede alinear al inicio un flex item más ancho que su contenedor. */
+  .hero2__texto {
+    inset-inline-start: 50%;
+    inset-inline-end: auto;
+    inline-size: 100vw;
+    transform: translate(-50%, -50%);
+  }
+
   .hero2__foto { opacity: 1; }
-  .hero2__firma { font-size: clamp(4.5rem, 21vw, 7rem); }
+  /* Mairo se extiende más allá de su ancho tipográfico. Este tamaño deja
+   * aire junto al borde del iPhone y aún cruza los lados de la foto. */
+  .hero2__firma { font-size: clamp(3.45rem, 19.5vw, 5.4rem); }
   .hero2__ubicacion { font-size: clamp(1.4rem, 5.2vw, 1.8rem); }
   .hero2__intro { flex-shrink: 0; inline-size: 100%; font-size: 0.875rem; }
 }
