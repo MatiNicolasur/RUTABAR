@@ -174,87 +174,78 @@
   padding: 0;
 }
 
-.cotizacion-flujo__selector {
-  display: grid;
-  gap: 0.65rem;
-  min-inline-size: 0;
+.cotizacion-flujo__horas {
+  min-width: 0;
+  margin: 0;
   padding: 0;
   border: 0;
 }
 
-.cotizacion-flujo__selector legend {
-  margin-block-end: 0.2rem;
-  font-size: 0.9375rem;
-  font-weight: 700;
+.cotizacion-flujo__horas legend {
+  margin-block-end: 0.75rem;
+  color: var(--texto);
+  font-size: 0.875rem;
+  font-weight: 650;
 }
 
-.cotizacion-flujo__cartas {
-  display: grid;
-  gap: 0.65rem;
+.cotizacion-flujo__horas-lista {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.1rem 0.65rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 }
 
-.cotizacion-flujo__opcion,
-.cotizacion-flujo__duracion {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 0.35rem 0.7rem;
-  min-height: 4rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid var(--papel-borde-fuerte);
-  border-radius: var(--radio-suave);
-  background: var(--papel);
+.cotizacion-flujo__hora {
+  position: relative;
+  flex: 0 0 3.7rem;
+  scroll-snap-align: start;
   cursor: pointer;
 }
 
-.cotizacion-flujo__opcion--activa,
-.cotizacion-flujo__duracion--activa {
+.cotizacion-flujo__hora input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cotizacion-flujo__hora span {
+  display: grid;
+  min-height: 3.25rem;
+  place-items: center;
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: var(--radio-suave);
+  background: var(--papel);
+  color: var(--texto);
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--m-dur-1) var(--m-ease-out), border-color var(--m-dur-1) var(--m-ease-out);
+}
+
+.cotizacion-flujo__hora input:checked + span {
   border-color: var(--rojo);
-  background: rgb(198 0 21 / 0.055);
-  box-shadow: inset 0 0 0 1px var(--rojo);
+  background: var(--rojo);
+  color: var(--sobre-rojo);
 }
 
-.cotizacion-flujo__opcion {
-  transition:
-    border-color var(--m-dur-1) var(--m-ease-out),
-    background-color var(--m-dur-1) var(--m-ease-out),
-    box-shadow var(--m-dur-1) var(--m-ease-out);
-}
-
-.cotizacion-flujo__opcion:hover {
-  border-color: var(--rojo-medio);
-}
-
-.cotizacion-flujo__opcion--activa:hover {
-  border-color: var(--rojo);
-}
-
-.cotizacion-flujo__opcion:focus-within {
-  outline: 3px solid rgb(198 0 21 / 0.16);
+.cotizacion-flujo__hora input:focus-visible + span {
+  outline: 3px solid rgb(198 0 21 / 0.25);
   outline-offset: 2px;
 }
 
-.cotizacion-flujo__opcion input,
-.cotizacion-flujo__duracion input {
-  width: 1.15rem;
-  height: 1.15rem;
-  margin: 0;
-  accent-color: var(--rojo);
-  grid-row: span 2;
+.cotizacion-flujo__hora:hover input:not(:checked) + span {
+  border-color: var(--rojo-medio);
 }
 
-.cotizacion-flujo__opcion-titulo {
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.cotizacion-flujo__opcion-detalle {
-  color: var(--texto-suave);
-  font-size: 0.82rem;
-}
-
-.cotizacion-flujo__horas {
-  max-width: 22rem;
+.cotizacion-flujo__horas-ayuda {
+  margin-block-start: 0.3rem;
+  color: var(--texto-tenue);
+  font-size: 0.78rem;
 }
 
 .cotizacion-flujo__precio {
@@ -333,91 +324,6 @@
   font-size: 0.88rem;
 }
 
-.cotizacion-flujo__resumen {
-  display: grid;
-  gap: 1rem;
-  padding: clamp(1rem, 4vw, 1.4rem);
-  border: 1px solid var(--papel-borde);
-  border-radius: var(--radio-suave);
-  background: var(--papel);
-}
-
-.cotizacion-flujo__resumen-cabecera {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.cotizacion-flujo__resumen-cabecera h3 {
-  font-family: var(--fuente-display);
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.cotizacion-flujo__datos {
-  display: grid;
-  gap: 0;
-  border-block-start: 1px solid var(--papel-borde);
-}
-
-.cotizacion-flujo__datos > div {
-  display: grid;
-  grid-template-columns: minmax(6.5rem, 0.7fr) minmax(0, 1fr);
-  gap: 0.75rem;
-  padding-block: 0.65rem;
-  border-block-end: 1px solid var(--papel-borde);
-  font-size: 0.85rem;
-}
-
-.cotizacion-flujo__datos dt {
-  color: var(--texto-suave);
-}
-
-.cotizacion-flujo__datos dd {
-  font-weight: 600;
-  text-align: end;
-  overflow-wrap: anywhere;
-}
-
-.cotizacion-flujo__montos {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
-}
-
-.cotizacion-flujo__montos > div {
-  display: grid;
-  gap: 0.2rem;
-  min-width: 0;
-  padding: 0.75rem;
-  border-radius: var(--radio);
-  background: #fff;
-}
-
-.cotizacion-flujo__montos span {
-  color: var(--texto-suave);
-  font-size: 0.74rem;
-  line-height: 1.35;
-}
-
-.cotizacion-flujo__montos strong {
-  font-size: clamp(0.88rem, 3.5vw, 1rem);
-  font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
-}
-
-.cotizacion-flujo__montos > p {
-  grid-column: 1 / -1;
-  color: var(--texto-suave);
-  font-size: 0.8rem;
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
-
-.cotizacion-flujo__nota-digital,
 .cotizacion-flujo__ayuda {
   font-size: 0.82rem;
 }
@@ -428,18 +334,12 @@
 }
 
 @media (min-width: 40rem) {
+  .cotizacion-flujo__horas-ayuda {
+    display: none;
+  }
+
   .cotizacion-flujo__campos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .cotizacion-flujo__cartas {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .cotizacion-flujo__opcion {
-    align-content: start;
-    min-height: 6rem;
-    padding: 0.8rem;
   }
 
   .cotizacion-flujo__acciones,

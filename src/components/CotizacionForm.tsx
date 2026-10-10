@@ -286,14 +286,24 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             <span className="cotizacion-flujo__ayuda">{carta.resumen}</span>
           </label>
 
-          <label className="campo cotizacion-flujo__horas">
-            <span className="campo__label">Cantidad de horas</span>
-            <select className="campo__input" value={duracion} onChange={(evento) => setDuracion(Number(evento.target.value) as DuracionCotizacion)}>
+          <fieldset className="cotizacion-flujo__horas">
+            <legend>Cantidad de horas</legend>
+            <div className="cotizacion-flujo__horas-lista">
               {CONFIG_COTIZACION.duraciones.map((opcion) => (
-                <option value={opcion} key={opcion}>{opcion} horas</option>
+                <label className="cotizacion-flujo__hora" key={opcion}>
+                  <input
+                    type="radio"
+                    name="duracion-cotizacion"
+                    value={opcion}
+                    checked={duracion === opcion}
+                    onChange={() => setDuracion(opcion)}
+                  />
+                  <span>{opcion} h</span>
+                </label>
               ))}
-            </select>
-          </label>
+            </div>
+            <p className="cotizacion-flujo__horas-ayuda">Desliza para ver todas las horas.</p>
+          </fieldset>
 
           <div className="cotizacion-flujo__precio" aria-live="polite" aria-atomic="true">
             <p className="micro">Total final con IVA incluido</p>
@@ -316,7 +326,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 3 de 3</p>
             <h2 className="h3" id="cotizacion-paso-3">Revisar y enviar</h2>
-            <p>Déjanos un dato de contacto y revisa el resumen. El detalle se enviará de forma privada por correo.</p>
+            <p>Déjanos un dato de contacto para enviarte el detalle de tu cotización.</p>
           </div>
 
           <div className="cotizacion-flujo__campos">
@@ -341,38 +351,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           </label>
 
           {errorContacto ? <p className="cotizacion-flujo__error" role="alert">{errorContacto}</p> : null}
-
-          <div className="cotizacion-flujo__resumen" aria-labelledby="titulo-resumen-cotizacion">
-            <div className="cotizacion-flujo__resumen-cabecera">
-              <div>
-                <p className="micro">Antes de enviar</p>
-                <h3 id="titulo-resumen-cotizacion">Resumen de tu cotización</h3>
-              </div>
-            </div>
-
-            <dl className="cotizacion-flujo__datos">
-              <div><dt>Fecha</dt><dd>{fechaVisible}</dd></div>
-              <div><dt>Ciudad o comuna</dt><dd>{ciudadCotizacion}</dd></div>
-              <div><dt>Lugar</dt><dd>{lugar}</dd></div>
-              <div><dt>Asistentes</dt><dd>{numero(numeroAsistentes)}</dd></div>
-              <div><dt>Carta</dt><dd>{carta.nombre} · {carta.bebidas} bebidas</dd></div>
-              <div><dt>Duración</dt><dd>{duracion} horas</dd></div>
-              <div><dt>Servicio</dt><dd>Barra libre durante las horas contratadas</dd></div>
-            </dl>
-
-            <div className="cotizacion-flujo__montos">
-              <div><span>Total final con IVA</span><strong>{clp(total)}</strong></div>
-              <div><span>Precio por persona</span><strong>{clp(porPersona)}</strong></div>
-              <div><span>{PAGO.reservaPct}% para reservar</span><strong>{clp(montoReserva)}</strong></div>
-              <div><span>{PAGO.saldoPct}% el día del evento</span><strong>{clp(montoSaldo)}</strong></div>
-              <p>{clp(montoReserva)} + {clp(montoSaldo)} = {clp(total)}</p>
-            </div>
-            <p className="cotizacion-flujo__nota-digital">
-              {solicitaCartaDigital
-                ? 'Carta digital con branding solicitada: sin costo, con al menos 5 días de anticipación.'
-                : 'También puedes pedir una carta digital con branding sin costo, con al menos 5 días de anticipación.'}
-            </p>
-          </div>
 
           {errorEnvio ? <p className="cotizacion-flujo__error" role="alert">{errorEnvio}</p> : null}
 
