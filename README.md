@@ -27,6 +27,8 @@ Copia `.env.example` a `.env.local` para desarrollo. En Vercel, configura estas 
 - `RESEND_FROM_EMAIL`: remitente de un dominio verificado en Resend.
 - `RESEND_TO_EMAIL`: buzón que recibe las cotizaciones.
 
+Para este sitio, configura `RESEND_FROM_EMAIL=RUTABAR <contacto@rutabar.cl>` y `RESEND_TO_EMAIL=contacto@rutabar.cl`. El dominio `rutabar.cl` debe figurar como verificado en Resend. Si Vercel todavía tiene valores de `barrabar.cl`, cámbialos: las variables de entorno tienen prioridad sobre los valores predeterminados del código.
+
 Las variables `RESEND_*` son privadas. No les agregues el prefijo `NEXT_PUBLIC_` ni subas `.env.local`.
 
 ## Publicación en Vercel

@@ -70,12 +70,12 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
 
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY
-  const remitente = process.env.RESEND_FROM_EMAIL || 'RUTABAR <contacto@barrabar.cl>'
-  const destinatario = process.env.RESEND_TO_EMAIL || 'contacto@barrabar.cl'
+  const remitente = process.env.RESEND_FROM_EMAIL || 'RUTABAR <contacto@rutabar.cl>'
+  const destinatario = process.env.RESEND_TO_EMAIL || 'contacto@rutabar.cl'
 
   if (!apiKey) {
     return Response.json(
-      { error: 'El envío por correo todavía no está configurado. Escríbenos a contacto@barrabar.cl mientras lo conectamos.' },
+      { error: 'El envío por correo todavía no está configurado. Escríbenos a contacto@rutabar.cl mientras lo conectamos.' },
       { status: 503 },
     )
   }
@@ -177,11 +177,20 @@ export async function POST(request: Request) {
     })
 
     if (!resend.ok) {
-      return Response.json({ error: 'El correo no se pudo enviar en este momento. Inténtalo otra vez o escríbenos a contacto@barrabar.cl.' }, { status: 502 })
+      // Registrar solo el estado y el código del proveedor: la respuesta puede
+      // contener direcciones u otros datos que no deben aparecer en los logs.
+      const respuesta: unknown = await resend.json().catch(() => null)
+      const codigo = respuesta && typeof respuesta === 'object' && 'name' in respuesta && typeof respuesta.name === 'string'
+        ? respuesta.name
+        : 'unknown'
+      console.error('Resend rechazó una cotización', { status: resend.status, codigo })
+
+      return Response.json({ error: 'El correo no se pudo enviar en este momento. Inténtalo otra vez.' }, { status: 502 })
     }
 
     return Response.json({ enviado: true }, { status: 200 })
-  } catch {
-    return Response.json({ error: 'El correo no se pudo enviar en este momento. Inténtalo otra vez o escríbenos a contacto@barrabar.cl.' }, { status: 502 })
+  } catch (error) {
+    console.error('No se pudo conectar con Resend', { tipo: error instanceof Error ? error.name : 'unknown' })
+    return Response.json({ error: 'No se pudo conectar con el servicio de correo. Inténtalo otra vez.' }, { status: 502 })
   }
 }
