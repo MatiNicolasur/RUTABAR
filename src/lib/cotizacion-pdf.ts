@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import fontkit from '@pdf-lib/fontkit'
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from 'pdf-lib'
 import { ALTERNATIVAS_CARTA, CARTA_WEB, type TragoWeb } from '../data/carta-web'
 import { CONDICIONES } from '../data/condiciones'
 import { CONFIG_COTIZACION, type CartaCotizacionId, type DuracionCotizacion } from '../data/precios-cotizacion'
@@ -98,8 +98,8 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === datos.cartaId)!
   const seleccion = ALTERNATIVAS_CARTA.find((opcion) => opcion.nombre === carta.nombre)!
   const tragos = tragosDeCarta(datos.cartaId)
-  const fotos = [...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, archivo: `${trago.id}.jpg` })), {
-    nombre: 'Bebidas y agua', detalle: bebidasDeCarta(datos.cartaId), archivo: 'bebidas-agua.jpg',
+  const fotos = [...tragos.map((trago) => ({ nombre: trago.nombre, base: trago.base, detalle: trago.descripcion, icono: trago.icono, archivo: `${trago.id}.jpg` })), {
+    nombre: 'Bebidas y agua', base: 'Para acompañar', detalle: bebidasDeCarta(datos.cartaId), icono: '2', archivo: 'bebidas-agua.jpg',
   }]
   const paginasCarta = Math.ceil(fotos.length / 6)
   const totalPaginas = 2 + paginasCarta
@@ -144,6 +144,7 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   pie(portada, 1, totalPaginas, normal)
 
   const archivos = new Map<string, Uint8Array>()
+  const iconos = new Map<string, PDFImage>()
   for (let paginaIndice = 0; paginaIndice < paginasCarta; paginaIndice++) {
     const pagina = pdf.addPage([ANCHO, ALTO])
     pagina.drawRectangle({ x: 0, y: 735, width: ANCHO, height: ALTO - 735, color: ROJO })
@@ -161,15 +162,27 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
       const x = columna === 0 ? 42 : 305
       const baseY = 500 - fila * 205
       pagina.drawRectangle({ x, y: baseY, width: 248, height: 195, borderColor: ROJO_CLARO, borderWidth: 0.8, color: BLANCO })
+      let icono = iconos.get(item.icono)
+      if (!icono) {
+        const bytesIcono = await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'iconos', `${item.icono}.png`))
+        icono = await pdf.embedPng(bytesIcono)
+        iconos.set(item.icono, icono)
+      }
+      pagina.drawImage(icono, { x: x + 12, y: baseY + 150, width: 35, height: 35 })
+      const tamanoNombre = Math.min(11, 11 * 181 / negrita.widthOfTextAtSize(seguro(item.nombre), 11))
+      linea(pagina, item.nombre, x + 56, baseY + 174, negrita, tamanoNombre)
+      linea(pagina, item.base.toUpperCase(), x + 56, baseY + 159, negrita, 7, ROJO)
+      const detalle = lineas(item.detalle, normal, 7, 181)
+      for (const [lineaIndice, fragmento] of detalle.slice(0, 2).entries()) {
+        linea(pagina, fragmento, x + 56, baseY + 146 - lineaIndice * 8, normal, 7, SUAVE)
+      }
       let bytes = archivos.get(item.archivo)
       if (!bytes) {
         bytes = await readFile(path.join(process.cwd(), 'public', 'carta-pdf', item.archivo))
         archivos.set(item.archivo, bytes)
       }
       const imagen = await pdf.embedJpg(bytes)
-      pagina.drawImage(imagen, { x: x + 9, y: baseY + 58, width: 230, height: 131 })
-      parrafo(pagina, item.nombre, x + 10, baseY + 41, 226, negrita, 11)
-      parrafo(pagina, item.detalle, x + 10, baseY + 24, 226, normal, 8, SUAVE, 10)
+      pagina.drawImage(imagen, { x: x + 9, y: baseY + 9, width: 230, height: 122 })
     }
     pie(pagina, paginaIndice + 2, totalPaginas, normal)
   }
