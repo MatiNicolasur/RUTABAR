@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, type CSSProperties, type MouseEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { CONFIG_COTIZACION, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 import { PAGO } from '@/data/pago'
 import { clp, numero } from '@/lib/formato'
@@ -34,6 +34,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const [asistentes, setAsistentes] = useState(String(asistentesIniciales ?? CONFIG_COTIZACION.personasBase))
   const [cartaId, setCartaId] = useState<CartaCotizacionId>(cartaInicial ?? 'reducida')
   const [duracion, setDuracion] = useState<DuracionCotizacion>(duracionInicial ?? 4)
+  const [posicionHoras, setPosicionHoras] = useState<number>(duracionInicial ?? 4)
+  const posicionHorasRef = useRef<number>(duracionInicial ?? 4)
+  const punteroActivoRef = useRef<number | null>(null)
+  const animacionHorasRef = useRef<number | null>(null)
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
@@ -55,7 +59,47 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const montoReserva = Math.round((total * PAGO.reservaPct) / 100)
   const montoSaldo = total - montoReserva
   const fechaVisible = fecha ? fecha.split('-').reverse().join('/') : 'Por definir'
-  const progresoHoras = (duracion - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
+  const progresoHoras = (posicionHoras - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
+
+  useEffect(() => () => {
+    if (animacionHorasRef.current !== null) cancelAnimationFrame(animacionHorasRef.current)
+  }, [])
+
+  function detenerAnimacionHoras() {
+    if (animacionHorasRef.current !== null) cancelAnimationFrame(animacionHorasRef.current)
+    animacionHorasRef.current = null
+  }
+
+  function moverHoras(valor: number) {
+    posicionHorasRef.current = valor
+    setPosicionHoras(valor)
+  }
+
+  function elegirHora(valor: number) {
+    return Math.min(DURACION_MAXIMA, Math.max(DURACION_MINIMA, Math.round(valor))) as DuracionCotizacion
+  }
+
+  function terminarArrastreHoras(evento: ReactPointerEvent<HTMLInputElement>) {
+    if (punteroActivoRef.current !== evento.pointerId) return
+    punteroActivoRef.current = null
+    if (evento.currentTarget.hasPointerCapture(evento.pointerId)) evento.currentTarget.releasePointerCapture(evento.pointerId)
+
+    const inicio = posicionHorasRef.current
+    const destino = elegirHora(inicio)
+    setDuracion(destino)
+    if (Math.abs(destino - inicio) < 0.005 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      moverHoras(destino)
+      return
+    }
+
+    const comienzo = performance.now()
+    function avanzar(ahora: number) {
+      const progreso = Math.min(1, (ahora - comienzo) / 220)
+      moverHoras(inicio + (destino - inicio) * (1 - Math.pow(1 - progreso, 3)))
+      animacionHorasRef.current = progreso < 1 ? requestAnimationFrame(avanzar) : null
+    }
+    animacionHorasRef.current = requestAnimationFrame(avanzar)
+  }
 
   const resumen = useMemo(() => {
     const contacto = [correo.trim() ? `Correo: ${correo.trim()}` : '', whatsapp.trim() ? `WhatsApp: ${whatsapp.trim()}` : '']
@@ -183,6 +227,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }
 
   function reiniciarCotizador() {
+    detenerAnimacionHoras()
+    punteroActivoRef.current = null
     setPaso(1)
     setFecha('')
     setCiudad('')
@@ -191,6 +237,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     setAsistentes(String(CONFIG_COTIZACION.personasBase))
     setCartaId('reducida')
     setDuracion(4)
+    moverHoras(4)
     setNombre('')
     setCorreo('')
     setWhatsapp('')
@@ -308,11 +355,38 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
                 type="range"
                 min={DURACION_MINIMA}
                 max={DURACION_MAXIMA}
-                step={1}
-                value={duracion}
+                step="any"
+                value={posicionHoras}
                 aria-valuetext={`${duracion} horas`}
-                onChange={(evento) => setDuracion(Number(evento.target.value) as DuracionCotizacion)}
+                onChange={(evento) => {
+                  const valor = Number(evento.target.value)
+                  const elegida = elegirHora(valor)
+                  setDuracion(elegida)
+                  moverHoras(punteroActivoRef.current === null ? elegida : valor)
+                }}
+                onPointerDown={(evento) => {
+                  if (punteroActivoRef.current !== null) return
+                  detenerAnimacionHoras()
+                  punteroActivoRef.current = evento.pointerId
+                  evento.currentTarget.setPointerCapture(evento.pointerId)
+                }}
+                onPointerUp={terminarArrastreHoras}
+                onPointerCancel={terminarArrastreHoras}
+                onKeyDown={(evento) => {
+                  const cambio = evento.key === 'ArrowRight' || evento.key === 'ArrowUp' || evento.key === 'PageUp' ? 1
+                    : evento.key === 'ArrowLeft' || evento.key === 'ArrowDown' || evento.key === 'PageDown' ? -1 : 0
+                  const destino = evento.key === 'Home' ? DURACION_MINIMA : evento.key === 'End' ? DURACION_MAXIMA
+                    : cambio ? elegirHora(duracion + cambio) : null
+                  if (destino === null) return
+                  evento.preventDefault()
+                  detenerAnimacionHoras()
+                  setDuracion(destino)
+                  moverHoras(destino)
+                }}
               />
+            </div>
+            <div className="cotizacion-flujo__horas-marcas" aria-hidden="true">
+              {CONFIG_COTIZACION.duraciones.map((opcion) => <span className={opcion === duracion ? 'cotizacion-flujo__horas-marca--activa' : undefined} key={opcion} />)}
             </div>
             <div className="cotizacion-flujo__horas-extremos" aria-hidden="true">
               <span>{DURACION_MINIMA} h</span>

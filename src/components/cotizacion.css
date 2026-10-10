@@ -279,6 +279,23 @@
   outline-offset: 0.2rem;
 }
 
+.cotizacion-flujo__horas-marcas {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 0.8rem;
+}
+
+.cotizacion-flujo__horas-marcas span {
+  width: 2px;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: var(--papel-borde-fuerte);
+}
+
+.cotizacion-flujo__horas-marcas .cotizacion-flujo__horas-marca--activa {
+  background: var(--rojo);
+}
+
 .cotizacion-flujo__horas-extremos {
   color: var(--texto-tenue);
   font-size: 0.78rem;
