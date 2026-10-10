@@ -2,59 +2,12 @@ import {
   ALTERNATIVAS_CARTA,
   BEBIDAS_Y_AGUA,
   CARTA_WEB,
-  ETIQUETA_PERFIL,
-  type TragoWeb,
 } from '@/data/carta-web'
 import { CartaFiltro } from './CartaFiltro'
-import { ParallaxScroll } from './ParallaxScroll'
+import { TarjetaTrago } from './TarjetaTrago'
 import Image from 'next/image'
 
-/**
- * Ficha de un trago.
- *
- * Es un componente de servidor: el icono se renderiza acá y viaja como HTML,
- * nunca como datos al bundle del navegador.
- */
-export function TarjetaTrago({ trago }: { trago: TragoWeb }) {
-  return (
-    <li
-      className="trago"
-      data-trago={trago.id}
-      data-familia={trago.familia}
-      data-perfil={trago.perfil}
-    >
-      <figure className="trago__foto">
-        <ParallaxScroll className="trago__parallax">
-          <Image
-            src={trago.imagen}
-            alt={`Fotografía ilustrativa de ${trago.nombre}`}
-            fill
-            sizes="(min-width: 62rem) 120px, 20vw"
-            className="trago__fotoImagen"
-          />
-        </ParallaxScroll>
-      </figure>
-
-      <div className="trago__cuerpo">
-        <div className="trago__cabecera">
-          <h3 className="trago__nombre">{trago.nombre}</h3>
-          <span className="trago__base">{trago.base}</span>
-        </div>
-        <p className="trago__descripcion">{trago.descripcion}</p>
-
-        <div className="trago__meta">
-          <span className="etiqueta">{ETIQUETA_PERFIL[trago.perfil]}</span>
-          <span className="trago__ficha">
-            {trago.vaso} · {trago.garnish}
-          </span>
-        </div>
-
-      </div>
-    </li>
-  )
-}
-
-/** La carta completa, con su filtro. Todo se renderiza en el servidor. */
+/** La carta se compone en el servidor; cada tarjeta maneja su apertura en el cliente. */
 export function CartaInteractiva() {
   const resumen = CARTA_WEB.map((t) => ({ id: t.id, familia: t.familia, perfil: t.perfil }))
 

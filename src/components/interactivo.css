@@ -115,14 +115,181 @@
 /* El filtrado lo hace el CSS: los tragos llegan renderizados desde el
  * servidor y acá solo se ocultan los que no corresponden. Así los 35 iconos
  * de marca nunca entran al bundle del navegador. */
-.carta-int[data-familia='con-alcohol'] .trago:not([data-familia='con-alcohol']),
-.carta-int[data-familia='sin-alcohol'] .trago:not([data-familia='sin-alcohol']),
-.carta-int[data-perfil='burbujeante'] .trago:not([data-perfil='burbujeante']),
-.carta-int[data-perfil='citrico'] .trago:not([data-perfil='citrico']),
-.carta-int[data-perfil='dulce'] .trago:not([data-perfil='dulce']),
-.carta-int[data-perfil='seco'] .trago:not([data-perfil='seco']),
-.carta-int[data-perfil='herbal'] .trago:not([data-perfil='herbal']) {
+.carta-int[data-familia='con-alcohol'] .trago-card:not([data-familia='con-alcohol']),
+.carta-int[data-familia='sin-alcohol'] .trago-card:not([data-familia='sin-alcohol']),
+.carta-int[data-perfil='burbujeante'] .trago-card:not([data-perfil='burbujeante']),
+.carta-int[data-perfil='citrico'] .trago-card:not([data-perfil='citrico']),
+.carta-int[data-perfil='dulce'] .trago-card:not([data-perfil='dulce']),
+.carta-int[data-perfil='seco'] .trago-card:not([data-perfil='seco']),
+.carta-int[data-perfil='herbal'] .trago-card:not([data-perfil='herbal']) {
   display: none;
+}
+
+/* La carta pública usa la foto entera como tarjeta. La lista compacta de
+ * servicio conserva sus reglas .trago de más abajo. */
+.carta-int .carta-lista {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.75rem, 1.8vw, 1.25rem);
+  border: 0;
+}
+
+@media (min-width: 42rem) {
+  .carta-int .carta-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 62rem) {
+  .carta-int .carta-lista { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 78rem) {
+  .carta-int .carta-lista { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.trago-card {
+  position: relative;
+  isolation: isolate;
+  min-inline-size: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radio-suave);
+  background: var(--tinta);
+  color: #fff;
+}
+
+.trago-card::before,
+.trago-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  content: '';
+}
+
+.trago-card::before {
+  background: linear-gradient(180deg, transparent 43%, rgb(9 0 2 / 0.75) 100%);
+}
+
+.trago-card::after {
+  background: rgb(12 0 3 / 0.78);
+  opacity: 0;
+  transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trago-card[data-open='true']::after { opacity: 1; }
+
+.trago-card__imagen {
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trago-card[data-open='true'] .trago-card__imagen { transform: scale(1.045); }
+
+.trago-card__titulo { margin: 0; }
+
+.trago-card__boton {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  inline-size: 100%;
+  padding: clamp(1rem, 2.4vw, 1.5rem);
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: start;
+  cursor: pointer;
+}
+
+.trago-card__boton:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -5px;
+}
+
+.trago-card__nombre {
+  max-inline-size: calc(100% - 2rem);
+  font-family: var(--fuente-display);
+  font-size: clamp(1.3rem, 2.1vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.5);
+}
+
+.trago-card__mas {
+  position: absolute;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  border-radius: 50%;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trago-card[data-open='true'] .trago-card__mas { transform: rotate(45deg); }
+
+.trago-card__info {
+  position: absolute;
+  inset: 1.25rem 1.2rem 6.25rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.75rem);
+  pointer-events: none;
+  transition:
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 360ms;
+}
+
+.trago-card[data-open='true'] .trago-card__info {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.trago-card__base {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.trago-card__descripcion {
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  line-height: 1.4;
+  text-wrap: pretty;
+  color: #fff;
+}
+
+.trago-card__ficha {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trago-card::after,
+  .trago-card__imagen,
+  .trago-card__mas,
+  .trago-card__info { transition: none; }
+
+  .trago-card__info { transform: none; }
+  .trago-card[data-open='true'] .trago-card__imagen { transform: none; }
 }
 
 .trago {
