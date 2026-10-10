@@ -4,6 +4,8 @@
  */
 export const CONFIG_COTIZACION = {
   personasBase: 40,
+  asistentesMin: 40,
+  asistentesMax: 300,
   duraciones: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const,
   cartas: [
     {
@@ -33,13 +35,19 @@ export const CONFIG_COTIZACION = {
 export type DuracionCotizacion = (typeof CONFIG_COTIZACION.duraciones)[number]
 export type CartaCotizacionId = (typeof CONFIG_COTIZACION.cartas)[number]['id']
 
+export function asistentesEnRango(asistentes: number): boolean {
+  return Number.isSafeInteger(asistentes)
+    && asistentes >= CONFIG_COTIZACION.asistentesMin
+    && asistentes <= CONFIG_COTIZACION.asistentesMax
+}
+
 export function calcularPrecioCotizacion(
   cartaId: CartaCotizacionId,
   duracion: DuracionCotizacion,
   asistentes: number,
 ): number {
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId)
-  if (!carta || !Number.isSafeInteger(asistentes) || asistentes < 1) return 0
+  if (!carta || !asistentesEnRango(asistentes)) return 0
 
   return Math.round((carta.precios[duracion] * asistentes) / CONFIG_COTIZACION.personasBase)
 }

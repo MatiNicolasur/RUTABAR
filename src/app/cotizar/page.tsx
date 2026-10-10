@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { CotizacionForm } from '@/components/CotizacionForm'
 import { Ranura } from '@/components/Ranura'
 import { PAGO } from '@/data/pago'
-import { CONFIG_COTIZACION, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
+import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 
 export const metadata: Metadata = {
   title: 'Cotizar',
@@ -29,7 +29,7 @@ function esDuracionValida(valor: number): valor is DuracionCotizacion {
 function asistentesValidos(valor: string | undefined): number | undefined {
   if (!valor) return undefined
   const cantidad = Number(valor)
-  return Number.isSafeInteger(cantidad) && cantidad > 0 ? cantidad : undefined
+  return asistentesEnRango(cantidad) ? cantidad : undefined
 }
 
 /** Cotizador público con tarifas de venta editables, separado del modelo interno de costos. */

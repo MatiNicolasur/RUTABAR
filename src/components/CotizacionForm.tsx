@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
-import { CONFIG_COTIZACION, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
+import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 import { PAGO } from '@/data/pago'
 import { clp, numero } from '@/lib/formato'
 
@@ -149,8 +149,12 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     : ''
 
   function validarEvento(): boolean {
-    if (!fecha || !ciudadCotizacion || !lugar.trim() || !Number.isSafeInteger(numeroAsistentes) || numeroAsistentes < 1) {
+    if (!fecha || !ciudadCotizacion || !lugar.trim() || !Number.isSafeInteger(numeroAsistentes)) {
       setErrorEvento('Completa la fecha, la ciudad o comuna, el lugar y un número válido de asistentes.')
+      return false
+    }
+    if (!asistentesEnRango(numeroAsistentes)) {
+      setErrorEvento(`Elige entre ${CONFIG_COTIZACION.asistentesMin} y ${CONFIG_COTIZACION.asistentesMax} invitados.`)
       return false
     }
     setErrorEvento('')
@@ -305,7 +309,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             </label>
             <label className="campo">
               <span className="campo__label">Número de asistentes <span className="campo__valor">*</span></span>
-              <input className="campo__input" type="number" min={1} step={1} inputMode="numeric" value={asistentes} onChange={(evento) => setAsistentes(evento.target.value)} required />
+              <input className="campo__input" type="number" min={CONFIG_COTIZACION.asistentesMin} max={CONFIG_COTIZACION.asistentesMax} step={1} inputMode="numeric" value={asistentes} onChange={(evento) => { setAsistentes(evento.target.value); setErrorEvento('') }} required />
+              <span className="cotizacion-flujo__ayuda">Entre {CONFIG_COTIZACION.asistentesMin} y {CONFIG_COTIZACION.asistentesMax} invitados.</span>
             </label>
           </div>
 

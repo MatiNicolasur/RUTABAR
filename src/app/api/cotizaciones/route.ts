@@ -1,4 +1,4 @@
-import { CONFIG_COTIZACION, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
+import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 import { PAGO } from '@/data/pago'
 import { clp } from '@/lib/formato'
 
@@ -50,7 +50,7 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
     !fechaValida ||
     !esTexto(entrada.ciudad, 100) ||
     !esTexto(entrada.lugar, 160) ||
-    !Number.isSafeInteger(entrada.asistentes) || Number(entrada.asistentes) < 1 || Number(entrada.asistentes) > 10_000 ||
+    !asistentesEnRango(Number(entrada.asistentes)) || typeof entrada.asistentes !== 'number' ||
     typeof entrada.solicitaCartaDigital !== 'boolean'
   ) return null
 
