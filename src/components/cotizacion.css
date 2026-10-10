@@ -420,15 +420,14 @@
 .cotizacion-flujo__exito {
   position: relative;
   display: grid;
-  min-height: 25rem;
-  align-items: center;
+  justify-items: center;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
   overflow: hidden;
   isolation: isolate;
-  padding: clamp(1.25rem, 5vw, 3rem);
-  border: 1px solid rgb(198 0 21 / 0.28);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio-suave);
-  background: linear-gradient(135deg, #fffafa 0%, #fff0f1 44%, #ffc2c8 100%);
-  box-shadow: 0 24px 55px -42px rgb(115 0 18 / 0.5);
+  background: #fffafa;
 }
 
 .cotizacion-flujo__confeti {
@@ -476,61 +475,31 @@
   position: relative;
   z-index: 1;
   display: grid;
-  justify-items: start;
-  gap: 1rem;
-  width: min(100%, 36rem);
-  margin-inline: auto;
-}
-
-.cotizacion-flujo__exito-contenido .micro {
-  color: var(--rojo-hondo);
+  justify-items: center;
+  gap: 0.8rem;
+  width: min(100%, 30rem);
+  text-align: center;
 }
 
 .cotizacion-flujo__exito-contenido .h2 {
-  max-width: 15ch;
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  line-height: 0.98;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.08;
 }
 
 .cotizacion-flujo__exito-contenido .lead {
   color: #4b3336;
-  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
-}
-
-.cotizacion-flujo__exito-total {
-  display: grid;
-  gap: 0.35rem;
-  width: 100%;
-  padding: 1rem 1.15rem;
-  border: 1px solid rgb(164 0 24 / 0.18);
-  border-radius: var(--radio);
-  background: rgb(255 255 255 / 0.74);
-}
-
-.cotizacion-flujo__exito-total span {
-  color: var(--texto-suave);
-  font-size: 0.84rem;
-}
-
-.cotizacion-flujo__exito-total strong {
-  color: var(--rojo-hondo);
-  font-family: var(--fuente-display);
-  font-size: clamp(1.3rem, 4vw, 1.8rem);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
 }
 
 .cotizacion-flujo__exito-gif {
   position: relative;
   z-index: 1;
-  width: min(100%, 24rem);
+  width: min(100%, 22rem);
   aspect-ratio: 16 / 9;
-  margin: 0.25rem auto 0;
+  margin: 0;
   overflow: hidden;
-  border: 1px solid rgb(164 0 24 / 0.22);
   border-radius: var(--radio-suave);
   background: #131311;
-  box-shadow: 0 16px 34px -24px rgb(19 19 17 / 0.6);
 }
 
 .cotizacion-flujo__exito-gif img {
@@ -538,24 +507,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-@media (min-width: 48rem) {
-  .cotizacion-flujo__exito {
-    grid-template-columns: minmax(0, 1.15fr) minmax(15rem, 0.85fr);
-    gap: clamp(1.25rem, 4vw, 3rem);
-  }
-
-  .cotizacion-flujo__exito-contenido {
-    width: 100%;
-    margin-inline: 0;
-  }
-
-  .cotizacion-flujo__exito-gif {
-    width: min(100%, 25rem);
-    margin: 0;
-    justify-self: end;
-  }
 }
 
 @keyframes cotizacion-confeti-caida {

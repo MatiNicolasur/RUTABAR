@@ -35,13 +35,13 @@ export default function Home() {
     <>
       <Hero
         diseno="retrato"
-        imagen="/fotos/cocteles-editorial.webp"
-        imagenAlt="Imagen ilustrativa de un pisco sour y un mocktail de pomelo y romero sobre una barra al atardecer"
-        lineas={['Tu ruta favorita de tragos.']}
-        acento="ruta"
+        imagen="/fotos/cocteles-speakeasy-grano.jpg"
+        imagenAlt="Cócteles en primer plano en una barra speakeasy iluminada en rojo, con personas conversando al fondo"
+        lineas={['Servicio de barra móvil', 'a la puerta de tu evento']}
         accion={{ label: 'Cotizar mi evento', href: '/cotizar' }}
         accionSecundaria={{ label: 'Ver la carta', href: '/carta' }}
-        marca="ruta bar"
+        marca="rutabar"
+        ubicacion={'bar móvil en\nsantiago de chile'}
       />
 
       <section className="datos-ruta" aria-label="La ruta en tres datos">

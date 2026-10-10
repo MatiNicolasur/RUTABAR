@@ -115,6 +115,30 @@ html {
   scroll-behavior: smooth;
   /* Respeta la altura real del header para que los anclajes no queden debajo. */
   scroll-padding-block-start: calc(var(--cabecera-alto) + 0.5rem);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rojo-profundo) var(--rojo);
+}
+
+@supports selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+
+  html::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: var(--rojo);
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: var(--rojo-profundo);
+    border: 1px solid var(--rojo);
+    border-radius: 999px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -144,6 +168,10 @@ body {
 body > footer {
   position: relative;
   z-index: 1;
+}
+
+#contenido:has(> .hero2__preloader) {
+  z-index: 100;
 }
 
 .imagen-parallax {

@@ -468,7 +468,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       ) : (
         <section className="cotizacion-flujo__exito" role="status" aria-labelledby="cotizacion-enviada-titulo">
           <div className="cotizacion-flujo__confeti" aria-hidden="true">
-            {Array.from({ length: 32 }, (_, indice) => (
+            {Array.from({ length: 20 }, (_, indice) => (
               <span
                 className={`cotizacion-flujo__confeti-pieza cotizacion-flujo__confeti-pieza--${indice % 4}`}
                 key={indice}
@@ -481,16 +481,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               />
             ))}
           </div>
-          <div className="cotizacion-flujo__exito-contenido">
-            <p className="micro">Solicitud enviada</p>
-            <h2 className="h2" id="cotizacion-enviada-titulo">Gracias, {nombre.trim()}.</h2>
-            <p className="lead">Recibimos los datos de tu evento. Nuestro equipo revisará la fecha y te responderá con la cotización final.</p>
-            <div className="cotizacion-flujo__exito-total">
-              <span>{carta.nombre} · {duracion} horas · {numero(numeroAsistentes)} asistentes</span>
-              <strong>{clp(total)} con IVA incluido</strong>
-            </div>
-            <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
-          </div>
           <figure className="cotizacion-flujo__exito-gif">
             <img
               src="/celebracion-cotizacion.gif"
@@ -499,6 +489,11 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               height={270}
             />
           </figure>
+          <div className="cotizacion-flujo__exito-contenido">
+            <h2 className="h2" id="cotizacion-enviada-titulo">¡Cotización enviada!</h2>
+            <p className="lead">Gracias, {nombre.trim()}. Te responderemos pronto.</p>
+            <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
+          </div>
         </section>
       )}
     </div>

@@ -17,13 +17,13 @@
  *    fotografía aparece después. Como el texto tiene que leerse sobre los dos
  *    fondos, el blanco cálido funciona en ambos.
  *
- * Todo el movimiento es CSS declarativo. Con `prefers-reduced-motion: reduce`
- * la cortina no se acorta: se elimina, y la foto queda en su sitio.
+ * En `retrato`, el preloader espera la foto y da paso a las animaciones CSS.
+ * Con `prefers-reduced-motion: reduce` se omite el movimiento espacial.
  */
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useId, type CSSProperties } from 'react'
+import { useEffect, useId, useState, type CSSProperties } from 'react'
 import { Icono } from './Icono'
 import { ParallaxScroll } from './ParallaxScroll'
 
@@ -46,8 +46,6 @@ type Props = {
   imagenAlt: string
   kicker?: string
   lineas: string[]
-  /** Palabra del titular en la tipografía manuscrita de la marca. */
-  acento?: string
   /** Frase corta en tipografía manuscrita, debajo del titular. */
   mano?: string
   lead?: string
@@ -57,8 +55,10 @@ type Props = {
   /** Columnas de la cortina. Más de 8 se lee como ruido. */
   segmentos?: number
   diseno?: Diseno
-  /** Solo para `retrato`: la firma manuscrita debajo del rectángulo. */
+  /** Solo para `retrato`: firma manuscrita que sobresale de la foto. */
   marca?: string
+  /** Solo para `retrato`: ubicación bajo la firma, dentro de la foto. */
+  ubicacion?: string
 }
 
 export function Hero({
@@ -66,7 +66,6 @@ export function Hero({
   imagenAlt,
   kicker,
   lineas,
-  acento,
   mano,
   lead,
   accion,
@@ -75,14 +74,48 @@ export function Hero({
   segmentos = 6,
   diseno = 'cortina',
   marca = 'RUTABAR',
+  ubicacion,
 }: Props) {
   const titleId = useId()
+  const [fotoLista, setFotoLista] = useState(false)
+  const [pausaCompleta, setPausaCompleta] = useState(false)
+  const [faseEntrada, setFaseEntrada] = useState<'espera' | 'sale' | 'hero'>('espera')
   const fraseRetrato = lineas.join(' ')
-  const inicioAcento = acento ? fraseRetrato.toLocaleLowerCase('es').indexOf(acento.toLocaleLowerCase('es')) : -1
   const columnas = Array.from(
     { length: Math.max(2, Math.min(10, segmentos)) },
     (_, indice) => indice,
   )
+
+  useEffect(() => {
+    if (diseno !== 'retrato') return
+
+    const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const pausa = window.setTimeout(() => setPausaCompleta(true), movimientoReducido ? 200 : 2450)
+    const respaldo = window.setTimeout(() => setFotoLista(true), 5000)
+
+    return () => {
+      window.clearTimeout(pausa)
+      window.clearTimeout(respaldo)
+    }
+  }, [diseno])
+
+  useEffect(() => {
+    if (diseno === 'retrato' && faseEntrada === 'espera' && fotoLista && pausaCompleta) {
+      setFaseEntrada('sale')
+    }
+  }, [diseno, faseEntrada, fotoLista, pausaCompleta])
+
+  useEffect(() => {
+    if (faseEntrada !== 'sale') return
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setFaseEntrada('hero')
+      return
+    }
+
+    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 1050)
+    return () => window.clearTimeout(respaldo)
+  }, [faseEntrada])
 
   const contenido = (
     <div className="lienzo hero__contenido">
@@ -152,7 +185,29 @@ export function Hero({
 
   if (diseno === 'retrato') {
     return (
-      <section className="hero hero--retrato" aria-labelledby={titleId}>
+      <>
+        {faseEntrada !== 'hero' ? (
+          <div
+            className={`hero2__preloader${faseEntrada === 'sale' ? ' hero2__preloader--saliendo' : ''}`}
+            role="status"
+            aria-label="el mejor bar móvil en santiago de chile"
+            onTransitionEnd={(evento) => {
+              if (evento.target === evento.currentTarget && evento.propertyName === 'transform') {
+                setFaseEntrada('hero')
+              }
+            }}
+          >
+            <p>
+              <span>el mejor bar móvil</span>
+              <span>en santiago de chile</span>
+            </p>
+          </div>
+        ) : null}
+        <section
+          className={`hero hero--retrato${faseEntrada === 'hero' ? ' hero--playing' : ''}`}
+          aria-labelledby={titleId}
+          inert={faseEntrada !== 'hero'}
+        >
         {/* El dibujo de marca, gigante, centrado y en el rojo de marca: es el
          * fondo de la composición. Va suelto dentro del hero y no dentro del
          * rectángulo, porque el recorte redondeado se lo comería. */}
@@ -160,8 +215,8 @@ export function Hero({
           <Icono nombre="31" tamano={420} />
         </span>
 
-        {/* El rectángulo. Es la única pieza: la foto entra recortada por el
-         * radio máximo y aparece abriéndose desde un círculo chico. */}
+        {/* La foto conserva su marco original. El texto queda como capa aparte
+         * para poder extenderse un poco más allá de los bordes de la imagen. */}
         <div className="hero2__marco">
           <div className="hero2__media">
             <ParallaxScroll className="hero2__parallax">
@@ -173,23 +228,16 @@ export function Hero({
                 fetchPriority="high"
                 sizes="(min-width: 62rem) 34rem, 88vw"
                 className="hero2__foto"
+                onLoad={() => setFotoLista(true)}
+                onError={() => setFotoLista(true)}
               />
             </ParallaxScroll>
+          </div>
 
-            <div className="hero2__texto">
-              <h1 className="hero2__frase" id={titleId}>
-                {inicioAcento < 0 || !acento ? fraseRetrato : (
-                  <>
-                    {fraseRetrato.slice(0, inicioAcento)}
-                    <span className="hero2__acento">{fraseRetrato.slice(inicioAcento, inicioAcento + acento.length)}</span>
-                    {fraseRetrato.slice(inicioAcento + acento.length)}
-                  </>
-                )}
-              </h1>
-              {/* La firma, entre la frase y la imagen: el nombre de la marca
-               * como cierre de la pieza. */}
-              <p className="hero2__firma mano">{marca}</p>
-            </div>
+          <div className="hero2__texto">
+            <h1 className="solo-lectores" id={titleId}>{fraseRetrato}</h1>
+            <p className="hero2__firma mano">{marca}</p>
+            {ubicacion ? <p className="hero2__ubicacion mano">{ubicacion}</p> : null}
           </div>
         </div>
 
@@ -200,7 +248,8 @@ export function Hero({
             {accionSecundaria ? <Link className="boton boton--fantasma" href={accionSecundaria.href}>{accionSecundaria.label}</Link> : null}
           </div>
         </div>
-      </section>
+        </section>
+      </>
     )
   }
 

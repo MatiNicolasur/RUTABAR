@@ -105,7 +105,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="cabecera__acciones">
-          <Link className="cabecera__enlace cabecera__inicio" href="/" aria-current={ruta === '/' ? 'page' : undefined}>
+          <Link className="enlace cabecera__enlace cabecera__inicio" href="/" aria-current={ruta === '/' ? 'page' : undefined}>
             Inicio
           </Link>
           {/* Una sola acción primaria en toda la cabecera. En móvil se esconde y
