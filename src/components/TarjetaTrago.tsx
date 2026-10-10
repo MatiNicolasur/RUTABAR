@@ -39,7 +39,7 @@ export function TarjetaTrago({ trago }: { trago: TragoWeb }) {
         src={trago.imagen}
         alt=""
         fill
-        sizes="(min-width: 78rem) 25vw, (min-width: 62rem) 33vw, (min-width: 42rem) 50vw, 90vw"
+        sizes="(min-width: 78rem) 25vw, (min-width: 62rem) 33vw, 45vw"
         className="trago-card__imagen"
       />
 
