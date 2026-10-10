@@ -503,7 +503,11 @@
 
 /* La firma blanca cruza el borde de la foto y toma el primer plano. */
 .hero2__firma {
-  margin: 0;
+  /* Mairo dibuja trazos fuera de su caja de línea. Durante el translate y la
+   * opacidad Safari rasteriza esa caja y recorta los trazos hasta el último
+   * fotograma. El padding amplía la capa; el margen conserva su posición. */
+  margin: -0.4em -0.2em;
+  padding: 0.4em 0.2em;
   align-self: center;
   inline-size: max-content;
   max-inline-size: none;
