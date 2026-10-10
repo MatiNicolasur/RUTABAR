@@ -7,12 +7,6 @@ import { Reveal } from '@/components/Reveal'
 import { SistemaServicio } from '@/components/SistemaServicio'
 import { ICONOS } from '@/data/iconos'
 
-const DATOS_RUTA = [
-  { numero: '01', valor: '25', etiqueta: 'opciones en la carta completa', pilar: 'Sabor', destino: '#ruta-sabor' },
-  { numero: '02', valor: '3', etiqueta: 'cartas para elegir tu experiencia', pilar: 'Barra', destino: '#ruta-barra' },
-  { numero: '03', valor: '3–12', etiqueta: 'horas de barra libre a elección', pilar: 'Ritmo', destino: '#ruta-ritmo' },
-] as const
-
 const ESTANDAR = [
   {
     palabra: 'Sabor',
@@ -44,18 +38,6 @@ export default function Home() {
         marca="rutabar"
         ubicacion={'bar móvil en\nsantiago de chile'}
       />
-
-      <section className="datos-ruta" aria-label="La ruta en tres datos">
-        <div className="lienzo datos-ruta__interior">
-          {DATOS_RUTA.map((dato) => (
-            <Link className="datos-ruta__item" href={dato.destino} key={dato.numero}>
-              <span className="datos-ruta__numero">{dato.numero} / {dato.pilar}</span>
-              <strong className="datos-ruta__valor">{dato.valor}</strong>
-              <span className="datos-ruta__etiqueta">{dato.etiqueta}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       <section className="seccion" aria-labelledby="titulo-estandar">
         <div className="lienzo">

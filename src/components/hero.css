@@ -676,8 +676,8 @@
   .hero2__intro { flex-shrink: 0; inline-size: 100%; font-size: 0.875rem; }
 }
 
-/* Fondo de marca al 110% del hero, desenfocado detrás de la foto. */
-.hero2__figura { inline-size: 110%; filter: blur(12px); opacity: 0.38; }
+/* Fondo de marca al 110% del hero, detrás de la foto. */
+.hero2__figura { inline-size: 110%; opacity: 0.38; }
 .hero2__figura svg { inline-size: 100%; block-size: auto; }
 .hero2__foto { object-position: center 64%; }
 

@@ -30,7 +30,7 @@ export const CONDICIONES: BloqueCondiciones[] = [
     titulo: 'Hora extra',
     puntos: [
       'Se cotiza por separado según personal, consumo y traslado.',
-      'La tarifa de horas adicionales se confirma en la cotización del evento.',
+      'La tarifa de cualquier hora adicional se acuerda por escrito antes de extender el servicio.',
     ],
   },
   {

@@ -1,6 +1,8 @@
 import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 import { PAGO } from '@/data/pago'
+import { CONDICIONES } from '@/data/condiciones'
 import { clp } from '@/lib/formato'
+import { generarCotizacionPdf } from '@/lib/cotizacion-pdf'
 
 export const runtime = 'nodejs'
 
@@ -39,14 +41,14 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
   const correo = typeof entrada.correo === 'string' ? entrada.correo.trim() : ''
   const whatsapp = typeof entrada.whatsapp === 'string' ? entrada.whatsapp.trim() : ''
   const fechaValida = typeof entrada.fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(entrada.fecha)
-  const correoValido = !correo || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)
+  const correoValido = correo.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)
   const digitosWhatsapp = whatsapp.replace(/\D/g, '')
-  const whatsappValido = !whatsapp || (digitosWhatsapp.length >= 8 && digitosWhatsapp.length <= 15)
+  const whatsappValido = !whatsapp || (whatsapp.length <= 32 && digitosWhatsapp.length >= 8 && digitosWhatsapp.length <= 15)
 
   if (
     !carta || !duracion ||
     !esTexto(entrada.nombre, 100) ||
-    !correoValido || !whatsappValido || (!correo && !whatsapp) ||
+    !correoValido || !whatsappValido ||
     !fechaValida ||
     !esTexto(entrada.ciudad, 100) ||
     !esTexto(entrada.lugar, 160) ||
@@ -120,22 +122,24 @@ export async function POST(request: Request) {
   const detalleHtml = filas.map(([etiqueta, contenido]) =>
     `<tr><th scope="row" style="width:42%;padding:11px 12px;text-align:left;vertical-align:top;border-bottom:1px solid #f0dadd;color:#6b5254;font-size:13px;font-weight:600">${escaparHtml(etiqueta)}</th><td style="padding:11px 12px;vertical-align:top;border-bottom:1px solid #f0dadd;color:#262622;font-size:14px">${escaparHtml(contenido)}</td></tr>`,
   ).join('')
-  const detalleTextoPlano = `Nueva solicitud de cotización para RUTABAR\n\n${detalleTexto}\n\nEl servicio consiste en barra libre durante las horas contratadas. El pago es ${PAGO.reservaPct}% para reservar (${clp(montoReserva)}) y ${PAGO.saldoPct}% el día del evento (${clp(montoSaldo)}).`
+  const condicionesTexto = CONDICIONES.map((bloque) => `${bloque.titulo}:\n${bloque.puntos.map((punto) => `- ${punto}`).join('\n')}`).join('\n\n')
+  const condicionesHtml = CONDICIONES.map((bloque) => `<h3 style="margin:14px 0 5px;color:#8a0019;font-size:13px">${escaparHtml(bloque.titulo)}</h3><ul style="margin:0;padding-left:19px;color:#4b3336;font-size:13px;line-height:1.6">${bloque.puntos.map((punto) => `<li>${escaparHtml(punto)}</li>`).join('')}</ul>`).join('')
+  const detalleTextoPlano = `Hola, ${datos.nombre}:\n\nSoy Matías Urquiza, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con fotos en el PDF adjunto.\n\n${detalleTexto}\n\nCondiciones del servicio:\n${condicionesTexto}\n\nSi tienes cualquier consulta, o si el precio es un problema para tu evento, dímelo y lo conversamos.\n\nUn abrazo,\nMatías Urquiza\nRUTABAR`
   const html = `<!doctype html>
 <html lang="es">
-  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nueva cotización RUTABAR</title></head>
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tu cotización RUTABAR</title></head>
   <body style="margin:0;padding:0;background-color:#fdf2f1;font-family:Arial,Helvetica,sans-serif;color:#131311">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#fdf2f1">
       <tr><td align="center" style="padding:32px 14px">
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:640px;background-color:#fffbfa;border:1px solid #f0dadd;border-radius:18px;overflow:hidden">
           <tr><td style="padding:28px 32px;background-color:#6d0002">
             <p style="margin:0 0 20px;color:#ffc2c8;font-size:13px;font-weight:700;letter-spacing:3px">RUTABAR</p>
-            <p style="margin:0 0 8px;color:#ffe3e4;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">Nueva solicitud de cotización</p>
-            <h1 style="margin:0;color:#ffffff;font-size:27px;line-height:1.2;font-weight:700">${escaparHtml(carta.nombre)}</h1>
+            <p style="margin:0 0 8px;color:#ffe3e4;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">Tu cotización está lista</p>
+            <h1 style="margin:0;color:#ffffff;font-size:27px;line-height:1.2;font-weight:700">Tu ruta de tragos empieza aquí.</h1>
             <p style="margin:8px 0 0;color:#ffe3e4;font-size:15px">${datos.duracion} horas · ${escaparHtml(fechaVisible)}</p>
           </td></tr>
           <tr><td style="padding:28px 32px 12px">
-            <p style="margin:0 0 18px;color:#262622;font-size:15px;line-height:1.65">Hola equipo, <strong>${escaparHtml(datos.nombre)}</strong> envió una solicitud para su evento. El servicio solicitado es <strong>barra libre</strong> durante las horas contratadas.</p>
+            <p style="margin:0 0 18px;color:#262622;font-size:15px;line-height:1.65">Hola, <strong>${escaparHtml(datos.nombre)}</strong>. Soy <strong>Matías Urquiza</strong>, dueño de RUTABAR. Me alegra haber recibido tu solicitud. Te envío el detalle de tu cotización y la carta con fotos en el <strong>PDF adjunto</strong>.</p>
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 22px;border:1px solid #f0dadd;border-radius:12px;background-color:#fff5f4">
               <tr><td style="padding:17px 20px">
                 <p style="margin:0 0 5px;color:#6b5254;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Total final con IVA incluido</p>
@@ -148,15 +152,31 @@ export async function POST(request: Request) {
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:22px;background-color:#fff5f4;border-left:4px solid #c60015">
               <tr><td style="padding:14px 16px;color:#4b3336;font-size:13px;line-height:1.65"><strong>Condiciones de pago</strong><br>${PAGO.reservaPct}% para reservar: ${escaparHtml(clp(montoReserva))}<br>${PAGO.saldoPct}% el día del evento: ${escaparHtml(clp(montoSaldo))}<br>Ambos pagos suman el total de ${escaparHtml(clp(total))}.</td></tr>
             </table>
+            <h2 style="margin:24px 0 8px;color:#131311;font-size:16px">Condiciones del servicio</h2>
+            ${condicionesHtml}
+            <p style="margin:22px 0 4px;color:#262622;font-size:14px;line-height:1.65">Si tienes cualquier consulta, o si el precio es un problema para tu evento, dímelo y lo conversamos.</p>
+            <p style="margin:0 0 16px;color:#262622;font-size:14px;line-height:1.65">Un abrazo,<br><strong>Matías Urquiza</strong><br>Dueño de RUTABAR</p>
           </td></tr>
           <tr><td style="padding:20px 32px 26px;border-top:1px solid #f0dadd">
-            <p style="margin:0;color:#706f6a;font-size:12px;line-height:1.6">Este correo fue generado desde el cotizador de <strong style="color:#6d0002">RUTABAR</strong>. Responde directamente para contactar a la persona interesada.</p>
+            <p style="margin:0;color:#706f6a;font-size:12px;line-height:1.6">Responde a este correo si quieres ajustar algún detalle. Tu cotización y la carta están en el PDF adjunto.</p>
           </td></tr>
         </table>
       </td></tr>
     </table>
   </body>
 </html>`
+
+  let pdf: Uint8Array
+  try {
+    pdf = await generarCotizacionPdf({
+      nombre: datos.nombre, fecha: datos.fecha, ciudad: datos.ciudad, lugar: datos.lugar,
+      asistentes: datos.asistentes, cartaId: datos.cartaId, duracion: datos.duracion,
+      total, porPersona, montoReserva, montoSaldo, solicitaCartaDigital: datos.solicitaCartaDigital,
+    })
+  } catch (error) {
+    console.error('No se pudo generar la cotización PDF', { tipo: error instanceof Error ? error.name : 'unknown' })
+    return Response.json({ error: 'No pudimos preparar el PDF de la cotización. Inténtalo otra vez.' }, { status: 500 })
+  }
 
   try {
     const resend = await fetch('https://api.resend.com/emails', {
@@ -167,13 +187,15 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         from: remitente,
-        to: [destinatario],
-        ...(datos.correo ? { reply_to: datos.correo } : {}),
-        subject: `Nueva cotización · ${carta.nombre} · ${fechaVisible}`.replace(/[\r\n]+/g, ' ').slice(0, 180),
+        to: [datos.correo],
+        ...(datos.correo.toLowerCase() !== destinatario.toLowerCase() ? { bcc: [destinatario] } : {}),
+        reply_to: destinatario,
+        subject: `Tu cotización RUTABAR · ${carta.nombre} · ${fechaVisible}`.replace(/[\r\n]+/g, ' ').slice(0, 180),
         text: detalleTextoPlano,
         html,
+        attachments: [{ filename: 'Cotizacion-y-carta-RUTABAR.pdf', content: Buffer.from(pdf).toString('base64') }],
       }),
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(20_000),
     })
 
     if (!resend.ok) {

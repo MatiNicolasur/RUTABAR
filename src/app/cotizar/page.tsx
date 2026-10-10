@@ -8,7 +8,7 @@ import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type Dura
 export const metadata: Metadata = {
   title: 'Cotizar',
   description:
-    'Calcula el precio de una barra libre con IVA incluido y solicita tu cotización en tres pasos.',
+    'Elige la carta y las horas de tu barra libre. Recibe tu cotización con IVA incluido y la carta con fotos por correo.',
   alternates: { canonical: '/cotizar' },
 }
 
@@ -49,14 +49,14 @@ export default async function PaginaCotizar({
       <header className="pagina-cabecera">
         <div className="lienzo pagina-cabecera__interior">
           <p className="micro">Cotizar</p>
-          <h1>Calcula el precio de tu barra libre.</h1>
+          <h1>Cotiza tu barra libre.</h1>
           <p className="lead">
-            Completa tres pasos, revisa el total con IVA incluido y elige si quieres enviar tu solicitud por correo o WhatsApp.
+            Cuéntanos sobre tu evento y recibe el precio final, el detalle y la carta con fotos por correo.
           </p>
         </div>
       </header>
 
-      <section className="seccion" aria-label="Calculadora y cotizador en tres pasos">
+      <section className="seccion" aria-label="Cotizador en tres pasos">
         <div className="lienzo">
           <CotizacionForm
             cartaInicial={cartaInicial}

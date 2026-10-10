@@ -1,9 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
-import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
-import { PAGO } from '@/data/pago'
-import { clp, numero } from '@/lib/formato'
+import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 
 type Props = {
   cartaInicial?: CartaCotizacionId
@@ -12,7 +10,7 @@ type Props = {
 }
 
 const WHATSAPP_COMERCIAL = process.env.NEXT_PUBLIC_WHATSAPP ?? ''
-const PASOS = ['Datos del evento', 'Elegir servicio', 'Revisar y enviar'] as const
+const PASOS = ['Datos del evento', 'Elegir servicio', 'Recibir cotización'] as const
 const DURACION_MINIMA = CONFIG_COTIZACION.duraciones[0]
 const DURACION_MAXIMA = CONFIG_COTIZACION.duraciones[CONFIG_COTIZACION.duraciones.length - 1]
 const OTRA_COMUNA = 'otra'
@@ -51,13 +49,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const numeroAsistentes = Number(asistentes)
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId) ?? CONFIG_COTIZACION.cartas[1]
   const ciudadCotizacion = ciudad === OTRA_COMUNA ? otraCiudad.trim() : ciudad
-  const total = useMemo(
-    () => calcularPrecioCotizacion(cartaId, duracion, numeroAsistentes),
-    [cartaId, duracion, numeroAsistentes],
-  )
-  const porPersona = numeroAsistentes > 0 ? Math.round(total / numeroAsistentes) : 0
-  const montoReserva = Math.round((total * PAGO.reservaPct) / 100)
-  const montoSaldo = total - montoReserva
   const fechaVisible = fecha ? fecha.split('-').reverse().join('/') : 'Por definir'
   const progresoHoras = (posicionHoras - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
 
@@ -118,9 +109,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       `Carta: ${carta.nombre} (${carta.bebidas} bebidas)`,
       `Duración: ${duracion} horas`,
       `Servicio: barra libre durante las ${duracion} horas contratadas.`,
-      `Total final con IVA incluido: ${clp(total)}`,
-      `Precio por persona: ${clp(porPersona)}`,
-      `Pago: ${PAGO.reservaPct}% para reservar ${clp(montoReserva)} + ${PAGO.saldoPct}% el día del evento ${clp(montoSaldo)} = ${clp(total)}.`,
       solicitaCartaDigital
         ? 'Carta digital con branding: sí, la solicito sin costo y con al menos 5 días de anticipación.'
         : 'Beneficio opcional: carta digital con branding sin costo, solicitándola con al menos 5 días de anticipación.',
@@ -134,12 +122,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     duracion,
     fechaVisible,
     lugar,
-    montoReserva,
-    montoSaldo,
     nombre,
-    porPersona,
     solicitaCartaDigital,
-    total,
     whatsapp,
   ])
 
@@ -171,8 +155,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       setErrorContacto('Escribe tu nombre para identificar la cotización.')
       return false
     }
-    if (!correoLimpio && !whatsapp.trim()) {
-      setErrorContacto('Indica un correo o un número de WhatsApp para poder responderte.')
+    if (!correoLimpio) {
+      setErrorContacto('Ingresa tu correo para recibir la cotización y la carta en PDF.')
       return false
     }
     if (correoLimpio && !correoValido) {
@@ -328,7 +312,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 2 de 3</p>
             <h2 className="h3" id="cotizacion-paso-2">Elegir servicio</h2>
-            <p>El total se actualiza al cambiar la carta, las horas o los asistentes.</p>
+            <p>Elige la carta y las horas. Te enviaremos el precio final por correo.</p>
           </div>
 
           <label className="campo cotizacion-flujo__carta-select">
@@ -399,18 +383,9 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             </div>
           </div>
 
-          <div className="cotizacion-flujo__precio" aria-live="polite" aria-atomic="true">
-            <p className="micro">Total final con IVA incluido</p>
-            <p className="cotizacion-flujo__total">{clp(total)}</p>
-            <p className="cotizacion-flujo__por-persona">{clp(porPersona)} por persona · {numero(numeroAsistentes)} asistentes</p>
-            <p className="cotizacion-flujo__formula">
-              Precio de referencia para {CONFIG_COTIZACION.personasBase} personas, ajustado proporcionalmente según asistentes.
-            </p>
-          </div>
-
           <div className="cotizacion-flujo__acciones">
             <button className="boton boton--fantasma" type="button" onClick={() => setPaso(1)}>Volver</button>
-            <button className="boton" type="button" onClick={() => setPaso(3)}>Continuar a revisar</button>
+            <button className="boton" type="button" onClick={() => setPaso(3)}>Continuar</button>
           </div>
         </section>
       ) : null}
@@ -419,8 +394,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
         <section className="cotizacion-flujo__panel" aria-labelledby="cotizacion-paso-3">
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 3 de 3</p>
-            <h2 className="h3" id="cotizacion-paso-3">Revisar y enviar</h2>
-            <p>Déjanos un dato de contacto para enviarte el detalle de tu cotización.</p>
+            <h2 className="h3" id="cotizacion-paso-3">Recibir cotización</h2>
+            <p>Ingresa tu correo y te enviaremos el precio y la carta con fotos en PDF.</p>
           </div>
 
           <div className="cotizacion-flujo__campos">
@@ -429,15 +404,15 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               <input className="campo__input" value={nombre} onChange={(evento) => { setNombre(evento.target.value); setErrorContacto('') }} autoComplete="name" required />
             </label>
             <label className="campo">
-              <span className="campo__label">Correo <span className="campo__opcional">Opcional</span></span>
-              <input className="campo__input" type="email" value={correo} onChange={(evento) => { setCorreo(evento.target.value); setErrorContacto('') }} autoComplete="email" placeholder="tu@correo.cl" />
+              <span className="campo__label">Correo para recibir tu cotización <span className="campo__valor">*</span></span>
+              <input className="campo__input" type="email" value={correo} onChange={(evento) => { setCorreo(evento.target.value); setErrorContacto('') }} autoComplete="email" placeholder="tu@correo.cl" required />
             </label>
             <label className="campo">
               <span className="campo__label">Número de WhatsApp <span className="campo__opcional">Opcional</span></span>
               <input className="campo__input" type="tel" value={whatsapp} onChange={(evento) => { setWhatsapp(evento.target.value); setErrorContacto('') }} autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" />
             </label>
           </div>
-          <p className="cotizacion-flujo__ayuda">Ingresa al menos un correo o número de WhatsApp para que podamos responderte.</p>
+          <p className="cotizacion-flujo__ayuda">El precio final, el detalle y la carta llegarán a ese correo.</p>
 
           <label className="cotizacion-flujo__beneficio">
             <input type="checkbox" checked={solicitaCartaDigital} onChange={(evento) => setSolicitaCartaDigital(evento.target.checked)} />
@@ -450,11 +425,11 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
           <div className={enlaceWhatsApp ? 'cotizacion-flujo__envio cotizacion-flujo__envio--whatsapp' : 'cotizacion-flujo__envio'}>
             <button className="boton" type="button" onClick={enviarPorCorreo} disabled={enviando}>
-              {enviando ? 'Enviando…' : 'Enviar por correo'}
+              {enviando ? 'Preparando tu PDF…' : 'Recibir cotización por correo'}
             </button>
             {enlaceWhatsApp ? (
               <a className="boton boton--fantasma" href={enlaceWhatsApp} onClick={validarAntesDeEnviar} rel="noopener noreferrer" target="_blank">
-                Enviar por WhatsApp
+                Consultar por WhatsApp
               </a>
             ) : null}
           </div>
@@ -491,7 +466,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           </figure>
           <div className="cotizacion-flujo__exito-contenido">
             <h2 className="h2" id="cotizacion-enviada-titulo">¡Cotización enviada!</h2>
-            <p className="lead">Gracias, {nombre.trim()}. Te responderemos pronto.</p>
+            <p className="lead">Gracias, {nombre.trim()}. Revisa tu correo: enviamos el precio y la carta en PDF.</p>
             <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
           </div>
         </section>

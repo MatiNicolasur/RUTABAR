@@ -29,6 +29,10 @@ Copia `.env.example` a `.env.local` para desarrollo. En Vercel, configura estas 
 
 Para este sitio, configura `RESEND_FROM_EMAIL=RUTABAR <contacto@rutabar.cl>` y `RESEND_TO_EMAIL=contacto@rutabar.cl`. El dominio `rutabar.cl` debe figurar como verificado en Resend. Si Vercel todavía tiene valores de `barrabar.cl`, cámbialos: las variables de entorno tienen prioridad sobre los valores predeterminados del código.
 
+Al enviar el formulario de `/cotizar`, el servidor calcula el precio con IVA, genera un PDF con la selección de la carta, fotos y condiciones, y envía un único correo al cliente con copia oculta al buzón comercial. El correo del cliente es obligatorio; el precio no se muestra en el formulario. Las imágenes JPEG de `public/carta-pdf/` se incluyen en la función de Vercel mediante `outputFileTracingIncludes`.
+
+Para revisar sin enviar correos reales, ejecuta `npm run pdf:preview` y abre `output/pdf/cotizacion-rutabar-ejemplo.pdf`. Ejecuta `npm run test:cotizacion-email` para simular Resend y comprobar destinatarios, adjunto, precio y condiciones.
+
 Las variables `RESEND_*` son privadas. No les agregues el prefijo `NEXT_PUBLIC_` ni subas `.env.local`.
 
 ## Publicación en Vercel
