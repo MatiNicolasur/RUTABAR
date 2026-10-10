@@ -386,6 +386,27 @@
   letter-spacing: -0.03em;
 }
 
+.carta-publica__intro {
+  max-width: 65ch;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.carta-publica__bebidas-foto {
+  position: relative;
+  width: min(100%, 54rem);
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radio-suave);
+  background: var(--papel-hondo);
+}
+
+.carta-publica__bebidas-imagen {
+  object-fit: cover;
+}
+
 .carta-publica__etiquetas {
   display: flex;
   flex-wrap: wrap;
@@ -406,6 +427,33 @@
 .carta-publica__opciones {
   display: grid;
   gap: 0.75rem;
+}
+
+.servicios-rutas {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-end: 1.5rem;
+}
+
+.servicios-ruta {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border-block-start: 2px solid var(--rojo);
+  background: var(--papel-hondo);
+}
+
+.servicios-ruta h3 {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.servicios-ruta > p:last-child {
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+  line-height: 1.55;
 }
 
 .carta-publica__opcion {
@@ -431,7 +479,8 @@
 }
 
 @media (min-width: 40rem) {
-  .carta-publica__opciones {
+  .carta-publica__opciones,
+  .servicios-rutas {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

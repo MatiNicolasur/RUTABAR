@@ -60,6 +60,23 @@ export function CartaInteractiva() {
 
   return (
     <div className="carta-publica">
+      <section className="carta-publica__alternativas" aria-labelledby="titulo-alternativas-carta">
+        <div className="bloque-titulo">
+          <h2 id="titulo-alternativas-carta">Elige tu ruta de tragos</h2>
+          <span className="regla" aria-hidden="true" />
+        </div>
+        <p className="carta-publica__intro">Tres selecciones para elegir según tus invitados y presupuesto. La carta completa reúne todo lo que ves abajo; las otras dos incluyen solo las bebidas indicadas.</p>
+        <div className="carta-publica__opciones">
+          {ALTERNATIVAS_CARTA.map((opcion) => (
+            <article className="carta-publica__opcion" key={opcion.nombre}>
+              <p className="micro">{opcion.cantidad}</p>
+              <h3>{opcion.nombre}</h3>
+              <p>{opcion.detalle}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <CartaFiltro tragos={resumen}>
         <ul className="carta-lista">
           {CARTA_WEB.map((trago) => (
@@ -73,26 +90,20 @@ export function CartaInteractiva() {
           <h2 id="titulo-bebidas-agua">Bebidas y agua</h2>
           <span className="regla" aria-hidden="true" />
         </div>
+        <figure className="carta-publica__bebidas-foto">
+          <Image
+            src="/fotos/bebidas-agua.jpg"
+            alt="Vasos de agua, jugo, bebidas, cerveza y vino sobre la cubierta de madera de una barra móvil"
+            fill
+            sizes="(min-width: 62rem) 54rem, 92vw"
+            className="carta-publica__bebidas-imagen"
+          />
+        </figure>
         <ul className="carta-publica__etiquetas">
           {BEBIDAS_Y_AGUA.map((bebida) => <li key={bebida}>{bebida}</li>)}
         </ul>
       </section>
 
-      <section className="carta-publica__alternativas" aria-labelledby="titulo-alternativas-carta">
-        <div className="bloque-titulo">
-          <h2 id="titulo-alternativas-carta">Tres alternativas de carta</h2>
-          <span className="regla" aria-hidden="true" />
-        </div>
-        <div className="carta-publica__opciones">
-          {ALTERNATIVAS_CARTA.map((opcion) => (
-            <article className="carta-publica__opcion" key={opcion.nombre}>
-              <p className="micro">{opcion.cantidad}</p>
-              <h3>{opcion.nombre}</h3>
-              <p>{opcion.detalle}</p>
-            </article>
-          ))}
-        </div>
-      </section>
     </div>
   )
 }

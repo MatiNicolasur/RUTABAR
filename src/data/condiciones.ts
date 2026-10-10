@@ -8,16 +8,6 @@ export type BloqueCondiciones = {
 
 export const CONDICIONES: BloqueCondiciones[] = [
   {
-    id: 'incluye',
-    titulo: 'Qué incluye',
-    puntos: [
-      'Barra acordada y montaje en el lugar del evento.',
-      'Bartender según la demanda declarada del evento.',
-      'Cristalería suficiente, hielo, mixers, insumos y guarniciones.',
-      'El suministro de alcohol depende de la modalidad contractual que se valide.',
-    ],
-  },
-  {
     id: 'carta',
     titulo: 'Carta',
     puntos: [
@@ -49,7 +39,7 @@ export const CONDICIONES: BloqueCondiciones[] = [
     puntos: [
       PAGO.resumen,
       'Confirmación escrita con condiciones de cambio y devolución antes del abono.',
-      'Los eventos corporativos pagan antes de prestar el servicio.',
+      'La facturación de eventos corporativos conserva el mismo esquema 50/50, salvo acuerdo escrito distinto.',
     ],
   },
 ]

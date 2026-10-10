@@ -30,7 +30,7 @@ const PREGUNTAS: Pregunta[] = [
   {
     pregunta: '¿Cómo se calcula el precio?',
     respuesta:
-      'Depende de la carta elegida, la cantidad de horas y los asistentes. Para 40 personas, el cotizador muestra el valor exacto de cada alternativa de 2, 4 o 6 horas; otros tamaños se calculan proporcionalmente.',
+      'Depende de la carta, la duración de 3 a 12 horas y los asistentes. Para 40 personas, el cotizador muestra las tarifas de cada alternativa; otros tamaños se calculan proporcionalmente.',
   },
   {
     pregunta: '¿Puedo poner yo el alcohol?',
@@ -55,7 +55,7 @@ const PREGUNTAS: Pregunta[] = [
   {
     pregunta: '¿Emiten factura para empresas?',
     respuesta:
-      'Sí. Los eventos corporativos y de productoras se facturan y se pagan antes de que se preste el servicio. Se puede acordar que la productora provea el alcohol y nosotros la operación, o al revés.',
+      'Sí. Podemos emitir factura y el pago sigue el esquema 50% para reservar y 50% el día del evento. Si tu empresa necesita otra condición, la acordamos por escrito antes de reservar.',
   },
 ]
 

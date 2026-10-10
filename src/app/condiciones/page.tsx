@@ -7,7 +7,7 @@ import { PAGO } from '@/data/pago'
 export const metadata: Metadata = {
   title: 'Condiciones',
   description:
-    'Qué incluye y qué no incluye el servicio de barra móvil: carta cerrada, traslado, horas extra, forma de pago, cambios y devoluciones.',
+    'Deja listo tu evento: carta, traslado, horarios, pago, cambios y devoluciones acordados por escrito.',
   alternates: { canonical: '/condiciones' },
 }
 
@@ -18,11 +18,8 @@ export default function PaginaCondiciones() {
       <header className="pagina-cabecera">
         <div className="lienzo pagina-cabecera__interior">
           <p className="micro">Condiciones</p>
-          <h1>Lo acordado por escrito, antes de pagar.</h1>
-          <p className="lead">
-            Estas condiciones se repiten en cada cotización. Preferimos decirlas antes del abono y
-            no discutirlas durante el evento.
-          </p>
+          <h1>Déjalo todo listo antes de tu evento.</h1>
+          <p className="lead">Carta, horarios, traslado y pago quedan claros antes de reservar.</p>
         </div>
       </header>
 
@@ -56,7 +53,7 @@ export default function PaginaCondiciones() {
               <h3 className="condicion__titulo">Casos particulares</h3>
               <ul className="lista-marcada">
                 <li>
-                  <strong>Corporativos:</strong> pago antes de prestar el servicio.
+                  <strong>Corporativos:</strong> emitimos factura y mantenemos el esquema 50/50 indicado en la cotización.
                 </li>
                 <li>
                   <strong>Catering y productoras:</strong> acuerdo por evento, según volumen y
@@ -85,11 +82,8 @@ export default function PaginaCondiciones() {
           <div className="cierre">
             <div className="pila">
               <p className="micro">¿Dudas antes de cotizar?</p>
-              <h2 className="h2">Escríbenos y lo resolvemos antes del abono.</h2>
-              <p className="lead">
-                Si algo de estas condiciones no calza con tu evento, conviene conversarlo ahora y no
-                el día de la barra.
-              </p>
+              <h2 className="h2">Conversemos los detalles de tu evento.</h2>
+              <p className="lead">Revisamos juntos cualquier punto antes de confirmar la reserva.</p>
             </div>
             <div className="cierre__acciones">
               <Link className="boton" href="/cotizar">

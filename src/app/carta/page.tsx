@@ -2,12 +2,11 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CartaInteractiva } from '@/components/CartaInteractiva'
 import { Reveal } from '@/components/Reveal'
-import { MOCKTAILS_WEB, TRAGOS_WEB_CON_ALCOHOL } from '@/data/carta-web'
 
 export const metadata: Metadata = {
   title: 'Carta',
   description:
-    'Carta de RUTABAR: 13 cócteles y 4 mocktails para eventos en Santiago, además de bebidas y agua. Revisa vaso, base y guarnición de cada preparación.',
+    'Conoce las tres selecciones de RUTABAR: barra reducida de 8 opciones, solo sin alcohol y carta completa de 25 bebidas para eventos.',
   alternates: { canonical: '/carta' },
 }
 
@@ -17,12 +16,8 @@ export default function PaginaCarta() {
       <header className="pagina-cabecera">
         <div className="lienzo pagina-cabecera__interior">
           <p className="micro">Carta</p>
-          <h1>
-            {TRAGOS_WEB_CON_ALCOHOL.length} cócteles y {MOCKTAILS_WEB.length} mocktails.
-          </h1>
-          <p className="lead">
-            Filtra por tipo y perfil. Revisa la base, el vaso y la guarnición de cada preparación.
-          </p>
+          <h1>Una carta, distintas rutas.</h1>
+          <p className="lead">Explora la carta completa y elige la selección que mejor calza con tu evento.</p>
         </div>
       </header>
 

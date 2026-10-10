@@ -442,7 +442,7 @@
  * legibilidad, pero acá funciona como acento —una sola palabra— y es lo que
  * ata la frase a la firma de abajo. Va un poco más grande que el resto porque
  * su altura de x es menor y a igual cuerpo se lee más chica. */
-.hero2__movil {
+.hero2__acento {
   font-family: var(--fuente-mano);
   font-weight: 400;
   font-size: 1.18em;

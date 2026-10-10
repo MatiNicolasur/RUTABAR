@@ -276,18 +276,15 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             <p>El total se actualiza al cambiar la carta, las horas o los asistentes.</p>
           </div>
 
-          <fieldset className="cotizacion-flujo__selector">
-            <legend>Tipo de carta</legend>
-            <div className="cotizacion-flujo__cartas">
+          <label className="campo cotizacion-flujo__carta-select">
+            <span className="campo__label">Tipo de carta</span>
+            <select className="campo__input" value={cartaId} onChange={(evento) => setCartaId(evento.target.value as CartaCotizacionId)}>
               {CONFIG_COTIZACION.cartas.map((opcion) => (
-                <label className={cartaId === opcion.id ? 'cotizacion-flujo__opcion cotizacion-flujo__opcion--activa' : 'cotizacion-flujo__opcion'} key={opcion.id}>
-                  <input type="radio" name="carta" value={opcion.id} checked={cartaId === opcion.id} onChange={() => setCartaId(opcion.id)} />
-                  <span className="cotizacion-flujo__opcion-titulo">{opcion.nombre}</span>
-                  <span className="cotizacion-flujo__opcion-detalle">{opcion.bebidas} bebidas</span>
-                </label>
+                <option value={opcion.id} key={opcion.id}>{opcion.nombre} · {opcion.bebidas} opciones</option>
               ))}
-            </div>
-          </fieldset>
+            </select>
+            <span className="cotizacion-flujo__ayuda">{carta.resumen}</span>
+          </label>
 
           <label className="campo cotizacion-flujo__horas">
             <span className="campo__label">Cantidad de horas</span>
@@ -303,7 +300,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             <p className="cotizacion-flujo__total">{clp(total)}</p>
             <p className="cotizacion-flujo__por-persona">{clp(porPersona)} por persona · {numero(numeroAsistentes)} asistentes</p>
             <p className="cotizacion-flujo__formula">
-              Total = precio de la tabla para {CONFIG_COTIZACION.personasBase} personas × asistentes ÷ {CONFIG_COTIZACION.personasBase}.
+              Precio de referencia para {CONFIG_COTIZACION.personasBase} personas, ajustado proporcionalmente según asistentes.
             </p>
           </div>
 

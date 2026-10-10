@@ -112,13 +112,13 @@ export const BEBIDAS_Y_AGUA = [
 export const ALTERNATIVAS_CARTA = [
   {
     nombre: 'Barra reducida',
-    cantidad: '7 tipos',
-    detalle: 'Cerveza, vino tinto, vino blanco, Mojito, Gin Tonic, Pisco Sour y Vodka Tropical.',
+    cantidad: '8 tipos',
+    detalle: 'Cerveza, vino tinto, vino blanco, Mojito, Gin Tonic, Pisco Sour, Vodka Tropical y agua.',
   },
   {
     nombre: 'Carta completa',
     cantidad: '25 tipos',
-    detalle: 'Todos los cócteles, bebidas, cervezas, vinos, agua y 4 mocktails.',
+    detalle: '13 cócteles, 4 mocktails y 8 opciones entre bebidas, cerveza, vino y agua.',
   },
   {
     nombre: 'Solo sin alcohol',

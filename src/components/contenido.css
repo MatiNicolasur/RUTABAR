@@ -53,6 +53,65 @@
   text-wrap: pretty;
 }
 
+/* --- Tres datos que abren la ruta y llevan al estándar -------------------- */
+
+.datos-ruta {
+  border-block-end: 1px solid var(--papel-borde);
+  background: var(--papel-hondo);
+}
+
+.datos-ruta__interior {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.datos-ruta__item {
+  display: grid;
+  gap: 0.3rem;
+  align-content: center;
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-inline-end: 1px solid var(--papel-borde);
+  color: var(--texto);
+  text-decoration: none;
+  transition: background-color var(--m-dur-1) var(--m-ease-out);
+}
+
+.datos-ruta__item:last-child {
+  border-inline-end: 0;
+}
+
+.datos-ruta__numero {
+  color: var(--rojo-hondo);
+  font-size: clamp(0.59rem, 1.5vw, 0.72rem);
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.datos-ruta__valor {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.7rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--rojo);
+  font-variant-numeric: tabular-nums;
+}
+
+.datos-ruta__etiqueta {
+  max-width: 22ch;
+  color: var(--texto-suave);
+  font-size: clamp(0.72rem, 1.8vw, 0.9rem);
+  line-height: 1.4;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .datos-ruta__item:hover {
+    background: var(--crema);
+  }
+}
+
 /* --- Principios ----------------------------------------------------------- */
 
 .principio {

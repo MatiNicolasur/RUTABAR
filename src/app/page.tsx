@@ -6,20 +6,25 @@ import { Ranura } from '@/components/Ranura'
 import { Reveal } from '@/components/Reveal'
 import { SistemaServicio } from '@/components/SistemaServicio'
 import { ICONOS } from '@/data/iconos'
-import { MOCKTAILS_WEB, TRAGOS_WEB_CON_ALCOHOL } from '@/data/carta-web'
+
+const DATOS_RUTA = [
+  { numero: '01', valor: '25', etiqueta: 'opciones en la carta completa', pilar: 'Sabor', destino: '#ruta-sabor' },
+  { numero: '02', valor: '3', etiqueta: 'cartas para elegir tu experiencia', pilar: 'Barra', destino: '#ruta-barra' },
+  { numero: '03', valor: '3–12', etiqueta: 'horas de barra libre a elección', pilar: 'Ritmo', destino: '#ruta-ritmo' },
+] as const
 
 const ESTANDAR = [
   {
     palabra: 'Sabor',
-    texto: 'La misma receta y la misma medida en cada vaso, del primero al último.',
+    texto: 'Cócteles, mocktails y favoritos de la ruta chilena.',
   },
   {
     palabra: 'Barra',
-    texto: 'Cristalería, guarniciones frescas y una estación ordenada durante el servicio.',
+    texto: 'Una carta elegida para tu gente y tu presupuesto.',
   },
   {
     palabra: 'Ritmo',
-    texto: 'Una carta bien elegida permite preparar cada pedido con agilidad.',
+    texto: 'Barra libre durante las horas que elijas.',
   },
 ]
 
@@ -32,11 +37,24 @@ export default function Home() {
         diseno="retrato"
         imagen="/fotos/cocteles-editorial.webp"
         imagenAlt="Imagen ilustrativa de un pisco sour y un mocktail de pomelo y romero sobre una barra al atardecer"
-        lineas={['Barra móvil para eventos en Santiago']}
+        lineas={['Tu ruta favorita de tragos.']}
+        acento="ruta"
         accion={{ label: 'Cotizar mi evento', href: '/cotizar' }}
         accionSecundaria={{ label: 'Ver la carta', href: '/carta' }}
         marca="ruta bar"
       />
+
+      <section className="datos-ruta" aria-label="La ruta en tres datos">
+        <div className="lienzo datos-ruta__interior">
+          {DATOS_RUTA.map((dato) => (
+            <Link className="datos-ruta__item" href={dato.destino} key={dato.numero}>
+              <span className="datos-ruta__numero">{dato.numero} / {dato.pilar}</span>
+              <strong className="datos-ruta__valor">{dato.valor}</strong>
+              <span className="datos-ruta__etiqueta">{dato.etiqueta}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section className="seccion" aria-labelledby="titulo-estandar">
         <div className="lienzo">
@@ -47,7 +65,6 @@ export default function Home() {
               <span className="punto">Barra</span>{' '}
               <span className="punto">Ritmo</span>
             </h2>
-            <p className="lead">Recetas medidas, presentación cuidada y un equipo listo a la hora acordada.</p>
           </div>
 
           <div className="estandar">
@@ -55,7 +72,7 @@ export default function Home() {
               {ESTANDAR.map((item, indice) => (
                 <Reveal className="estandar__bloque" key={item.palabra} retraso={indice * 60}>
                   <span className="estandar__numero">{String(indice + 1).padStart(2, '0')}</span>
-                  <h3 className="estandar__palabra">{item.palabra}</h3>
+                  <h3 className="estandar__palabra" id={`ruta-${item.palabra.toLowerCase()}`}>{item.palabra}</h3>
                   <p className="estandar__texto">{item.texto}</p>
                 </Reveal>
               ))}
@@ -70,7 +87,8 @@ export default function Home() {
       <Ranura
         id="titulo-barra"
         micro="El servicio"
-        titulo="Una barra en movimiento, un servicio atento."
+        titulo="La ruta de tragos llega a tu evento."
+        mano="tragos de la ruta chilena"
         imagen="/fotos/bartender-patio-editorial.webp"
         imagenAlt="Imagen ilustrativa de un bartender sirviendo un cóctel a invitados en una barra móvil negra con base de madera, en un patio al atardecer"
         medida="retrato"
@@ -79,10 +97,7 @@ export default function Home() {
         invertida
       >
         <p className="lead">
-          Llegamos con la barra, preparamos cada pedido y atendemos a tus invitados durante todo el servicio.
-        </p>
-        <p className="prosa">
-          La barra móvil negra y su base de madera se integran al patio; el equipo y los detalles de montaje se coordinan para el espacio.
+          Elige tu carta. Nosotros nos encargamos de servirla.
         </p>
       </Ranura>
 
@@ -94,9 +109,6 @@ export default function Home() {
           <div className="seccion__encabezado">
             <p className="micro">Todo lo necesario</p>
             <h2 className="h2" id="titulo-sistema">Todo lo necesario para servir.</h2>
-            <p className="lead">
-              Cada parte de la barra queda descrita antes del evento, desde la cristalería hasta el montaje.
-            </p>
           </div>
           <SistemaServicio />
         </div>
@@ -106,7 +118,7 @@ export default function Home() {
         id="titulo-carta"
         micro="La carta"
         accion={{ label: 'Explorar la carta', href: '/carta' }}
-        titulo={`${TRAGOS_WEB_CON_ALCOHOL.length} cócteles, ${MOCKTAILS_WEB.length} mocktails.`}
+        titulo="Tu ruta favorita, vaso a vaso."
         imagen="/fotos/garnituras.jpg"
         imagenAlt="Estación de guarniciones: cítricos, flores comestibles, limones y sales preparados antes del servicio"
         medida="retrato"
@@ -115,10 +127,7 @@ export default function Home() {
         confeti
       >
         <p className="lead">
-          Una selección pensada para servir con consistencia: cócteles clásicos, preparaciones de autor y opciones sin alcohol.
-        </p>
-        <p className="prosa">
-            Los mocktails reciben la misma atención y presentación que el resto de la carta.
+          Explora la carta completa y elige una selección a tu medida.
         </p>
       </Ranura>
 
@@ -133,9 +142,7 @@ export default function Home() {
         <div className="lienzo cierre-visual__contenido">
           <p className="micro">Siguiente paso</p>
           <h2 className="h2" id="titulo-cierre">Cuéntanos de tu evento y te cotizamos.</h2>
-          <p className="lead">
-            Dinos la fecha, la comuna, cuántos invitados esperas y cuánto tiempo quieres la barra. Te enviamos una propuesta por escrito.
-          </p>
+          <p className="lead">Fecha, comuna e invitados: con eso empieza tu ruta.</p>
           <div className="cierre__acciones">
             <Link className="boton boton--claro" href="/cotizar">Cotizar mi evento</Link>
             <Link className="boton boton--fantasma" href="/carta">Ver la carta</Link>

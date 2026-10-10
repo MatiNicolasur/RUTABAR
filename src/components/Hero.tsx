@@ -46,6 +46,8 @@ type Props = {
   imagenAlt: string
   kicker?: string
   lineas: string[]
+  /** Palabra del titular en la tipografía manuscrita de la marca. */
+  acento?: string
   /** Frase corta en tipografía manuscrita, debajo del titular. */
   mano?: string
   lead?: string
@@ -64,6 +66,7 @@ export function Hero({
   imagenAlt,
   kicker,
   lineas,
+  acento,
   mano,
   lead,
   accion,
@@ -74,6 +77,8 @@ export function Hero({
   marca = 'RUTABAR',
 }: Props) {
   const titleId = useId()
+  const fraseRetrato = lineas.join(' ')
+  const inicioAcento = acento ? fraseRetrato.toLocaleLowerCase('es').indexOf(acento.toLocaleLowerCase('es')) : -1
   const columnas = Array.from(
     { length: Math.max(2, Math.min(10, segmentos)) },
     (_, indice) => indice,
@@ -172,12 +177,14 @@ export function Hero({
             </ParallaxScroll>
 
             <div className="hero2__texto">
-              {/* La frase, centrada dentro de la foto. La palabra "móvil" va en
-               * la tipografía manuscrita y en rosa: es el acento de marca dentro
-               * del mensaje. Por eso la frase se compone acá y no llega armada
-               * como una sola cadena. */}
               <h1 className="hero2__frase" id={titleId}>
-                Barra <span className="hero2__movil">móvil</span> para eventos en Santiago
+                {inicioAcento < 0 || !acento ? fraseRetrato : (
+                  <>
+                    {fraseRetrato.slice(0, inicioAcento)}
+                    <span className="hero2__acento">{fraseRetrato.slice(inicioAcento, inicioAcento + acento.length)}</span>
+                    {fraseRetrato.slice(inicioAcento + acento.length)}
+                  </>
+                )}
               </h1>
               {/* La firma, entre la frase y la imagen: el nombre de la marca
                * como cierre de la pieza. */}

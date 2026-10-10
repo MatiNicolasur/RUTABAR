@@ -30,6 +30,7 @@ import { SITIO } from '@/lib/seo'
  */
 
 const ENLACES = [
+  { href: '/', etiqueta: 'Inicio' },
   { href: '/servicios', etiqueta: 'Servicios' },
   { href: '/carta', etiqueta: 'Carta' },
   { href: '/condiciones', etiqueta: 'Condiciones' },
@@ -104,6 +105,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="cabecera__acciones">
+          <Link className="cabecera__enlace cabecera__inicio" href="/" aria-current={ruta === '/' ? 'page' : undefined}>
+            Inicio
+          </Link>
           {/* Una sola acción primaria en toda la cabecera. En móvil se esconde y
            * vive dentro del menú: si se queda, no deja lugar para nada más. */}
           <Link className="boton cabecera__cta" href="/cotizar">
@@ -114,7 +118,7 @@ export function SiteHeader() {
           <details className="cabecera__menu">
             <summary aria-label="Abrir navegación">Carta</summary>
             <div className="cabecera__menuPanel">
-              {ENLACES.map((item) => (
+              {ENLACES.filter((item) => item.href !== '/').map((item) => (
                 <Link key={item.href} href={item.href}>
                   {item.etiqueta}
                 </Link>

@@ -53,6 +53,12 @@
   text-shadow: 0 1px 12px rgb(19 19 17 / 0.55);
 }
 
+.cabecera[data-sobre-hero='true'] .cabecera__enlace[aria-current='page'] {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
 .cabecera[data-sobre-hero='true'] .cabecera__menu summary {
   border-color: rgb(255 245 244 / 0.45);
   color: var(--sobre-rojo);
@@ -132,6 +138,13 @@
   color: var(--rojo);
 }
 
+.cabecera__inicio {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  white-space: nowrap;
+}
+
 .cabecera__cta {
   padding: 0.7em 1.35em;
   font-size: var(--texto-menudo);
@@ -143,12 +156,22 @@
   .cabecera__nav {
     display: flex;
   }
+
+  .cabecera__inicio {
+    display: none;
+  }
 }
 
 @media (max-width: 47.99rem) {
   .cabecera__cta {
     display: inline-flex;
     min-height: 44px;
+  }
+}
+
+@media (max-width: 23rem) {
+  .cabecera__cta {
+    display: none;
   }
 }
 
