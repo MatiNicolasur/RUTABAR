@@ -141,12 +141,9 @@ export default function Home() {
           ))}
         </div>
         <div className="lienzo cierre-visual__contenido">
-          <p className="micro">Siguiente paso</p>
-          <h2 className="h2" id="titulo-cierre">Cuéntanos de tu evento y te cotizamos.</h2>
-          <p className="lead">Fecha, comuna e invitados: con eso empieza tu ruta.</p>
+          <h2 className="h2" id="titulo-cierre">Llena el formulario y recibe una cotización en menos de 5 min</h2>
           <div className="cierre__acciones">
             <Link className="boton boton--claro" href="/cotizar">Cotizar mi evento</Link>
-            <Link className="boton boton--fantasma" href="/carta">Ver la carta</Link>
           </div>
         </div>
       </section>
