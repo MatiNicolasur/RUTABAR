@@ -41,12 +41,14 @@ async function main() {
     assert.deepEqual(envio?.to, ['cliente@example.com'])
     assert.deepEqual(envio?.bcc, ['contacto@rutabar.cl'])
     assert.match(String(envio?.html), /Matías Urquiza/)
-    assert.match(String(envio?.html), /Condiciones del servicio/)
-    assert.match(String(envio?.text), /\$596\.000/)
+    assert.match(String(envio?.html), /src="cid:rutabar-logo"/)
+    assert.doesNotMatch(String(envio?.html), /Condiciones de pago|Total final|Precio por persona/)
+    assert.doesNotMatch(String(envio?.text), /\$|50%|Condiciones del servicio/)
 
     const adjuntos = envio?.attachments as { filename: string; content: string }[]
-    assert.equal(adjuntos.length, 1)
+    assert.equal(adjuntos.length, 2)
     assert.equal(adjuntos[0].filename, 'Cotizacion-y-carta-RUTABAR.pdf')
+    assert.equal(adjuntos[1].filename, 'logo-rutabar.png')
     const pdf = Buffer.from(adjuntos[0].content, 'base64')
     assert.equal(pdf.subarray(0, 4).toString(), '%PDF')
     assert.equal((await PDFDocument.load(pdf)).getPageCount(), 1)
@@ -61,7 +63,7 @@ async function main() {
       })
       assert.equal((await PDFDocument.load(archivo)).getPageCount(), 1)
     }
-    process.stdout.write('Envío simulado correcto: cliente, copia comercial, precio, condiciones y PDF.\n')
+    process.stdout.write('Envío simulado correcto: correo breve, logo incrustado y cotización en PDF.\n')
   } finally {
     globalThis.fetch = fetchOriginal
   }
