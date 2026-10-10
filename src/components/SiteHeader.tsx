@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Sello } from './Sello'
 import { SITIO } from '@/lib/seo'
 
@@ -39,15 +39,28 @@ const ENLACES = [
 export function SiteHeader() {
   const ruta = usePathname()
   const menuRef = useRef<HTMLDetailsElement>(null)
+  const [faseMenu, setFaseMenu] = useState<'cerrado' | 'entrando' | 'abierto' | 'saliendo'>('cerrado')
 
   useEffect(() => {
-    if (menuRef.current) menuRef.current.open = false
+    setFaseMenu((fase) => fase === 'cerrado' ? fase : 'saliendo')
   }, [ruta])
+
+  useEffect(() => {
+    if (faseMenu === 'entrando') {
+      const frame = requestAnimationFrame(() => setFaseMenu((fase) => fase === 'entrando' ? 'abierto' : fase))
+      return () => cancelAnimationFrame(frame)
+    }
+
+    if (faseMenu === 'saliendo') {
+      const cierre = window.setTimeout(() => setFaseMenu((fase) => fase === 'saliendo' ? 'cerrado' : fase), 200)
+      return () => window.clearTimeout(cierre)
+    }
+  }, [faseMenu])
 
   useEffect(() => {
     const cerrarFuera = (evento: PointerEvent) => {
       if (menuRef.current?.open && !menuRef.current.contains(evento.target as Node)) {
-        menuRef.current.open = false
+        setFaseMenu((fase) => fase === 'abierto' || fase === 'entrando' ? 'saliendo' : fase)
       }
     }
 
@@ -128,29 +141,37 @@ export function SiteHeader() {
           <details
             className="cabecera__menu"
             ref={menuRef}
+            open={faseMenu !== 'cerrado'}
+            data-fase={faseMenu}
             onKeyDown={(evento) => {
               if (evento.key === 'Escape') {
-                if (menuRef.current) menuRef.current.open = false
+                setFaseMenu((fase) => fase === 'abierto' || fase === 'entrando' ? 'saliendo' : fase)
                 menuRef.current?.querySelector('summary')?.focus()
               }
             }}
           >
-            <summary>
+            <summary
+              aria-expanded={faseMenu === 'entrando' || faseMenu === 'abierto'}
+              onClick={(evento) => {
+                evento.preventDefault()
+                setFaseMenu((fase) => fase === 'abierto' || fase === 'entrando' ? 'saliendo' : 'entrando')
+              }}
+            >
               <span className="cabecera__hamburguesa" aria-hidden="true"><span /><span /><span /></span>
               <span className="solo-lectores">Menú</span>
             </summary>
-            <div className="cabecera__menuPanel">
+            <div className="cabecera__menuPanel" inert={faseMenu !== 'abierto'}>
               {ENLACES.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={ruta === item.href ? 'page' : undefined}
-                  onClick={() => { if (menuRef.current) menuRef.current.open = false }}
+                  onClick={() => setFaseMenu('saliendo')}
                 >
                   {item.etiqueta}
                 </Link>
               ))}
-              <Link className="cabecera__menuCta" href="/cotizar" onClick={() => { if (menuRef.current) menuRef.current.open = false }}>
+              <Link className="cabecera__menuCta" href="/cotizar" onClick={() => setFaseMenu('saliendo')}>
                 Cotizar mi evento
               </Link>
             </div>
