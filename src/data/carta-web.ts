@@ -99,14 +99,14 @@ export const CARTA_WEB: TragoWeb[] = [
 ]
 
 export const BEBIDAS_Y_AGUA = [
-  'Cerveza',
-  'Coca-Cola',
-  'Jugo',
-  'Otra bebida sin alcohol',
-  'Sprite',
-  'Vino blanco',
-  'Vino tinto',
-  'Agua',
+  { nombre: 'Cerveza', tipo: 'Con alcohol', icono: '21', cartas: ['Barra reducida', 'Carta completa'] },
+  { nombre: 'Coca-Cola', tipo: 'Sin alcohol', icono: '22', cartas: ['Carta completa', 'Solo sin alcohol'] },
+  { nombre: 'Jugo', tipo: 'Sin alcohol', icono: '4', cartas: ['Carta completa', 'Solo sin alcohol'] },
+  { nombre: 'Otra bebida sin alcohol', tipo: 'Sin alcohol', icono: '23', cartas: ['Carta completa', 'Solo sin alcohol'] },
+  { nombre: 'Sprite', tipo: 'Sin alcohol', icono: '22', cartas: ['Carta completa', 'Solo sin alcohol'] },
+  { nombre: 'Vino blanco', tipo: 'Con alcohol', icono: '6', cartas: ['Barra reducida', 'Carta completa'] },
+  { nombre: 'Vino tinto', tipo: 'Con alcohol', icono: '6', cartas: ['Barra reducida', 'Carta completa'] },
+  { nombre: 'Agua', tipo: 'Sin alcohol', icono: '24', cartas: ['Barra reducida', 'Carta completa', 'Solo sin alcohol'] },
 ] as const
 
 export const ALTERNATIVAS_CARTA = [

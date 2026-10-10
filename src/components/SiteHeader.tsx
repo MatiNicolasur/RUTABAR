@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { Sello } from './Sello'
 import { SITIO } from '@/lib/seo'
 
@@ -38,6 +38,22 @@ const ENLACES = [
 
 export function SiteHeader() {
   const ruta = usePathname()
+  const menuRef = useRef<HTMLDetailsElement>(null)
+
+  useEffect(() => {
+    if (menuRef.current) menuRef.current.open = false
+  }, [ruta])
+
+  useEffect(() => {
+    const cerrarFuera = (evento: PointerEvent) => {
+      if (menuRef.current?.open && !menuRef.current.contains(evento.target as Node)) {
+        menuRef.current.open = false
+      }
+    }
+
+    document.addEventListener('pointerdown', cerrarFuera)
+    return () => document.removeEventListener('pointerdown', cerrarFuera)
+  }, [])
 
   /**
    * El estado "sobre el hero" tiene que estar bien desde el primer frame.
@@ -105,25 +121,36 @@ export function SiteHeader() {
         </nav>
 
         <div className="cabecera__acciones">
-          <Link className="enlace cabecera__enlace cabecera__inicio" href="/" aria-current={ruta === '/' ? 'page' : undefined}>
-            Inicio
-          </Link>
-          {/* Una sola acción primaria en toda la cabecera. En móvil se esconde y
-           * vive dentro del menú: si se queda, no deja lugar para nada más. */}
           <Link className="boton cabecera__cta" href="/cotizar">
             Cotizar
           </Link>
 
-          {/* Menú móvil sin JavaScript: un disclosure nativo. */}
-          <details className="cabecera__menu">
-            <summary aria-label="Abrir navegación">Carta</summary>
+          <details
+            className="cabecera__menu"
+            ref={menuRef}
+            onKeyDown={(evento) => {
+              if (evento.key === 'Escape') {
+                if (menuRef.current) menuRef.current.open = false
+                menuRef.current?.querySelector('summary')?.focus()
+              }
+            }}
+          >
+            <summary>
+              <span className="cabecera__hamburguesa" aria-hidden="true"><span /><span /><span /></span>
+              <span className="solo-lectores">Menú</span>
+            </summary>
             <div className="cabecera__menuPanel">
-              {ENLACES.filter((item) => item.href !== '/').map((item) => (
-                <Link key={item.href} href={item.href}>
+              {ENLACES.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={ruta === item.href ? 'page' : undefined}
+                  onClick={() => { if (menuRef.current) menuRef.current.open = false }}
+                >
                   {item.etiqueta}
                 </Link>
               ))}
-              <Link className="cabecera__menuCta" href="/cotizar">
+              <Link className="cabecera__menuCta" href="/cotizar" onClick={() => { if (menuRef.current) menuRef.current.open = false }}>
                 Cotizar mi evento
               </Link>
             </div>

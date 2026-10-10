@@ -4,8 +4,9 @@ import {
   CARTA_WEB,
 } from '@/data/carta-web'
 import { CartaFiltro } from './CartaFiltro'
+import { TarjetaBebida } from './TarjetaBebida'
 import { TarjetaTrago } from './TarjetaTrago'
-import Image from 'next/image'
+import { Icono } from './Icono'
 
 /** La carta se compone en el servidor; cada tarjeta maneja su apertura en el cliente. */
 export function CartaInteractiva() {
@@ -43,17 +44,17 @@ export function CartaInteractiva() {
           <h2 id="titulo-bebidas-agua">Bebidas y agua</h2>
           <span className="regla" aria-hidden="true" />
         </div>
-        <figure className="carta-publica__bebidas-foto">
-          <Image
-            src="/fotos/bebidas-agua.jpg"
-            alt="Vasos de agua, jugo, bebidas, cerveza y vino sobre la cubierta de madera de una barra móvil"
-            fill
-            sizes="(min-width: 62rem) 54rem, 92vw"
-            className="carta-publica__bebidas-imagen"
-          />
-        </figure>
-        <ul className="carta-publica__etiquetas">
-          {BEBIDAS_Y_AGUA.map((bebida) => <li key={bebida}>{bebida}</li>)}
+        <ul className="carta-publica__bebidas-grid">
+          {BEBIDAS_Y_AGUA.map((bebida, indice) => (
+            <TarjetaBebida
+              key={bebida.nombre}
+              nombre={bebida.nombre}
+              tipo={bebida.tipo}
+              cartas={bebida.cartas}
+              tono={indice % 4}
+              icono={<Icono nombre={bebida.icono} tamano={210} />}
+            />
+          ))}
         </ul>
       </section>
 

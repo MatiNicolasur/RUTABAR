@@ -90,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-CL" className={`${montserrat.variable} ${mairo.variable}`}>
       <body>
+        <div className="barra-safari" aria-hidden="true" />
         <a className="saltar" href="#contenido">
           Saltar al contenido
         </a>

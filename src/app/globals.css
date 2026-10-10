@@ -117,6 +117,7 @@
 }
 
 html {
+  background-color: var(--rojo-profundo);
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   /* Respeta la altura real del header para que los anclajes no queden debajo. */
@@ -184,16 +185,19 @@ body > footer {
   z-index: 100;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  html { background-color: var(--rojo-profundo); }
+.barra-safari {
+  display: none;
+}
 
-  body::before {
-    content: '';
+@media (hover: none) and (pointer: coarse) {
+  .barra-safari {
+    display: block;
     position: fixed;
-    inset: 0 0 auto;
+    inset-block-start: 0;
+    inset-inline: 0;
     z-index: 120;
-    block-size: env(safe-area-inset-top);
-    background: var(--rojo-profundo);
+    block-size: max(env(safe-area-inset-top), 1px);
+    background-color: var(--rojo-profundo);
     pointer-events: none;
   }
 }

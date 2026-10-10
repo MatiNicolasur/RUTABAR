@@ -127,22 +127,27 @@
 
 /* La carta pública usa la foto entera como tarjeta. La lista compacta de
  * servicio conserva sus reglas .trago de más abajo. */
-.carta-int .carta-lista {
+.carta-int .carta-lista,
+.carta-publica__bebidas-grid {
+  display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(0.75rem, 1.8vw, 1.25rem);
   border: 0;
 }
 
 @media (min-width: 42rem) {
-  .carta-int .carta-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .carta-int .carta-lista,
+  .carta-publica__bebidas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 62rem) {
-  .carta-int .carta-lista { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .carta-int .carta-lista,
+  .carta-publica__bebidas-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (min-width: 78rem) {
-  .carta-int .carta-lista { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .carta-int .carta-lista,
+  .carta-publica__bebidas-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 .trago-card {
@@ -560,35 +565,30 @@
   line-height: 1.55;
 }
 
-.carta-publica__bebidas-foto {
-  position: relative;
-  width: min(100%, 54rem);
-  aspect-ratio: 3 / 2;
-  margin: 0;
-  overflow: hidden;
-  border-radius: var(--radio-suave);
-  background: var(--papel-hondo);
+.carta-bebida {
+  background: var(--rojo-profundo);
 }
 
-.carta-publica__bebidas-imagen {
-  object-fit: cover;
+.carta-bebida[data-tono='1'] { background: var(--rojo-hondo); }
+.carta-bebida[data-tono='2'] { background: #a3001c; }
+.carta-bebida[data-tono='3'] { background: var(--rojo); }
+
+.carta-bebida__icono {
+  position: absolute;
+  z-index: 0;
+  inset-block-start: 11%;
+  inset-inline-end: -4%;
+  inline-size: 80%;
+  color: #fff;
+  opacity: 0.22;
+  transform: rotate(-9deg);
+  pointer-events: none;
 }
 
-.carta-publica__etiquetas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  padding: 0;
-  list-style: none;
-}
-
-.carta-publica__etiquetas li {
-  padding: 0.55rem 0.9rem;
-  border: 1px solid var(--papel-borde);
-  border-radius: var(--radio-pastilla);
-  background: var(--papel-hondo);
-  font-size: var(--texto-menudo);
-  font-weight: 600;
+.carta-bebida__icono svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
 }
 
 .carta-publica__opciones {
