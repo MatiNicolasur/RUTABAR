@@ -10,15 +10,21 @@ import { ICONOS } from '@/data/iconos'
 const ESTANDAR = [
   {
     palabra: 'Sabor',
-    texto: 'Cócteles, mocktails y favoritos de la ruta chilena.',
+    porcentaje: '71%',
+    dato: 'de quienes consumen cócteles dice que el sabor es el principal factor al momento de elegir qué tomar.',
+    texto: 'Por eso partimos por lo esencial: buenas recetas, ingredientes seleccionados y tragos preparados para disfrutarlos de verdad.',
   },
   {
     palabra: 'Barra',
-    texto: 'Una carta elegida para tu gente y tu presupuesto.',
+    porcentaje: '72%',
+    dato: 'de los consumidores recurre al bartender cuando necesita ayuda para decidir qué pedir.',
+    texto: 'Nuestra barra no solo sirve tragos. Recomienda, prepara y mantiene la experiencia fluyendo durante todo el evento.',
   },
   {
     palabra: 'Ritmo',
-    texto: 'Barra libre durante las horas que elijas.',
+    porcentaje: '79%',
+    dato: 'de las personas se siente atraída por eventos que combinan distintos intereses y experiencias.',
+    texto: 'Porque una buena celebración no ocurre alrededor de una copa: ocurre alrededor de las personas, la música, las conversaciones y esos momentos que nadie planificó.',
   },
 ]
 
@@ -43,7 +49,7 @@ export default function Home() {
         <div className="lienzo">
           <div className="seccion__encabezado">
             <p className="micro">Nuestro estándar</p>
-            <h2 className="h2" id="titulo-estandar">
+            <h2 className="h2 estandar__titulo" id="titulo-estandar" aria-label="Sabor. Barra. Ritmo.">
               <span className="punto">Sabor</span>{' '}
               <span className="punto">Barra</span>{' '}
               <span className="punto">Ritmo</span>
@@ -55,7 +61,8 @@ export default function Home() {
               {ESTANDAR.map((item, indice) => (
                 <Reveal className="estandar__bloque" key={item.palabra} retraso={indice * 60}>
                   <span className="estandar__numero">{String(indice + 1).padStart(2, '0')}</span>
-                  <h3 className="estandar__palabra" id={`ruta-${item.palabra.toLowerCase()}`}>{item.palabra}</h3>
+                  <h3 className="estandar__palabra" id={`ruta-${item.palabra.toLowerCase()}`}>{item.palabra}.</h3>
+                  <p className="estandar__dato"><strong>{item.porcentaje}</strong> {item.dato}</p>
                   <p className="estandar__texto">{item.texto}</p>
                 </Reveal>
               ))}
@@ -63,6 +70,10 @@ export default function Home() {
             <div className="estandar__figura" aria-hidden="true">
               <Icono nombre="35" tamano={240} />
             </div>
+          </div>
+          <div className="estandar__cierre">
+            <p className="estandar__declaracion">Ruta Bar transforma tu evento en un punto de encuentro.</p>
+            <p className="estandar__remate">Coctelería de ruta a tu evento.</p>
           </div>
         </div>
       </section>
