@@ -117,7 +117,10 @@ export function Hero({
 
     const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
       || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 800 : 200)
+    // La espera corre desde que el navegador abrió la página, no desde que
+    // React terminó de hidratar; así el preloader no añade una pausa posterior.
+    const esperaRestante = animarIntro ? Math.max(0, 800 - window.performance.now()) : 0
+    const pausa = window.setTimeout(() => setPausaCompleta(true), esperaRestante)
 
     return () => {
       window.clearTimeout(pausa)
