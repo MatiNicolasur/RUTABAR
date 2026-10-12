@@ -2,9 +2,15 @@ import assert from 'node:assert/strict'
 import { PDFDocument } from 'pdf-lib'
 import { POST } from '../src/app/api/cotizaciones/route'
 import { generarCotizacionPdf } from '../src/lib/cotizacion-pdf'
-import { calcularPrecioCotizacion, type CartaCotizacionId } from '../src/data/precios-cotizacion'
+import { calcularPrecioCotizacion, CONFIG_COTIZACION, type CartaCotizacionId } from '../src/data/precios-cotizacion'
 
 async function main() {
+  for (const carta of CONFIG_COTIZACION.cartas) {
+    for (const horas of CONFIG_COTIZACION.duraciones) {
+      assert.equal(calcularPrecioCotizacion(carta.id, horas, 40), carta.precios[horas])
+    }
+  }
+  assert.equal(calcularPrecioCotizacion('reducida', 5, 80), 1_096_000)
   process.env.RESEND_API_KEY = 'clave-simulada'
   process.env.RESEND_FROM_EMAIL = 'RUTABAR <contacto@rutabar.cl>'
   process.env.RESEND_TO_EMAIL = 'contacto@rutabar.cl'
@@ -54,6 +60,12 @@ async function main() {
     assert.equal((await PDFDocument.load(pdf)).getPageCount(), 1)
     assert.equal(pdf.includes(Buffer.from('/DCTDecode')), false, 'El PDF no debe incluir fotos JPEG')
     assert.equal(llamadas, 1)
+    const sinLugar = await POST(new Request('http://localhost/api/cotizaciones', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...datos, lugar: '' }),
+    }))
+    assert.equal(sinLugar.status, 200)
+    assert.equal(llamadas, 2)
     for (const cartaId of ['reducida', 'sin-alcohol'] as CartaCotizacionId[]) {
       const total = calcularPrecioCotizacion(cartaId, 4, 40)
       const archivo = await generarCotizacionPdf({
@@ -68,7 +80,7 @@ async function main() {
       body: JSON.stringify({ ...datos, cartaId: 'personalizada', detalleCarta: 'Mojito, gin tonic y dos mocktails cítricos' }),
     }))
     assert.equal(personalizada.status, 200)
-    assert.equal(llamadas, 2)
+    assert.equal(llamadas, 3)
     assert.match(String(envio?.subject), /carta personalizada/i)
     assert.match(String(envio?.text), /Mojito, gin tonic/)
     assert.equal(envio?.attachments, undefined, 'La solicitud personalizada no debe enviar un precio ni un PDF de carta fija')
@@ -77,7 +89,7 @@ async function main() {
       body: JSON.stringify({ ...datos, cartaId: 'personalizada', detalleCarta: '' }),
     }))
     assert.equal(personalizadaIncompleta.status, 400)
-    assert.equal(llamadas, 2)
+    assert.equal(llamadas, 3)
     process.stdout.write('Envío simulado correcto: correo breve, logo incrustado y cotización en PDF.\n')
   } finally {
     globalThis.fetch = fetchOriginal

@@ -7,11 +7,13 @@ type Props = {
   cartaInicial?: CartaCotizacionId
   asistentesIniciales?: number
   duracionInicial?: DuracionCotizacion
-  personalizadaInicial?: boolean
+  packInicial?: CartaCotizacionId
+  modoInicial?: 'flexible'
 }
 
 const WHATSAPP_COMERCIAL = process.env.NEXT_PUBLIC_WHATSAPP ?? ''
-const PASOS = ['Datos del evento', 'Elegir servicio', 'Recibir cotización'] as const
+const PASOS = ['Elegir servicio', 'Datos del evento', 'Tus datos'] as const
+const ORDEN_PACKS: CartaCotizacionId[] = ['reducida', 'completa', 'sin-alcohol']
 const DURACION_MINIMA = CONFIG_COTIZACION.duraciones[0]
 const DURACION_MAXIMA = CONFIG_COTIZACION.duraciones[CONFIG_COTIZACION.duraciones.length - 1]
 const OTRA_COMUNA = 'otra'
@@ -24,20 +26,18 @@ const COMUNAS_POR_PROVINCIA = [
   { provincia: 'Talagante', comunas: ['El Monte', 'Isla de Maipo', 'Padre Hurtado', 'Peñaflor', 'Talagante'] },
 ] as const
 
-export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInicial, personalizadaInicial = false }: Props) {
+export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInicial, packInicial, modoInicial }: Props) {
   const flujoRef = useRef<HTMLDivElement>(null)
-  const [paso, setPaso] = useState<1 | 2 | 3>(1)
+  const [paso, setPaso] = useState<1 | 2 | 3>(packInicial ? 2 : 1)
+  const [modo, setModo] = useState<'pack' | 'flexible' | null>(packInicial ? 'pack' : modoInicial ?? null)
   const [fecha, setFecha] = useState('')
   const [ciudad, setCiudad] = useState('')
   const [otraCiudad, setOtraCiudad] = useState('')
-  const [lugar, setLugar] = useState('')
   const [asistentes, setAsistentes] = useState(String(asistentesIniciales ?? CONFIG_COTIZACION.personasBase))
-  const [cartaId, setCartaId] = useState<CartaCotizacionId | 'personalizada'>(personalizadaInicial ? 'personalizada' : cartaInicial ?? 'reducida')
-  const [detalleCarta, setDetalleCarta] = useState('')
-  const [errorCarta, setErrorCarta] = useState('')
-  const [duracion, setDuracion] = useState<DuracionCotizacion>(duracionInicial ?? 4)
-  const [posicionHoras, setPosicionHoras] = useState<number>(duracionInicial ?? 4)
-  const posicionHorasRef = useRef<number>(duracionInicial ?? 4)
+  const [cartaId, setCartaId] = useState<CartaCotizacionId>(packInicial ?? cartaInicial ?? 'reducida')
+  const [duracion, setDuracion] = useState<DuracionCotizacion>(packInicial ? 5 : duracionInicial ?? 5)
+  const [posicionHoras, setPosicionHoras] = useState<number>(packInicial ? 5 : duracionInicial ?? 5)
+  const posicionHorasRef = useRef<number>(packInicial ? 5 : duracionInicial ?? 5)
   const punteroActivoRef = useRef<number | null>(null)
   const animacionHorasRef = useRef<number | null>(null)
   const [nombre, setNombre] = useState('')
@@ -52,7 +52,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
   const numeroAsistentes = Number(asistentes)
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId)
-  const esPersonalizada = cartaId === 'personalizada'
   const ciudadCotizacion = ciudad === OTRA_COMUNA ? otraCiudad.trim() : ciudad
   const fechaVisible = fecha ? fecha.split('-').reverse().join('/') : 'Por definir'
   const progresoHoras = (posicionHoras - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
@@ -135,10 +134,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       contacto || 'Contacto: —',
       `Fecha: ${fechaVisible}`,
       `Ciudad o comuna: ${ciudadCotizacion || '—'}`,
-      `Lugar: ${lugar.trim() || '—'}`,
       `Asistentes: ${asistentes || '—'}`,
-      `Carta: ${esPersonalizada ? 'Personalizada' : `${carta?.nombre} (${carta?.bebidas} opciones)`}`,
-      ...(esPersonalizada ? [`Tragos deseados: ${detalleCarta.trim() || 'Por definir'}`] : []),
+      `Carta: ${carta?.nombre} (${carta?.bebidas} opciones)`,
       `Duración: ${duracion} horas`,
       `Servicio: barra libre durante las ${duracion} horas contratadas.`,
       solicitaCartaDigital
@@ -148,14 +145,11 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }, [
     asistentes,
     carta,
-    detalleCarta,
     ciudad,
     ciudadCotizacion,
     correo,
     duracion,
-    esPersonalizada,
     fechaVisible,
-    lugar,
     nombre,
     solicitaCartaDigital,
     whatsapp,
@@ -167,8 +161,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     : ''
 
   function validarEvento(): boolean {
-    if (!fecha || !ciudadCotizacion || !lugar.trim() || !Number.isSafeInteger(numeroAsistentes)) {
-      setErrorEvento('Completa la fecha, la ciudad o comuna, el lugar y un número válido de asistentes.')
+    if (!fecha || !Number.isSafeInteger(numeroAsistentes)) {
+      setErrorEvento('Completa la fecha y un número válido de asistentes.')
       return false
     }
     if (!asistentesEnRango(numeroAsistentes)) {
@@ -180,10 +174,6 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }
 
   function validarContacto(): boolean {
-    if (esPersonalizada && detalleCarta.trim().length < 10) {
-      setErrorContacto('Cuéntanos qué tragos quieres incluir en tu carta personalizada.')
-      return false
-    }
     const correoLimpio = correo.trim()
     const digitosWhatsApp = whatsapp.replace(/\D/g, '')
     const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoLimpio)
@@ -193,8 +183,12 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       setErrorContacto('Escribe tu nombre para identificar la cotización.')
       return false
     }
+    if (!ciudadCotizacion) {
+      setErrorContacto('Selecciona la ciudad o comuna del evento.')
+      return false
+    }
     if (!correoLimpio) {
-      setErrorContacto(esPersonalizada ? 'Ingresa tu correo para recibir la respuesta a tu solicitud.' : 'Ingresa tu correo para recibir la cotización y la carta en PDF.')
+      setErrorContacto('Ingresa tu correo para recibir la cotización y la carta en PDF.')
       return false
     }
     if (correoLimpio && !correoValido) {
@@ -230,10 +224,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           whatsapp: whatsapp.trim(),
           fecha,
           ciudad: ciudadCotizacion,
-          lugar: lugar.trim(),
+          lugar: '',
           asistentes: numeroAsistentes,
           cartaId,
-          detalleCarta: esPersonalizada ? detalleCarta.trim() : '',
+          detalleCarta: '',
           duracion,
           solicitaCartaDigital,
         }),
@@ -257,16 +251,14 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     detenerAnimacionHoras()
     punteroActivoRef.current = null
     setPaso(1)
+    setModo(null)
     setFecha('')
     setCiudad('')
     setOtraCiudad('')
-    setLugar('')
     setAsistentes(String(CONFIG_COTIZACION.personasBase))
     setCartaId('reducida')
-    setDetalleCarta('')
-    setErrorCarta('')
-    setDuracion(4)
-    moverHoras(4)
+    setDuracion(5)
+    moverHoras(5)
     setNombre('')
     setCorreo('')
     setWhatsapp('')
@@ -291,7 +283,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               key={etiqueta}
             >
               <span className="cotizacion-flujo__numero">{numeroPaso}</span>
-              <span>{esPersonalizada && numeroPaso === 3 ? 'Enviar solicitud' : etiqueta}</span>
+              <span>{etiqueta}</span>
               </li>
             )
           })}
@@ -301,48 +293,17 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
         <section className="cotizacion-flujo__panel" aria-labelledby="cotizacion-paso-1">
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 1 de 3</p>
-            <h2 className="h3" id="cotizacion-paso-1">Datos del evento</h2>
-            <p>Cuéntanos dónde será y cuántas personas asistirán.</p>
+            <h2 className="h3" id="cotizacion-paso-1">Elige tu servicio</h2>
+            <p>Escoge un pack de 5 horas o arma tu propia ruta de barra libre.</p>
           </div>
-
-          <div className="cotizacion-flujo__campos">
-            <label className="campo">
-              <span className="campo__label">Fecha del evento <span className="campo__valor">*</span></span>
-              <input className="campo__input" type="date" lang="es-CL" value={fecha} onChange={(evento) => setFecha(evento.target.value)} required />
-            </label>
-            <label className="campo">
-              <span className="campo__label">Ciudad o comuna <span className="campo__valor">*</span></span>
-              <select className="campo__input" value={ciudad} onChange={(evento) => setCiudad(evento.target.value)} autoComplete="address-level2" required>
-                <option value="" disabled>Selecciona una comuna</option>
-                {COMUNAS_POR_PROVINCIA.map((grupo) => (
-                  <optgroup label={grupo.provincia} key={grupo.provincia}>
-                    {grupo.comunas.map((comuna) => <option value={comuna} key={comuna}>{comuna}</option>)}
-                  </optgroup>
-                ))}
-                <option value={OTRA_COMUNA}>Otra ciudad o comuna</option>
-              </select>
-            </label>
-            {ciudad === OTRA_COMUNA ? (
-              <label className="campo">
-                <span className="campo__label">Indica la ciudad o comuna <span className="campo__valor">*</span></span>
-                <input className="campo__input" value={otraCiudad} onChange={(evento) => setOtraCiudad(evento.target.value)} autoComplete="address-level2" required />
-              </label>
-            ) : null}
-            <label className="campo">
-              <span className="campo__label">Lugar <span className="campo__valor">*</span></span>
-              <input className="campo__input" value={lugar} onChange={(evento) => setLugar(evento.target.value)} placeholder="Casa, salón, terraza…" required />
-            </label>
-            <label className="campo">
-              <span className="campo__label">Número de asistentes <span className="campo__valor">*</span></span>
-              <input className="campo__input" type="number" min={CONFIG_COTIZACION.asistentesMin} max={CONFIG_COTIZACION.asistentesMax} step={1} inputMode="numeric" value={asistentes} onChange={(evento) => { setAsistentes(evento.target.value); setErrorEvento('') }} required />
-              <span className="cotizacion-flujo__ayuda">Entre {CONFIG_COTIZACION.asistentesMin} y {CONFIG_COTIZACION.asistentesMax} invitados.</span>
-            </label>
-          </div>
-
-          {errorEvento ? <p className="cotizacion-flujo__error" role="alert">{errorEvento}</p> : null}
-          <div className="cotizacion-flujo__acciones cotizacion-flujo__acciones--final">
-            <button className="boton" type="button" onClick={() => { if (validarEvento()) setPaso(2) }}>
-              Continuar a elegir servicio
+          <div className="cotizacion-flujo__servicios" role="group" aria-label="Tipo de servicio">
+            {ORDEN_PACKS.map((id) => CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === id)!).map((opcion) => (
+              <button className={modo === 'pack' && cartaId === opcion.id ? 'cotizacion-flujo__servicio cotizacion-flujo__servicio--activo' : 'cotizacion-flujo__servicio'} type="button" key={opcion.id} aria-pressed={modo === 'pack' && cartaId === opcion.id} onClick={() => { setModo('pack'); setCartaId(opcion.id); setDuracion(5); moverHoras(5); setPaso(2) }}>
+                <strong>{opcion.nombre}</strong><span>{opcion.bebidas} opciones · 5 horas</span>
+              </button>
+            ))}
+            <button className={modo === 'flexible' ? 'cotizacion-flujo__servicio cotizacion-flujo__servicio--activo' : 'cotizacion-flujo__servicio'} type="button" aria-pressed={modo === 'flexible'} onClick={() => { setModo('flexible'); setPaso(2) }}>
+              <strong>La carta y las horas que tú quieras</strong><span>Elige carta y duración entre 3 y 12 horas</span>
             </button>
           </div>
         </section>
@@ -352,29 +313,18 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
         <section className="cotizacion-flujo__panel" aria-labelledby="cotizacion-paso-2">
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 2 de 3</p>
-            <h2 className="h3" id="cotizacion-paso-2">Elegir servicio</h2>
-            <p>{esPersonalizada ? 'Cuéntanos tu idea y elige las horas. Prepararemos el precio a medida.' : 'Elige la ruta y las horas. Te enviaremos el precio final por correo.'}</p>
+            <h2 className="h3" id="cotizacion-paso-2">Datos del evento</h2>
+            <p>{modo === 'pack' ? `Elegiste ${carta?.nombre}: ${carta?.bebidas} opciones y 5 horas de barra libre.` : 'Escoge la carta y duración, y cuéntanos sobre tu evento.'}</p>
           </div>
-
-          <label className="campo cotizacion-flujo__carta-select">
-            <span className="campo__label">Tipo de carta</span>
-            <select className="campo__input" value={cartaId} onChange={(evento) => { setCartaId(evento.target.value as CartaCotizacionId | 'personalizada'); setErrorCarta('') }}>
-              {CONFIG_COTIZACION.cartas.map((opcion) => (
-                <option value={opcion.id} key={opcion.id}>{opcion.nombre} · {opcion.bebidas} opciones</option>
-              ))}
-              <option value="personalizada">Carta personalizada · precio a medida</option>
-            </select>
-            <span className="cotizacion-flujo__ayuda">{esPersonalizada ? 'La revisaremos contigo antes de confirmar un precio.' : carta?.resumen}</span>
-          </label>
-
-          {esPersonalizada ? (
-            <label className="campo">
-              <span className="campo__label">¿Qué tragos te gustaría incluir? <span className="campo__valor">*</span></span>
-              <textarea className="campo__input" value={detalleCarta} onChange={(evento) => { setDetalleCarta(evento.target.value); setErrorCarta('') }} maxLength={1000} rows={4} placeholder="Ej.: clásicos con gin, dos sours y mocktails frutales…" required />
-              <span className="cotizacion-flujo__ayuda">Indica tus favoritos o el estilo que imaginas. Nos pondremos en contacto para afinar la selección.</span>
-            </label>
-          ) : null}
-
+          {modo === 'flexible' ? (
+            <>
+              <label className="campo cotizacion-flujo__carta-select">
+                <span className="campo__label">Tipo de carta</span>
+                <select className="campo__input" value={cartaId} onChange={(evento) => setCartaId(evento.target.value as CartaCotizacionId)}>
+                  {CONFIG_COTIZACION.cartas.map((opcion) => <option value={opcion.id} key={opcion.id}>{opcion.nombre} · {opcion.bebidas} opciones</option>)}
+                </select>
+                <span className="cotizacion-flujo__ayuda">{carta?.resumen}</span>
+              </label>
           <div className="cotizacion-flujo__horas">
             <div className="cotizacion-flujo__horas-encabezado">
               <label htmlFor="duracion-cotizacion">Cantidad de horas</label>
@@ -433,17 +383,26 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             </div>
           </div>
 
-          <div className="cotizacion-flujo__acciones">
-            <button className="boton boton--fantasma" type="button" onClick={() => setPaso(1)}>Volver</button>
-            <button className="boton" type="button" onClick={() => {
-              if (esPersonalizada && detalleCarta.trim().length < 10) {
-                setErrorCarta('Describe brevemente los tragos que te gustaría incluir.')
-                return
-              }
-              setPaso(3)
-            }}>Continuar</button>
+            </>
+          ) : (
+            <div className="cotizacion-flujo__pack-elegido"><strong>{carta?.nombre}</strong><span>{carta?.resumen}</span><small>5 horas · Barra libre</small></div>
+          )}
+          <div className="cotizacion-flujo__campos">
+            <label className="campo cotizacion-flujo__campo-evento">
+              <span className="campo__label">Fecha del evento <span className="campo__valor">*</span></span>
+              <input className="campo__input" type="date" lang="es-CL" value={fecha} onInput={(evento) => { setFecha(evento.currentTarget.value); setErrorEvento('') }} onChange={(evento) => setFecha(evento.target.value)} required />
+            </label>
+            <label className="campo cotizacion-flujo__campo-evento">
+              <span className="campo__label">Número de asistentes <span className="campo__valor">*</span></span>
+              <input className="campo__input" type="number" min={CONFIG_COTIZACION.asistentesMin} max={CONFIG_COTIZACION.asistentesMax} step={1} inputMode="numeric" value={asistentes} onChange={(evento) => { setAsistentes(evento.target.value); setErrorEvento('') }} required />
+              <span className="cotizacion-flujo__ayuda">Entre {CONFIG_COTIZACION.asistentesMin} y {CONFIG_COTIZACION.asistentesMax} invitados.</span>
+            </label>
           </div>
-          {errorCarta ? <p className="cotizacion-flujo__error" role="alert">{errorCarta}</p> : null}
+          {errorEvento ? <p className="cotizacion-flujo__error" role="alert">{errorEvento}</p> : null}
+          <div className="cotizacion-flujo__acciones">
+            <button className="boton boton--fantasma" type="button" onClick={() => setPaso(1)}>Cambiar servicio</button>
+            <button className="boton" type="button" onClick={() => { if (validarEvento()) setPaso(3) }}>Continuar</button>
+          </div>
         </section>
       ) : null}
 
@@ -451,8 +410,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
         <section className="cotizacion-flujo__panel" aria-labelledby="cotizacion-paso-3">
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 3 de 3</p>
-            <h2 className="h3" id="cotizacion-paso-3">{esPersonalizada ? 'Enviar solicitud' : 'Recibir cotización'}</h2>
-            <p>{esPersonalizada ? 'Te confirmaremos por correo que recibimos tu idea y prepararemos un precio a medida.' : 'Ingresa tu correo y te enviaremos el precio y la carta en PDF.'}</p>
+            <h2 className="h3" id="cotizacion-paso-3">Tus datos</h2>
+            <p>Indícanos dónde será el evento y a qué correo enviamos tu cotización en PDF.</p>
           </div>
 
           <div className="cotizacion-flujo__campos">
@@ -460,6 +419,24 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               <span className="campo__label">Nombre <span className="campo__valor">*</span></span>
               <input className="campo__input" value={nombre} onChange={(evento) => { setNombre(evento.target.value); setErrorContacto('') }} autoComplete="name" required />
             </label>
+            <label className="campo">
+              <span className="campo__label">Ciudad o comuna del evento <span className="campo__valor">*</span></span>
+              <select className="campo__input" value={ciudad} onChange={(evento) => { setCiudad(evento.target.value); setErrorContacto('') }} autoComplete="address-level2" required>
+                <option value="" disabled>Selecciona una comuna</option>
+                {COMUNAS_POR_PROVINCIA.map((grupo) => (
+                  <optgroup label={grupo.provincia} key={grupo.provincia}>
+                    {grupo.comunas.map((comuna) => <option value={comuna} key={comuna}>{comuna}</option>)}
+                  </optgroup>
+                ))}
+                <option value={OTRA_COMUNA}>Otra ciudad o comuna</option>
+              </select>
+            </label>
+            {ciudad === OTRA_COMUNA ? (
+              <label className="campo">
+                <span className="campo__label">Indica la ciudad o comuna <span className="campo__valor">*</span></span>
+                <input className="campo__input" value={otraCiudad} onChange={(evento) => { setOtraCiudad(evento.target.value); setErrorContacto('') }} autoComplete="address-level2" required />
+              </label>
+            ) : null}
             <label className="campo">
               <span className="campo__label">Correo para recibir tu cotización <span className="campo__valor">*</span></span>
               <input className="campo__input" type="email" value={correo} onChange={(evento) => { setCorreo(evento.target.value); setErrorContacto('') }} autoComplete="email" placeholder="tu@correo.cl" required />
@@ -469,7 +446,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               <input className="campo__input" type="tel" value={whatsapp} onChange={(evento) => { setWhatsapp(evento.target.value); setErrorContacto('') }} autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" />
             </label>
           </div>
-          <p className="cotizacion-flujo__ayuda">{esPersonalizada ? 'Responderemos a ese correo con la propuesta personalizada.' : 'El precio final, el detalle y la carta llegarán a ese correo.'}</p>
+          <p className="cotizacion-flujo__ayuda">El precio final, el detalle y la carta llegarán a ese correo.</p>
 
           <label className="cotizacion-flujo__beneficio">
             <input type="checkbox" checked={solicitaCartaDigital} onChange={(evento) => setSolicitaCartaDigital(evento.target.checked)} />
@@ -482,7 +459,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
           <div className={enlaceWhatsApp ? 'cotizacion-flujo__envio cotizacion-flujo__envio--whatsapp' : 'cotizacion-flujo__envio'}>
             <button className="boton" type="button" onClick={enviarPorCorreo} disabled={enviando}>
-              {enviando ? (esPersonalizada ? 'Enviando solicitud…' : 'Preparando tu PDF…') : (esPersonalizada ? 'Solicitar carta personalizada' : 'Recibir cotización por correo')}
+              {enviando ? 'Preparando tu PDF…' : 'Recibir cotización por correo'}
             </button>
             {enlaceWhatsApp ? (
               <a className="boton boton--fantasma" href={enlaceWhatsApp} onClick={validarAntesDeEnviar} rel="noopener noreferrer" target="_blank">
@@ -492,7 +469,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           </div>
 
           <div className="cotizacion-flujo__acciones">
-            <button className="boton boton--fantasma" type="button" onClick={() => setPaso(2)}>Volver a elegir servicio</button>
+            <button className="boton boton--fantasma" type="button" onClick={() => setPaso(2)}>Volver a datos del evento</button>
           </div>
         </section>
       ) : null}
@@ -522,8 +499,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             />
           </figure>
           <div className="cotizacion-flujo__exito-contenido">
-            <h2 className="h2" id="cotizacion-enviada-titulo">{esPersonalizada ? '¡Solicitud enviada!' : '¡Cotización enviada!'}</h2>
-            <p className="lead">{esPersonalizada ? `Gracias, ${nombre.trim()}. Revisa tu correo: recibimos tu idea y te responderemos con una propuesta.` : `Gracias, ${nombre.trim()}. Revisa tu correo: enviamos el precio y la carta en PDF.`}</p>
+            <h2 className="h2" id="cotizacion-enviada-titulo">¡Cotización enviada!</h2>
+            <p className="lead">{`Gracias, ${nombre.trim()}. Revisa tu correo: enviamos el precio y la carta en PDF.`}</p>
             <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
           </div>
         </section>

@@ -14,6 +14,7 @@
   min-inline-size: 0;
   overflow: hidden;
   border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-suave);
   background: var(--papel);
   box-shadow: 0 18px 46px rgb(73 0 10 / 0.06);
   transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 350ms ease;
@@ -22,13 +23,19 @@
 .rutas-servicio__foto,
 .rutas-servicio__personalizada-arte {
   position: relative;
-  aspect-ratio: 1.16;
+  aspect-ratio: 0.92;
   overflow: hidden;
 }
 
+.rutas-servicio__foto { background: var(--tinta); }
+.rutas-servicio__foto::before { position: absolute; z-index: 1; inset: -2%; content: ''; background: var(--ruta-imagen) center / cover no-repeat; filter: blur(3px); opacity: .65; mask-image: linear-gradient(#000 0%, #000 38%, transparent 68%); pointer-events: none; animation: rutas-fondo-vivo 8s ease-in-out infinite alternate; }
+@keyframes rutas-fondo-vivo { from { transform: translateX(-1.2%) scale(1.025); } to { transform: translateX(1.2%) scale(1.04); } }
+.rutas-servicio__foto::after { position: absolute; inset: 38% 0 0; content: ''; background: linear-gradient(transparent, rgb(12 0 3 / 0.72)); pointer-events: none; }
+.rutas-servicio__foto-dato { position: absolute; z-index: 2; inset-inline: 1.2rem; bottom: 1.1rem; color: #fff; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+
 .rutas-servicio__foto img {
   object-fit: cover;
-  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: none;
 }
 
 .rutas-servicio__card:nth-child(1) .rutas-servicio__foto img { object-position: center 38%; }
@@ -92,6 +99,10 @@
   text-decoration: none;
 }
 
+.rutas-servicio__pie { display: grid; width: 100%; gap: 1rem; margin-block-start: auto; }
+.rutas-servicio__precio { display: grid; gap: .18rem; margin: 0; padding-block-start: 1rem; border-block-start: 1px solid var(--papel-borde); color: var(--rojo-hondo); font-size: clamp(1.2rem, 1.8vw, 1.55rem); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.rutas-servicio__precio span { color: var(--texto-suave); font-size: .72rem; font-weight: 600; line-height: 1.35; }
+
 .rutas-servicio__accion span {
   font-size: 1.1rem;
   transition: transform 200ms ease;
@@ -106,7 +117,7 @@
 .rutas-servicio__personalizada-arte {
   display: grid;
   place-content: center;
-  background: radial-gradient(circle at 72% 25%, #dd6673 0, transparent 40%), linear-gradient(145deg, #6d0002, #ad0022);
+  background: #310006;
   color: rgb(255 245 244 / 0.82);
   font-family: var(--fuente-mano);
   font-size: clamp(3.2rem, 5vw, 6rem);
@@ -115,7 +126,9 @@
 
 .rutas-servicio__personalizada-arte span { margin-inline-start: 2.8rem; }
 .rutas-servicio__card--personalizada .rutas-servicio__dato,
-.rutas-servicio__card--personalizada .rutas-servicio__detalle { color: var(--sobre-rojo-suave); }
+.rutas-servicio__card--personalizada .rutas-servicio__detalle,
+.rutas-servicio__card--personalizada .rutas-servicio__precio span { color: var(--sobre-rojo-suave); }
+.rutas-servicio__card--personalizada .rutas-servicio__precio { border-color: rgb(255 255 255 / .24); color: #fff; font-size: 1rem; }
 .rutas-servicio__accion--personalizada { color: var(--sobre-rojo); }
 
 @media (hover: hover) and (pointer: fine) {
@@ -124,7 +137,6 @@
     box-shadow: 0 24px 60px rgb(73 0 10 / 0.13);
   }
 
-  .rutas-servicio__card:hover .rutas-servicio__foto img { transform: scale(1.045); }
   .rutas-servicio__accion:hover span { transform: translate(3px, -3px); }
 }
 
@@ -140,6 +152,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rutas-servicio__card,
+  .rutas-servicio__foto::before,
   .rutas-servicio__foto img,
   .rutas-servicio__accion span { transition: none; }
+  .rutas-servicio__foto::before { animation: none; }
 }

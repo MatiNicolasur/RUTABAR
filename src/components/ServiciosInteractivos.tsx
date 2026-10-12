@@ -35,7 +35,7 @@ export function ServiciosInteractivos({ segmentos, iconos }: Props) {
           </div>
           <div>
             <dt>Se cotiza</dt>
-            <dd>La carta, la cantidad de horas, los asistentes y el lugar del evento.</dd>
+            <dd>La carta, la cantidad de horas, los asistentes y la comuna del evento.</dd>
           </div>
         </dl>
 

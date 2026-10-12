@@ -55,7 +55,7 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
     !correoValido || !whatsappValido ||
     !fechaValida ||
     !esTexto(entrada.ciudad, 100) ||
-    !esTexto(entrada.lugar, 160) ||
+    (entrada.lugar !== undefined && (typeof entrada.lugar !== 'string' || entrada.lugar.length > 160)) ||
     !asistentesEnRango(Number(entrada.asistentes)) || typeof entrada.asistentes !== 'number' ||
     typeof entrada.solicitaCartaDigital !== 'boolean'
   ) return null
@@ -66,7 +66,7 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
     whatsapp,
     fecha: String(entrada.fecha),
     ciudad: entrada.ciudad.trim(),
-    lugar: entrada.lugar.trim(),
+    lugar: typeof entrada.lugar === 'string' ? entrada.lugar.trim() : '',
     asistentes: Number(entrada.asistentes),
     cartaId: personalizada ? 'personalizada' : carta!.id,
     detalleCarta,

@@ -8,7 +8,7 @@ import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type Dura
 export const metadata: Metadata = {
   title: 'Cotizar',
   description:
-    'Elige una ruta y las horas de barra libre, o solicita una carta personalizada. Recibe los detalles por correo.',
+    'Elige uno de nuestros packs o arma tu propia ruta de barra libre. Recibe los detalles por correo.',
   alternates: { canonical: '/cotizar' },
 }
 
@@ -17,6 +17,8 @@ type Parametros = {
   invitados?: string
   horas?: string
   personalizada?: string
+  pack?: string
+  modo?: string
 }
 
 function esCartaValida(valor: string | undefined): valor is CartaCotizacionId {
@@ -44,19 +46,15 @@ export default async function PaginaCotizar({
   const horasSolicitadas = Number(parametros.horas)
   const duracionInicial = esDuracionValida(horasSolicitadas) ? horasSolicitadas : undefined
   const cartaInicial = esCartaValida(parametros.carta) ? parametros.carta : undefined
-  const personalizadaInicial = parametros.personalizada === '1'
+  const packInicial = esCartaValida(parametros.pack) ? parametros.pack : undefined
 
   return (
     <>
       <header className="pagina-cabecera">
         <div className="lienzo pagina-cabecera__interior">
           <p className="micro">Cotizar</p>
-          <h1>{personalizadaInicial ? 'Cotiza una carta personalizada.' : 'Cotiza tu barra libre.'}</h1>
-          <p className="lead">
-            {personalizadaInicial
-              ? 'Cuéntanos qué tragos quieres. Revisaremos tu propuesta y te enviaremos un precio a medida.'
-              : 'Cuéntanos sobre tu evento y recibe el precio final, el detalle y la carta por correo.'}
-          </p>
+          <h1>Cotiza tu barra libre.</h1>
+          <p className="lead">Elige una ruta, cuéntanos sobre tu evento y recibe el precio final, el detalle y la carta por correo.</p>
         </div>
       </header>
 
@@ -66,7 +64,8 @@ export default async function PaginaCotizar({
             cartaInicial={cartaInicial}
             asistentesIniciales={asistentesIniciales}
             duracionInicial={duracionInicial}
-            personalizadaInicial={personalizadaInicial}
+            packInicial={packInicial}
+            modoInicial={parametros.modo === 'flexible' || parametros.personalizada === '1' ? 'flexible' : undefined}
           />
         </div>
       </section>

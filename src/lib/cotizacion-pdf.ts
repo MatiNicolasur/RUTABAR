@@ -124,7 +124,7 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   linea(pagina, `Preparada para ${datos.nombre}`, MARGEN, 759, normal, ajustar(`Preparada para ${datos.nombre}`, normal, 9, 450), BLANCO)
 
   valor(pagina, 'Fecha', fechaVisible, MARGEN, 732, 102, negrita)
-  valor(pagina, 'Lugar', `${datos.lugar}, ${datos.ciudad}`, 164, 732, 260, negrita)
+  valor(pagina, 'Comuna', datos.ciudad, 164, 732, 260, negrita)
   valor(pagina, 'Invitados', `${datos.asistentes} personas`, 455, 732, 102, negrita)
   valor(pagina, 'Carta', carta.nombre, MARGEN, 692, 240, negrita)
   valor(pagina, 'Duración', `${datos.duracion} horas de barra libre`, 312, 692, 245, negrita)

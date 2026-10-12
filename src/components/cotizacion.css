@@ -86,9 +86,28 @@
   gap: 1rem;
 }
 
+.cotizacion-flujo__servicios { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.cotizacion-flujo__servicio { display: grid; gap: .5rem; min-height: 7rem; padding: 1.15rem; border: 1px solid var(--papel-borde-fuerte); border-radius: var(--radio-suave); background: var(--papel); color: var(--texto); cursor: pointer; text-align: left; transition: border-color 200ms ease, background-color 200ms ease, transform 200ms ease; }
+.cotizacion-flujo__servicio strong { font-family: var(--fuente-display); font-size: clamp(1rem, 3vw, 1.3rem); line-height: 1.15; text-transform: uppercase; }
+.cotizacion-flujo__servicio span { color: var(--texto-suave); font-size: .82rem; }
+.cotizacion-flujo__servicio:hover, .cotizacion-flujo__servicio--activo { border-color: var(--rojo); background: rgb(198 0 21 / .05); }
+.cotizacion-flujo__servicio:focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; }
+.cotizacion-flujo__pack-elegido { display: grid; gap: .5rem; padding: 1.2rem; border: 1px solid var(--rojo); border-radius: var(--radio-suave); background: rgb(198 0 21 / .05); }
+.cotizacion-flujo__pack-elegido strong { font-family: var(--fuente-display); font-size: 1.3rem; text-transform: uppercase; }
+.cotizacion-flujo__pack-elegido span { color: var(--texto-suave); font-size: .9rem; }
+.cotizacion-flujo__pack-elegido small { color: var(--rojo-hondo); font-weight: 800; text-transform: uppercase; }
+@media (max-width: 41.99rem) { .cotizacion-flujo__servicios { grid-template-columns: 1fr; } .cotizacion-flujo__servicio { min-height: 5.25rem; } }
+
 .cotizacion-flujo .campo {
   gap: 0.5rem;
 }
+
+.cotizacion-flujo__campo-evento { min-width: 0; align-content: start; }
+.cotizacion-flujo__campo-evento .campo__label { min-height: 1.5rem; align-items: center; }
+.cotizacion-flujo__campo-evento .campo__input { display: block; box-sizing: border-box; width: 100%; min-width: 0; height: 3.5rem; min-height: 3.5rem; margin: 0; padding-block: 0; line-height: normal; }
+.cotizacion-flujo__campo-evento input[type='number'] { appearance: textfield; -moz-appearance: textfield; }
+.cotizacion-flujo__campo-evento input[type='number']::-webkit-inner-spin-button,
+.cotizacion-flujo__campo-evento input[type='number']::-webkit-outer-spin-button { margin: 0; -webkit-appearance: none; }
 
 .cotizacion-flujo .campo__label {
   color: var(--texto);
@@ -154,9 +173,10 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  height: 3.5rem;
   min-height: 3.5rem;
-  padding: 0.8rem 1rem;
-  line-height: 1.25;
+  padding-block: 0;
+  line-height: normal;
   text-align: left;
   color-scheme: light;
   -webkit-appearance: none;
@@ -165,10 +185,12 @@
 
 .cotizacion-flujo__campos input[type='date']::-webkit-date-and-time-value {
   min-width: 0;
-  height: 1.5em;
+  min-height: 100%;
   margin: 0;
   text-align: left;
 }
+
+.cotizacion-flujo__campos input[type='date']::-webkit-datetime-edit { display: flex; align-items: center; min-height: 3.5rem; padding: 0; }
 
 .cotizacion-flujo__campos input[type='date']::-webkit-calendar-picker-indicator {
   margin-inline-start: 0.5rem;
