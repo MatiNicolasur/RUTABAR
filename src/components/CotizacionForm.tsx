@@ -229,6 +229,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           cartaId,
           detalleCarta: '',
           duracion,
+          modo: modo ?? 'flexible',
           solicitaCartaDigital,
         }),
       })

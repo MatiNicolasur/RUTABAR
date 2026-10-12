@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
-import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
+import { CONFIG_COTIZACION, asistentesEnRango, calcularPrecioCotizacion, type CartaCotizacionId, type DuracionCotizacion, type ModoCotizacion } from '@/data/precios-cotizacion'
 import { PAGO } from '@/data/pago'
 import { generarCotizacionPdf } from '@/lib/cotizacion-pdf'
 
@@ -17,6 +17,7 @@ type DatosCotizacion = {
   cartaId: CartaCotizacionId | 'personalizada'
   detalleCarta: string
   duracion: DuracionCotizacion
+  modo: ModoCotizacion
   solicitaCartaDigital: boolean
 }
 
@@ -41,6 +42,8 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === entrada.cartaId)
   const detalleCarta = typeof entrada.detalleCarta === 'string' ? entrada.detalleCarta.trim() : ''
   const duracion = CONFIG_COTIZACION.duraciones.find((opcion) => opcion === entrada.duracion)
+  const modo = entrada.modo === undefined ? 'flexible'
+    : entrada.modo === 'pack' || entrada.modo === 'flexible' ? entrada.modo : null
   const correo = typeof entrada.correo === 'string' ? entrada.correo.trim() : ''
   const whatsapp = typeof entrada.whatsapp === 'string' ? entrada.whatsapp.trim() : ''
   const fechaValida = typeof entrada.fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(entrada.fecha)
@@ -49,7 +52,8 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
   const whatsappValido = !whatsapp || (whatsapp.length <= 32 && digitosWhatsapp.length >= 8 && digitosWhatsapp.length <= 15)
 
   if (
-    (!carta && !personalizada) || !duracion ||
+    (!carta && !personalizada) || !duracion || !modo ||
+    (modo === 'pack' && (personalizada || duracion !== CONFIG_COTIZACION.packs.duracion)) ||
     (personalizada && (detalleCarta.length < 10 || detalleCarta.length > 1000)) ||
     !esTexto(entrada.nombre, 100) ||
     !correoValido || !whatsappValido ||
@@ -71,6 +75,7 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
     cartaId: personalizada ? 'personalizada' : carta!.id,
     detalleCarta,
     duracion,
+    modo,
     solicitaCartaDigital: entrada.solicitaCartaDigital,
   }
 }
@@ -130,7 +135,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const total = calcularPrecioCotizacion(datos.cartaId, datos.duracion, datos.asistentes)
+  const total = calcularPrecioCotizacion(datos.cartaId, datos.duracion, datos.asistentes, datos.modo)
   const porPersona = Math.round(total / datos.asistentes)
   const montoReserva = Math.round((total * PAGO.reservaPct) / 100)
   const montoSaldo = total - montoReserva

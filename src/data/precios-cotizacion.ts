@@ -1,11 +1,19 @@
 /**
- * Tarifas públicas con IVA para 40 personas. Edita esta tabla o `personasBase`
- * para actualizar los precios sin tocar la interfaz.
+ * Tarifas con IVA: packs por persona y cartas flexibles para 40 personas.
+ * Edita estos parámetros para actualizar los precios sin tocar la interfaz.
  */
 export const CONFIG_COTIZACION = {
   personasBase: 40,
   asistentesMin: 20,
   asistentesMax: 300,
+  packs: {
+    duracion: 5,
+    preciosPorPersona: {
+      reducida: 13_200,
+      completa: 16_200,
+      'sin-alcohol': 11_200,
+    },
+  },
   duraciones: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const,
   cartas: [
     {
@@ -34,6 +42,7 @@ export const CONFIG_COTIZACION = {
 
 export type DuracionCotizacion = (typeof CONFIG_COTIZACION.duraciones)[number]
 export type CartaCotizacionId = (typeof CONFIG_COTIZACION.cartas)[number]['id']
+export type ModoCotizacion = 'pack' | 'flexible'
 
 export function asistentesEnRango(asistentes: number): boolean {
   return Number.isSafeInteger(asistentes)
@@ -45,9 +54,15 @@ export function calcularPrecioCotizacion(
   cartaId: CartaCotizacionId,
   duracion: DuracionCotizacion,
   asistentes: number,
+  modo: ModoCotizacion = 'flexible',
 ): number {
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId)
   if (!carta || !asistentesEnRango(asistentes)) return 0
+
+  if (modo === 'pack') {
+    if (duracion !== CONFIG_COTIZACION.packs.duracion) return 0
+    return CONFIG_COTIZACION.packs.preciosPorPersona[cartaId] * asistentes
+  }
 
   return Math.round((carta.precios[duracion] * asistentes) / CONFIG_COTIZACION.personasBase)
 }

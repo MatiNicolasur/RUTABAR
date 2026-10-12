@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { PDFDocument } from 'pdf-lib'
+import { PDFArray, PDFDocument, PDFRawStream, decodePDFRawStream } from 'pdf-lib'
 import { POST } from '../src/app/api/cotizaciones/route'
 import { generarCotizacionPdf } from '../src/lib/cotizacion-pdf'
 import { calcularPrecioCotizacion, CONFIG_COTIZACION, type CartaCotizacionId } from '../src/data/precios-cotizacion'
@@ -11,16 +11,27 @@ async function main() {
     }
   }
   assert.equal(calcularPrecioCotizacion('reducida', 5, 80), 1_096_000)
+  for (const [cartaId, porPersona] of [
+    ['reducida', 13_200], ['completa', 16_200], ['sin-alcohol', 11_200],
+  ] as const) {
+    for (const asistentes of [20, 40, 300]) {
+      assert.equal(calcularPrecioCotizacion(cartaId, 5, asistentes, 'pack'), porPersona * asistentes)
+    }
+    assert.equal(calcularPrecioCotizacion(cartaId, 4, 20, 'pack'), 0)
+    assert.equal(calcularPrecioCotizacion(cartaId, 5, 19, 'pack'), 0)
+  }
   process.env.RESEND_API_KEY = 'clave-simulada'
   process.env.RESEND_FROM_EMAIL = 'RUTABAR <contacto@rutabar.cl>'
   process.env.RESEND_TO_EMAIL = 'contacto@rutabar.cl'
 
   let envio: Record<string, unknown> | undefined
+  const envios: Record<string, unknown>[] = []
   let llamadas = 0
   const fetchOriginal = globalThis.fetch
   globalThis.fetch = (async (_url: RequestInfo | URL, opciones?: RequestInit) => {
     llamadas++
     envio = JSON.parse(String(opciones?.body)) as Record<string, unknown>
+    envios.push(envio)
     return new Response(JSON.stringify({ id: 'correo-simulado' }), { status: 200 })
   }) as typeof fetch
 
@@ -90,6 +101,32 @@ async function main() {
     }))
     assert.equal(personalizadaIncompleta.status, 400)
     assert.equal(llamadas, 3)
+    const packDuracionInvalida = await POST(new Request('http://localhost/api/cotizaciones', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...datos, modo: 'pack' }),
+    }))
+    assert.equal(packDuracionInvalida.status, 400)
+    assert.equal(llamadas, 3)
+    const pack = await POST(new Request('http://localhost/api/cotizaciones', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...datos, modo: 'pack', duracion: 5, asistentes: 20 }),
+    }))
+    assert.equal(pack.status, 200)
+    assert.equal(llamadas, 4)
+    const adjuntosPack = envios.at(-1)?.attachments as { content: string }[]
+    const pdfPack = Buffer.from(adjuntosPack[0].content, 'base64')
+    const documentoPack = await PDFDocument.load(pdfPack)
+    assert.equal(documentoPack.getPageCount(), 1)
+    const contenidos = documentoPack.getPages()[0].node.Contents()
+    assert(contenidos instanceof PDFArray)
+    const operaciones = contenidos.asArray().map((referencia) => {
+      const stream = documentoPack.context.lookup(referencia)
+      assert(stream instanceof PDFRawStream)
+      return Buffer.from(decodePDFRawStream(stream).decode()).toString('latin1')
+    }).join('\n')
+    for (const monto of ['$324.000', '$16.200', '$162.000']) {
+      assert(operaciones.includes(Buffer.from(monto).toString('hex').toUpperCase()), `Falta ${monto} en el PDF del pack`)
+    }
     process.stdout.write('Envío simulado correcto: correo breve, logo incrustado y cotización en PDF.\n')
   } finally {
     globalThis.fetch = fetchOriginal

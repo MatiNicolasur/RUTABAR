@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { CONFIG_COTIZACION, type CartaCotizacionId } from '@/data/precios-cotizacion'
 import { Sello } from './Sello'
 
-const HORAS_PACK = 5
+const HORAS_PACK = CONFIG_COTIZACION.packs.duracion
 
 const RUTAS = [
   {
@@ -76,7 +76,7 @@ export function RutasServicio() {
                     <div className="rutas-servicio__precio">
                       <span>Mínimo {CONFIG_COTIZACION.asistentesMin} personas · IVA incluido</span>
                       <div className="rutas-servicio__valor">
-                        <strong>{formatoPrecio.format(carta.precios[HORAS_PACK] / CONFIG_COTIZACION.personasBase)}</strong>
+                        <strong>{formatoPrecio.format(CONFIG_COTIZACION.packs.preciosPorPersona[ruta.id])}</strong>
                         <span>por persona</span>
                       </div>
                     </div>
