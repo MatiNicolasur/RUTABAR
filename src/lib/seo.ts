@@ -24,7 +24,7 @@ export const PALABRAS_CLAVE = [
   'barra móvil Santiago',
   'coctelería para eventos',
   'bartender para eventos',
-  'cocteleria eventos Santiago',
+  'coctelería eventos Santiago',
   'mocktails',
   'barra sin alcohol',
   'catering de cócteles',

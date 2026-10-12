@@ -70,11 +70,11 @@ export const CARTA_WEB: TragoWeb[] = [
   }),
   trago({
     id: 'tequilazo', nombre: 'Tequilazo', familia: 'con-alcohol', perfil: 'seco', base: 'Tequila',
-    descripcion: 'Shot de tequila con sal y limón de pica.', vaso: 'Shot 60 ml', garnish: 'Cuarto de limón', icono: '3', imagen: '/tragos/tequilazo.webp',
+    descripcion: 'Shot de tequila con sal y limón de Pica.', vaso: 'Shot 60 ml', garnish: 'Cuarto de limón', icono: '3', imagen: '/tragos/tequilazo.webp',
   }),
   trago({
     id: 'tom-collins', nombre: 'Tom Collins', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Gin',
-    descripcion: 'Gin, limón, jarabe y soda.', vaso: 'Vaso alto 400 ml', garnish: 'Limón y cereza marrasquino', icono: '22', imagen: '/tragos/tom-collins.webp',
+    descripcion: 'Gin, limón, jarabe y soda.', vaso: 'Vaso alto 400 ml', garnish: 'Limón y cereza al marrasquino', icono: '22', imagen: '/tragos/tom-collins.webp',
   }),
   trago({
     id: 'vodka-tropical', nombre: 'Vodka Tropical', familia: 'con-alcohol', perfil: 'dulce', base: 'Vodka',

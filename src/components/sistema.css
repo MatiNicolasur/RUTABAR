@@ -303,7 +303,7 @@
   transform: translate(-50%, -50%);
   color: #b8b8b8;
   opacity: 0.42;
-  filter: blur(14px);
+  filter: blur(22px);
   pointer-events: none;
 }
 
