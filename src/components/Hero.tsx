@@ -17,8 +17,8 @@
  *    fotografía aparece después. Como el texto tiene que leerse sobre los dos
  *    fondos, el blanco cálido funciona en ambos.
  *
- * En `retrato`, la imagen, la firma y las acciones están visibles desde el
- * primer fotograma. El header conserva una entrada breve, sin bloquear el hero.
+ * En `retrato`, la fotografía y el texto conservan su entrada animada. No hay
+ * una capa de pantalla completa por encima ni una espera artificial de carga.
  */
 
 import Image from 'next/image'
@@ -164,7 +164,7 @@ export function Hero({
     return (
       <>
         <section
-          className="hero hero--retrato"
+          className="hero hero--retrato hero--playing"
           aria-labelledby={titleId}
         >
         {/* El dibujo de marca, gigante, centrado y en el rojo de marca: es el
