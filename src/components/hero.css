@@ -576,11 +576,11 @@
   /* El radio final apenas cubre las esquinas: así la desaceleración sigue
    * viéndose hasta que termina la apertura. */
   .hero--playing .hero2__media {
-    animation: hero2-abrir 1300ms cubic-bezier(0.22, 0.72, 0.36, 1) 1250ms both;
+    animation: hero2-abrir 1800ms cubic-bezier(0.22, 0.72, 0.36, 1) both;
   }
 
   .hero--playing .hero2__foto {
-    animation: hero2-foto-asentar 1300ms var(--hero2-ease) 1250ms both;
+    animation: hero2-foto-asentar 1800ms var(--hero2-ease) both;
   }
 
   .hero--playing .hero2__firma {
