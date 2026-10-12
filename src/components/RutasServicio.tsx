@@ -60,7 +60,7 @@ export function RutasServicio() {
             return (
               <article className="rutas-servicio__card" key={ruta.id} aria-labelledby={tituloId}>
                 <div className="rutas-servicio__foto">
-                  <Image src={ruta.imagen} alt={ruta.imagenAlt} fill sizes="(min-width: 82rem) 231px, (min-width: 72rem) 20vw, (min-width: 48rem) 45vw, 100vw" />
+                  <Image src={ruta.imagen} alt={ruta.imagenAlt} fill sizes="(min-width: 82rem) 360px, (min-width: 64rem) 30vw, (min-width: 48rem) 35vw, 100vw" />
                 </div>
                 <div className="rutas-servicio__cuerpo">
                   <h3 id={tituloId}>{carta.nombre}</h3>
@@ -89,13 +89,15 @@ export function RutasServicio() {
           <article className="rutas-servicio__card rutas-servicio__card--personalizada" aria-labelledby="titulo-pack-flexible">
             <div className="rutas-servicio__personalizada-arte" aria-hidden="true"><Sello tamano={180} /></div>
             <div className="rutas-servicio__cuerpo">
-              <p className="rutas-servicio__dato">A tu medida</p>
-              <h3 id="titulo-pack-flexible">La carta y las horas que tú quieras</h3>
-              <p className="rutas-servicio__datos">
-                <span>{CONFIG_COTIZACION.cartas.length} cartas</span>
-                <span>{CONFIG_COTIZACION.duraciones[0]} a {CONFIG_COTIZACION.duraciones.at(-1)} horas</span>
-              </p>
-              <p className="rutas-servicio__detalle">Escoge tu carta favorita y la duración de la barra libre. Nosotros nos encargamos de servir.</p>
+              <div className="rutas-servicio__intro">
+                <p className="rutas-servicio__dato">A tu medida</p>
+                <h3 id="titulo-pack-flexible">La carta y las horas que tú quieras</h3>
+                <p className="rutas-servicio__datos">
+                  <span>{CONFIG_COTIZACION.cartas.length} cartas</span>
+                  <span>{CONFIG_COTIZACION.duraciones[0]} a {CONFIG_COTIZACION.duraciones.at(-1)} horas</span>
+                </p>
+                <p className="rutas-servicio__detalle">Escoge tu carta favorita y la duración de la barra libre. Nosotros nos encargamos de servir.</p>
+              </div>
               <div className="rutas-servicio__pie">
                 <div className="rutas-servicio__precio">
                   <span>{CONFIG_COTIZACION.asistentesMin} a {CONFIG_COTIZACION.asistentesMax} personas · IVA incluido</span>
