@@ -1,5 +1,19 @@
+.rutas-servicio {
+  background-color: var(--rojo-profundo);
+  color: var(--sobre-rojo);
+}
+
 .rutas-servicio__encabezado {
   max-inline-size: 48rem;
+}
+
+.rutas-servicio__encabezado .micro,
+.rutas-servicio__encabezado .lead {
+  color: var(--sobre-rojo-suave);
+}
+
+.rutas-servicio__encabezado .micro::before {
+  background: var(--rosa);
 }
 
 .rutas-servicio__grid {
@@ -17,6 +31,7 @@
   border: 1px solid var(--papel-borde);
   border-radius: 16px;
   background: var(--papel);
+  color: var(--texto);
   box-shadow: 0 16px 40px rgb(73 0 10 / 0.07);
   transition: transform 260ms ease, box-shadow 260ms ease;
 }
