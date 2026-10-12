@@ -294,25 +294,6 @@
   color: #fff;
 }
 
-.sistema__barra-fondo {
-  position: absolute;
-  z-index: 0;
-  inset-block: 50% auto;
-  inset-inline-start: 50%;
-  width: 120%;
-  transform: translate(-50%, -50%);
-  color: #b8b8b8;
-  opacity: 0.42;
-  filter: blur(22px);
-  pointer-events: none;
-}
-
-.sistema__barra-fondo svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .seccion--sistema > .lienzo {
   position: relative;
   z-index: 1;

@@ -82,9 +82,6 @@ export default function Home() {
       </Ranura>
 
       <section className="seccion seccion--sistema" aria-labelledby="titulo-sistema">
-        <div className="sistema__barra-fondo" aria-hidden="true">
-          <Icono nombre="33" tamano={160} />
-        </div>
         <div className="lienzo">
           <div className="seccion__encabezado">
             <p className="micro">Todo lo necesario</p>
