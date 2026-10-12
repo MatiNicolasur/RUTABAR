@@ -37,7 +37,7 @@ export default function Home() {
         accion={{ label: 'Cotizar mi evento', href: '/cotizar' }}
         accionSecundaria={{ label: 'Ver la carta', href: '/carta' }}
         marca="rutabar"
-        ubicacion={'bar móvil en\nSantiago de Chile'}
+        ubicacion={'Bar móvil en\nSantiago de Chile'}
       />
 
       <section className="seccion" aria-labelledby="titulo-estandar">
