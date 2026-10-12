@@ -10,15 +10,15 @@ import { ICONOS } from '@/data/iconos'
 const ESTANDAR = [
   {
     palabra: 'Sabor',
-    texto: 'Por eso partimos por lo esencial: buenas recetas, ingredientes seleccionados y tragos preparados para disfrutarlos de verdad.',
+    texto: 'El sabor empieza en lo simple: recetas bien pensadas, ingredientes seleccionados y cada trago preparado con cuidado.',
   },
   {
     palabra: 'Barra',
-    texto: 'Nuestra barra no solo sirve tragos. Recomienda, prepara y mantiene la experiencia fluyendo durante todo el evento.',
+    texto: 'Una buena barra hace más que servir: escucha, recomienda y mantiene el servicio fluido durante todo el evento.',
   },
   {
     palabra: 'Ritmo',
-    texto: 'Porque una buena celebración no ocurre alrededor de una copa: ocurre alrededor de las personas, la música, las conversaciones y esos momentos que nadie planificó.',
+    texto: 'Cada celebración tiene su propio ritmo. Nuestra barra se adapta a él y deja que lo importante ocurra entre las personas.',
   },
 ]
 
