@@ -351,13 +351,23 @@
   text-wrap: balance;
 }
 
-.hero2__preloader p span {
+.hero2__preloader p > span {
   display: block;
   white-space: nowrap;
 }
 
-.hero2__preloader p span + span {
+.hero2__preloader p > span + span {
   margin-block-start: 0.18em;
+}
+
+.hero2__preloader-chile {
+  display: inline-block;
+  font-family: var(--fuente-mano);
+  font-size: 1.12em;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0;
+  color: #ff6b78;
 }
 
 @media (max-width: 34rem) {
@@ -367,11 +377,11 @@
 }
 
 @media (prefers-reduced-motion: no-preference), (max-width: 47.99rem) {
-  .hero2__preloader p span:first-child {
+  .hero2__preloader p > span:first-child {
     animation: hero2-preloader-linea 900ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
   }
 
-  .hero2__preloader p span + span {
+  .hero2__preloader p > span + span {
     animation: hero2-preloader-linea 1050ms cubic-bezier(0.22, 1, 0.36, 1) 1200ms both;
   }
 }

@@ -219,7 +219,7 @@ export function Hero({
           <div
             className={`hero2__preloader${faseEntrada === 'sale' ? ' hero2__preloader--saliendo' : ''}`}
             role="status"
-            aria-label="el mejor bar móvil en santiago de chile"
+            aria-label="El mejor bar móvil en Santiago de Chile"
             onTransitionEnd={(evento) => {
               if (evento.target === evento.currentTarget && evento.propertyName === 'transform') {
                 setFaseEntrada('hero')
@@ -227,8 +227,8 @@ export function Hero({
             }}
           >
             <p>
-              <span>el mejor bar móvil</span>
-              <span>en santiago de chile</span>
+              <span>El mejor bar móvil</span>
+              <span>en Santiago de <span className="hero2__preloader-chile">Chile</span></span>
             </p>
           </div>
         ) : null}
