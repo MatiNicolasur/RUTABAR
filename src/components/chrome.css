@@ -401,7 +401,7 @@
 
 .pie__nav .micro,
 .pie__notas .micro {
-  color: var(--sobre-rojo-tenue);
+  color: rgb(255 245 244 / 0.72);
   margin-block-end: 0.3rem;
 }
 
@@ -450,7 +450,7 @@
   padding-block-start: 1.5rem;
   border-block-start: 1px solid var(--borde-rojo);
   font-size: var(--texto-micro);
-  color: var(--sobre-rojo-tenue);
+  color: rgb(255 245 244 / 0.72);
 }
 
 .pie__legal a {

@@ -336,7 +336,7 @@
   background: var(--rojo-profundo);
   color: var(--sobre-rojo);
   transform: translate3d(0, 0, 0);
-  transition: transform 1000ms cubic-bezier(0.35, 0, 0.16, 1);
+  transition: transform 650ms cubic-bezier(0.35, 0, 0.16, 1);
 }
 
 .hero2__preloader p {
@@ -386,11 +386,11 @@
 
 @media (prefers-reduced-motion: no-preference), (max-width: 47.99rem) {
   .hero2__preloader p > span:first-child {
-    animation: hero2-preloader-linea 900ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+    animation: hero2-preloader-linea 600ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
   }
 
   .hero2__preloader p > span + span {
-    animation: hero2-preloader-linea 1050ms cubic-bezier(0.22, 1, 0.36, 1) 1200ms both;
+    animation: hero2-preloader-linea 650ms cubic-bezier(0.22, 1, 0.36, 1) 550ms both;
   }
 }
 

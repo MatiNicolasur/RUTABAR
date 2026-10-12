@@ -17,9 +17,10 @@
  *    fotografía aparece después. Como el texto tiene que leerse sobre los dos
  *    fondos, el blanco cálido funciona en ambos.
  *
- * En `retrato`, el preloader espera la foto y da paso a las animaciones CSS.
- * En escritorio se respeta `prefers-reduced-motion`; la intro móvil mantiene
- * su secuencia porque el cliente pidió verla también en su iPhone.
+ * En `retrato`, el preloader termina su breve secuencia antes de revelar el
+ * hero; no espera a la descarga de la foto para no retrasar el contenido en
+ * redes lentas. En escritorio se respeta `prefers-reduced-motion`; la intro
+ * móvil mantiene su secuencia porque el cliente pidió verla también en iPhone.
  */
 
 import Image from 'next/image'
@@ -80,7 +81,6 @@ export function Hero({
   ubicacion,
 }: Props) {
   const titleId = useId()
-  const [fotoLista, setFotoLista] = useState(false)
   const [usarImagenRespaldo, setUsarImagenRespaldo] = useState(false)
   const [pausaCompleta, setPausaCompleta] = useState(false)
   const [faseEntrada, setFaseEntrada] = useState<'espera' | 'sale' | 'hero'>('espera')
@@ -117,20 +117,18 @@ export function Hero({
 
     const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
       || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 2450 : 200)
-    const respaldo = window.setTimeout(() => setFotoLista(true), 5000)
+    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 1350 : 200)
 
     return () => {
       window.clearTimeout(pausa)
-      window.clearTimeout(respaldo)
     }
   }, [diseno])
 
   useEffect(() => {
-    if (diseno === 'retrato' && faseEntrada === 'espera' && fotoLista && pausaCompleta) {
+    if (diseno === 'retrato' && faseEntrada === 'espera' && pausaCompleta) {
       setFaseEntrada('sale')
     }
-  }, [diseno, faseEntrada, fotoLista, pausaCompleta])
+  }, [diseno, faseEntrada, pausaCompleta])
 
   useEffect(() => {
     if (faseEntrada !== 'sale') return
@@ -142,7 +140,7 @@ export function Hero({
       return
     }
 
-    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 1050)
+    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 650)
     return () => window.clearTimeout(respaldo)
   }, [faseEntrada])
 
@@ -258,10 +256,8 @@ export function Hero({
                   fetchPriority="high"
                   sizes="(min-width: 48rem) 25rem, 58vw"
                   className="hero2__foto"
-                  onLoad={() => setFotoLista(true)}
                   onError={() => {
                     if (imagenRespaldo && !usarImagenRespaldo) setUsarImagenRespaldo(true)
-                    else setFotoLista(true)
                   }}
                 />
               </ParallaxScroll>

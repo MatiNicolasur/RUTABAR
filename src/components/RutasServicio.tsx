@@ -60,7 +60,7 @@ export function RutasServicio() {
             return (
               <article className="rutas-servicio__card" key={ruta.id} aria-labelledby={tituloId}>
                 <div className="rutas-servicio__foto">
-                  <Image src={ruta.imagen} alt={ruta.imagenAlt} fill sizes="(min-width: 82rem) 360px, (min-width: 64rem) 30vw, (min-width: 48rem) 35vw, 100vw" />
+                  <Image src={ruta.imagen} alt={ruta.imagenAlt} fill sizes="(min-width: 82rem) 360px, (min-width: 64rem) 30vw, (min-width: 48rem) 35vw, 82vw" quality={65} />
                 </div>
                 <div className="rutas-servicio__cuerpo">
                   <h3 id={tituloId}>{carta.nombre}</h3>
