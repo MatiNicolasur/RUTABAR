@@ -52,7 +52,7 @@ export function SiteHeader() {
     }
 
     if (faseMenu === 'saliendo') {
-      const cierre = window.setTimeout(() => setFaseMenu((fase) => fase === 'saliendo' ? 'cerrado' : fase), 200)
+      const cierre = window.setTimeout(() => setFaseMenu((fase) => fase === 'saliendo' ? 'cerrado' : fase), 340)
       return () => window.clearTimeout(cierre)
     }
   }, [faseMenu])
@@ -67,6 +67,17 @@ export function SiteHeader() {
     document.addEventListener('pointerdown', cerrarFuera)
     return () => document.removeEventListener('pointerdown', cerrarFuera)
   }, [])
+
+  useEffect(() => {
+    if (faseMenu === 'cerrado') return
+    const cerrarConEscape = (evento: KeyboardEvent) => {
+      if (evento.key !== 'Escape') return
+      setFaseMenu('saliendo')
+      menuRef.current?.querySelector('summary')?.focus()
+    }
+    document.addEventListener('keydown', cerrarConEscape)
+    return () => document.removeEventListener('keydown', cerrarConEscape)
+  }, [faseMenu])
 
   /**
    * El estado "sobre el hero" tiene que estar bien desde el primer frame.
@@ -143,12 +154,6 @@ export function SiteHeader() {
             ref={menuRef}
             open={faseMenu !== 'cerrado'}
             data-fase={faseMenu}
-            onKeyDown={(evento) => {
-              if (evento.key === 'Escape') {
-                setFaseMenu((fase) => fase === 'abierto' || fase === 'entrando' ? 'saliendo' : fase)
-                menuRef.current?.querySelector('summary')?.focus()
-              }
-            }}
           >
             <summary
               aria-expanded={faseMenu === 'entrando' || faseMenu === 'abierto'}
@@ -160,6 +165,7 @@ export function SiteHeader() {
               <span className="cabecera__hamburguesa" aria-hidden="true"><span /><span /><span /></span>
               <span className="solo-lectores">Menú</span>
             </summary>
+            <div className="cabecera__menuScrim" aria-hidden="true" onClick={() => setFaseMenu('saliendo')} />
             <div className="cabecera__menuPanel" inert={faseMenu !== 'abierto'}>
               {ENLACES.map((item) => (
                 <Link
