@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const SITIO = {
   nombre: 'RUTABAR',
-  url: process.env.NEXT_PUBLIC_SITIO_URL ?? 'https://rutabar.cl',
+  url: 'https://www.rutabar.cl',
   descripcion:
     'Barra móvil y barra libre para eventos en Santiago de Chile. Packs de cócteles, mocktails y servicio atendido para celebraciones y empresas.',
   ciudad: 'Santiago',

@@ -6,11 +6,11 @@ RUTABAR lleva una barra atendida por bartenders a celebraciones privadas, matrim
 
 ## Rutas del sitio
 
-- [Inicio](https://rutabar.cl/): presentación del servicio y selección de rutas.
-- [Servicios](https://rutabar.cl/servicios): packs y modalidad de barra libre.
-- [Carta](https://rutabar.cl/carta): cócteles, mocktails, bebidas y agua.
-- [Cotizar](https://rutabar.cl/cotizar): solicitud de cotización para un evento.
-- [Condiciones](https://rutabar.cl/condiciones): pagos, traslados, horarios y condiciones del servicio.
+- [Inicio](https://www.rutabar.cl/): presentación del servicio y selección de rutas.
+- [Servicios](https://www.rutabar.cl/servicios): packs y modalidad de barra libre.
+- [Carta](https://www.rutabar.cl/carta): cócteles, mocktails, bebidas y agua.
+- [Cotizar](https://www.rutabar.cl/cotizar): solicitud de cotización para un evento.
+- [Condiciones](https://www.rutabar.cl/condiciones): pagos, traslados, horarios y condiciones del servicio.
 
 ## Información comercial
 
@@ -19,4 +19,3 @@ Los packs tienen un mínimo de 20 personas y cinco horas de servicio. También s
 ## Contacto
 
 - Correo: contacto@rutabar.cl
-
