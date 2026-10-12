@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import fontkit from '@pdf-lib/fontkit'
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from 'pdf-lib'
-import { CARTA_WEB, type TragoWeb } from '../data/carta-web'
+import { CARTA_WEB, MOCKTAILS_WEB, type TragoWeb } from '../data/carta-web'
 import { CONDICIONES, type BloqueCondiciones } from '../data/condiciones'
 import { CONFIG_COTIZACION, type CartaCotizacionId, type DuracionCotizacion } from '../data/precios-cotizacion'
 import { clp } from './formato'
@@ -82,9 +82,9 @@ function tragosDeCarta(cartaId: CartaCotizacionId): TragoWeb[] {
 }
 
 function bebidasDeCarta(cartaId: CartaCotizacionId): string {
-  if (cartaId === 'sin-alcohol') return 'Coca-Cola, Sprite, jugos, otras bebidas sin alcohol y agua.'
+  if (cartaId === 'sin-alcohol') return 'Coca-Cola, jugo, Sprite u otra bebida sin alcohol a elección y agua.'
   if (cartaId === 'reducida') return 'Cerveza, vino tinto, vino blanco y agua.'
-  return 'Cerveza, vinos, bebidas, jugos y agua.'
+  return 'Cerveza, vinos, Coca-Cola, jugo, Sprite u otra bebida sin alcohol a elección y agua.'
 }
 
 function bloqueCondiciones(page: PDFPage, bloque: BloqueCondiciones, x: number, y: number, ancho: number, normal: PDFFont, negrita: PDFFont) {
@@ -105,9 +105,15 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const logo = await pdf.embedPng(await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'logo-blanco.png')))
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === datos.cartaId)!
   const tragos = tragosDeCarta(datos.cartaId)
-  const items = [...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })), {
-    nombre: 'Bebidas y agua', detalle: bebidasDeCarta(datos.cartaId), icono: '2',
-  }]
+  const items = [
+    ...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
+    ...(datos.cartaId === 'reducida' ? [{
+      nombre: '3 mocktails a elección',
+      detalle: `Elige 3: ${MOCKTAILS_WEB.map((trago) => trago.nombre).join(', ')}.`,
+      icono: '24',
+    }] : []),
+    { nombre: 'Bebidas y agua', detalle: bebidasDeCarta(datos.cartaId), icono: '2' },
+  ]
   const fechaVisible = datos.fecha.split('-').reverse().join('/')
   const pagina = pdf.addPage([ANCHO, ALTO])
 

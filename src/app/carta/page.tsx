@@ -6,7 +6,7 @@ import { Reveal } from '@/components/Reveal'
 export const metadata: Metadata = {
   title: 'Carta',
   description:
-    'Conoce las tres selecciones de RUTABAR: barra reducida de 8 opciones, solo sin alcohol y carta completa de 25 bebidas para eventos.',
+    'Conoce las tres modalidades de RUTABAR: barra reducida de 11 opciones, carta sin alcohol de 8 y carta completa de 24 bebidas.',
   alternates: { canonical: '/carta' },
 }
 
