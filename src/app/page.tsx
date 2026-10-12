@@ -88,7 +88,7 @@ export default function Home() {
         <div className="lienzo">
           <div className="seccion__encabezado">
             <p className="micro">Todo lo necesario</p>
-            <h2 className="h2" id="titulo-sistema">Todo lo necesario para servir.</h2>
+            <h2 className="h2" id="titulo-sistema">Tú solo disfruta</h2>
           </div>
           <SistemaServicio />
         </div>
