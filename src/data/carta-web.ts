@@ -99,30 +99,31 @@ export const CARTA_WEB: TragoWeb[] = [
 ]
 
 export const BEBIDAS_Y_AGUA = [
-  { nombre: 'Cerveza', tipo: 'Con alcohol', icono: '21', cartas: ['Barra reducida', 'Carta completa'] },
-  { nombre: 'Coca-Cola', tipo: 'Sin alcohol', icono: '22', cartas: ['Carta completa', 'Solo sin alcohol'] },
-  { nombre: 'Jugo', tipo: 'Sin alcohol', icono: '4', cartas: ['Carta completa', 'Solo sin alcohol'] },
-  { nombre: 'Sprite u otra bebida sin alcohol a elección', tipo: 'Sin alcohol', icono: '22', cartas: ['Carta completa', 'Solo sin alcohol'] },
-  { nombre: 'Vino blanco', tipo: 'Con alcohol', icono: '6', cartas: ['Barra reducida', 'Carta completa'] },
-  { nombre: 'Vino tinto', tipo: 'Con alcohol', icono: '6', cartas: ['Barra reducida', 'Carta completa'] },
-  { nombre: 'Agua', tipo: 'Sin alcohol', icono: '24', cartas: ['Barra reducida', 'Carta completa', 'Solo sin alcohol'] },
+  { nombre: 'Cerveza', tipo: 'Con alcohol', icono: '21', cartas: ['Ruta Esencial', 'Ruta Full'] },
+  { nombre: 'Coca-Cola', tipo: 'Sin alcohol', icono: '22', cartas: ['Ruta Full', 'Ruta Zero'] },
+  { nombre: 'Jugo', tipo: 'Sin alcohol', icono: '4', cartas: ['Ruta Full', 'Ruta Zero'] },
+  { nombre: 'Sprite', tipo: 'Sin alcohol', icono: '22', cartas: ['Ruta Full', 'Ruta Zero'] },
+  { nombre: 'Otra bebida sin alcohol', tipo: 'Sin alcohol', icono: '22', cartas: ['Ruta Full', 'Ruta Zero'] },
+  { nombre: 'Vino blanco', tipo: 'Con alcohol', icono: '6', cartas: ['Ruta Esencial', 'Ruta Full'] },
+  { nombre: 'Vino tinto', tipo: 'Con alcohol', icono: '6', cartas: ['Ruta Esencial', 'Ruta Full'] },
+  { nombre: 'Agua', tipo: 'Sin alcohol', icono: '24', cartas: ['Ruta Esencial', 'Ruta Full', 'Ruta Zero'] },
 ] as const
 
 export const ALTERNATIVAS_CARTA = [
   {
-    nombre: 'Barra reducida',
-    cantidad: '11 tipos',
-    detalle: 'Cerveza, vinos tinto y blanco, Mojito, Gin Tonic, Pisco Sour, Vodka Tropical, 3 mocktails a elección y agua.',
+    nombre: 'Ruta Esencial',
+    cantidad: '10 opciones · 5 horas de referencia',
+    detalle: 'Cerveza, vino tinto, vino blanco, Mojito, Gin Tonic, Pisco Sour, Vodka Tropical y 3 mocktails a elección. Agua incluida.',
   },
   {
-    nombre: 'Carta completa',
-    cantidad: '24 tipos',
-    detalle: '13 cócteles, 4 mocktails y 7 opciones entre bebidas, cerveza, vino y agua.',
+    nombre: 'Ruta Full',
+    cantidad: '25 opciones · 5 horas de referencia',
+    detalle: '13 cócteles, 4 mocktails y 8 opciones entre cerveza, vinos, bebidas, jugo y agua.',
   },
   {
-    nombre: 'Solo sin alcohol',
-    cantidad: '8 tipos',
-    detalle: 'Coca-Cola, jugo, Sprite u otra bebida sin alcohol a elección, 4 mocktails y agua.',
+    nombre: 'Ruta Zero',
+    cantidad: '9 opciones · 5 horas de referencia',
+    detalle: '4 mocktails, Coca-Cola, jugo, Sprite, otra bebida sin alcohol y agua.',
   },
 ] as const
 

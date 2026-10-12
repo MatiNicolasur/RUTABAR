@@ -8,7 +8,7 @@ import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type Dura
 export const metadata: Metadata = {
   title: 'Cotizar',
   description:
-    'Elige la carta y las horas de tu barra libre. Recibe tu cotización con IVA incluido y la carta con fotos por correo.',
+    'Elige una ruta y las horas de barra libre, o solicita una carta personalizada. Recibe los detalles por correo.',
   alternates: { canonical: '/cotizar' },
 }
 
@@ -16,6 +16,7 @@ type Parametros = {
   carta?: string
   invitados?: string
   horas?: string
+  personalizada?: string
 }
 
 function esCartaValida(valor: string | undefined): valor is CartaCotizacionId {
@@ -43,15 +44,18 @@ export default async function PaginaCotizar({
   const horasSolicitadas = Number(parametros.horas)
   const duracionInicial = esDuracionValida(horasSolicitadas) ? horasSolicitadas : undefined
   const cartaInicial = esCartaValida(parametros.carta) ? parametros.carta : undefined
+  const personalizadaInicial = parametros.personalizada === '1'
 
   return (
     <>
       <header className="pagina-cabecera">
         <div className="lienzo pagina-cabecera__interior">
           <p className="micro">Cotizar</p>
-          <h1>Cotiza tu barra libre.</h1>
+          <h1>{personalizadaInicial ? 'Cotiza una carta personalizada.' : 'Cotiza tu barra libre.'}</h1>
           <p className="lead">
-            Cuéntanos sobre tu evento y recibe el precio final, el detalle y la carta con fotos por correo.
+            {personalizadaInicial
+              ? 'Cuéntanos qué tragos quieres. Revisaremos tu propuesta y te enviaremos un precio a medida.'
+              : 'Cuéntanos sobre tu evento y recibe el precio final, el detalle y la carta por correo.'}
           </p>
         </div>
       </header>
@@ -62,6 +66,7 @@ export default async function PaginaCotizar({
             cartaInicial={cartaInicial}
             asistentesIniciales={asistentesIniciales}
             duracionInicial={duracionInicial}
+            personalizadaInicial={personalizadaInicial}
           />
         </div>
       </section>

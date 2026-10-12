@@ -1,0 +1,145 @@
+.rutas-servicio__encabezado {
+  max-inline-size: 48rem;
+}
+
+.rutas-servicio__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.3rem);
+}
+
+.rutas-servicio__card {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--papel-borde);
+  background: var(--papel);
+  box-shadow: 0 18px 46px rgb(73 0 10 / 0.06);
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 350ms ease;
+}
+
+.rutas-servicio__foto,
+.rutas-servicio__personalizada-arte {
+  position: relative;
+  aspect-ratio: 1.16;
+  overflow: hidden;
+}
+
+.rutas-servicio__foto img {
+  object-fit: cover;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rutas-servicio__card:nth-child(1) .rutas-servicio__foto img { object-position: center 38%; }
+.rutas-servicio__card:nth-child(2) .rutas-servicio__foto img { object-position: center 48%; }
+.rutas-servicio__card:nth-child(3) .rutas-servicio__foto img { object-position: center 45%; }
+
+.rutas-servicio__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(1.2rem, 2vw, 1.7rem);
+}
+
+.rutas-servicio__dato {
+  margin-block-end: 0.7rem;
+  color: var(--rojo-hondo);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rutas-servicio__card h3 {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.28rem, 1.7vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.rutas-servicio__bajada {
+  margin-block-start: 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.rutas-servicio__detalle {
+  margin-block: 0.55rem 1.5rem;
+  color: var(--texto-suave);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.rutas-servicio__accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  min-block-size: 44px;
+  margin-block-start: auto;
+  padding-block: 0.55rem;
+  border-block-end: 1px solid currentColor;
+  color: var(--rojo-hondo);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.rutas-servicio__accion span {
+  font-size: 1.1rem;
+  transition: transform 200ms ease;
+}
+
+.rutas-servicio__card--personalizada {
+  border-color: var(--rojo-hondo);
+  background: var(--rojo-hondo);
+  color: var(--sobre-rojo);
+}
+
+.rutas-servicio__personalizada-arte {
+  display: grid;
+  place-content: center;
+  background: radial-gradient(circle at 72% 25%, #dd6673 0, transparent 40%), linear-gradient(145deg, #6d0002, #ad0022);
+  color: rgb(255 245 244 / 0.82);
+  font-family: var(--fuente-mano);
+  font-size: clamp(3.2rem, 5vw, 6rem);
+  line-height: 0.65;
+}
+
+.rutas-servicio__personalizada-arte span { margin-inline-start: 2.8rem; }
+.rutas-servicio__card--personalizada .rutas-servicio__dato,
+.rutas-servicio__card--personalizada .rutas-servicio__detalle { color: var(--sobre-rojo-suave); }
+.rutas-servicio__accion--personalizada { color: var(--sobre-rojo); }
+
+@media (hover: hover) and (pointer: fine) {
+  .rutas-servicio__card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 24px 60px rgb(73 0 10 / 0.13);
+  }
+
+  .rutas-servicio__card:hover .rutas-servicio__foto img { transform: scale(1.045); }
+  .rutas-servicio__accion:hover span { transform: translate(3px, -3px); }
+}
+
+@media (max-width: 77.99rem) {
+  .rutas-servicio__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 41.99rem) {
+  .rutas-servicio__grid { grid-template-columns: 1fr; }
+  .rutas-servicio__foto,
+  .rutas-servicio__personalizada-arte { aspect-ratio: 1.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rutas-servicio__card,
+  .rutas-servicio__foto img,
+  .rutas-servicio__accion span { transition: none; }
+}

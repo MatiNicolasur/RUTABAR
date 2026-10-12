@@ -123,7 +123,7 @@ export function SiteHeader() {
     // El estado inicial es `true` a propósito: así el HTML servido ya trae la
     // cabecera transparente y el primer frame sobre el hero es el correcto. El
     // efecto lo corrige antes de pintar en las páginas sin hero.
-    <header className="cabecera" data-sobre-hero="true">
+    <header className="cabecera" data-sobre-hero="true" data-entrada={ruta === '/' ? 'espera' : 'pagina'}>
       <div className="lienzo cabecera__interior">
         <Link className="cabecera__marca" href="/" aria-label={`${SITIO.nombre}, ir al inicio`}>
           <Sello tamano={72} className="cabecera__sello" />

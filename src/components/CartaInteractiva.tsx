@@ -19,7 +19,7 @@ export function CartaInteractiva() {
           <h2 id="titulo-alternativas-carta">Elige tu ruta de tragos</h2>
           <span className="regla" aria-hidden="true" />
         </div>
-        <p className="carta-publica__intro">Tres selecciones para elegir según tus invitados y presupuesto. La carta completa reúne todo lo que ves abajo; las otras dos incluyen solo las bebidas indicadas.</p>
+        <p className="carta-publica__intro">Tres rutas para elegir según tus invitados y presupuesto. Ruta Full reúne todo lo que ves abajo; las otras incluyen solo las bebidas indicadas.</p>
         <div className="carta-publica__opciones">
           {ALTERNATIVAS_CARTA.map((opcion) => (
             <article className="carta-publica__opcion" key={opcion.nombre}>

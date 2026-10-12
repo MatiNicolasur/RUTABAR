@@ -63,6 +63,21 @@ async function main() {
       })
       assert.equal((await PDFDocument.load(archivo)).getPageCount(), 1)
     }
+    const personalizada = await POST(new Request('http://localhost/api/cotizaciones', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...datos, cartaId: 'personalizada', detalleCarta: 'Mojito, gin tonic y dos mocktails cítricos' }),
+    }))
+    assert.equal(personalizada.status, 200)
+    assert.equal(llamadas, 2)
+    assert.match(String(envio?.subject), /carta personalizada/i)
+    assert.match(String(envio?.text), /Mojito, gin tonic/)
+    assert.equal(envio?.attachments, undefined, 'La solicitud personalizada no debe enviar un precio ni un PDF de carta fija')
+    const personalizadaIncompleta = await POST(new Request('http://localhost/api/cotizaciones', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...datos, cartaId: 'personalizada', detalleCarta: '' }),
+    }))
+    assert.equal(personalizadaIncompleta.status, 400)
+    assert.equal(llamadas, 2)
     process.stdout.write('Envío simulado correcto: correo breve, logo incrustado y cotización en PDF.\n')
   } finally {
     globalThis.fetch = fetchOriginal

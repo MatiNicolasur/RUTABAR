@@ -82,9 +82,9 @@ function tragosDeCarta(cartaId: CartaCotizacionId): TragoWeb[] {
 }
 
 function bebidasDeCarta(cartaId: CartaCotizacionId): string {
-  if (cartaId === 'sin-alcohol') return 'Coca-Cola, jugo, Sprite u otra bebida sin alcohol a elección y agua.'
+  if (cartaId === 'sin-alcohol') return 'Coca-Cola, jugo, Sprite, otra bebida sin alcohol a elección y agua.'
   if (cartaId === 'reducida') return 'Cerveza, vino tinto, vino blanco y agua.'
-  return 'Cerveza, vinos, Coca-Cola, jugo, Sprite u otra bebida sin alcohol a elección y agua.'
+  return 'Cerveza, vinos, Coca-Cola, jugo, Sprite, otra bebida sin alcohol a elección y agua.'
 }
 
 function bloqueCondiciones(page: PDFPage, bloque: BloqueCondiciones, x: number, y: number, ancho: number, normal: PDFFont, negrita: PDFFont) {

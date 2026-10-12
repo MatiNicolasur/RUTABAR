@@ -4,6 +4,7 @@ import { Icono } from '@/components/Icono'
 import { Preguntas } from '@/components/Preguntas'
 import { Ranura } from '@/components/Ranura'
 import { Reveal } from '@/components/Reveal'
+import { RutasServicio } from '@/components/RutasServicio'
 import { SistemaServicio } from '@/components/SistemaServicio'
 import { ICONOS } from '@/data/iconos'
 
@@ -65,21 +66,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Ranura
-        id="titulo-barra"
-        micro="El servicio"
-        titulo="La ruta de tragos llega a tu evento."
-        imagen="/fotos/bartender-patio-editorial.webp"
-        imagenAlt="Imagen ilustrativa de un bartender sirviendo un cóctel a invitados en una barra móvil negra con base de madera, en un patio al atardecer"
-        medida="retrato"
-        enfoque="center 44%"
-        sinOptimizacion
-        invertida
-      >
-        <p className="lead">
-          Vamos cambiando la carta por época del año. Estamos en primavera y por eso nuestros tragos son más cítricos y dulces.
-        </p>
-      </Ranura>
+      <RutasServicio />
 
       <section className="seccion seccion--sistema" aria-labelledby="titulo-sistema">
         <div className="lienzo">

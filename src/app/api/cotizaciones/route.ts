@@ -14,7 +14,8 @@ type DatosCotizacion = {
   ciudad: string
   lugar: string
   asistentes: number
-  cartaId: CartaCotizacionId
+  cartaId: CartaCotizacionId | 'personalizada'
+  detalleCarta: string
   duracion: DuracionCotizacion
   solicitaCartaDigital: boolean
 }
@@ -36,7 +37,9 @@ function escaparHtml(texto: string): string {
 function validarDatos(valor: unknown): DatosCotizacion | null {
   if (!valor || typeof valor !== 'object') return null
   const entrada = valor as Record<string, unknown>
+  const personalizada = entrada.cartaId === 'personalizada'
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === entrada.cartaId)
+  const detalleCarta = typeof entrada.detalleCarta === 'string' ? entrada.detalleCarta.trim() : ''
   const duracion = CONFIG_COTIZACION.duraciones.find((opcion) => opcion === entrada.duracion)
   const correo = typeof entrada.correo === 'string' ? entrada.correo.trim() : ''
   const whatsapp = typeof entrada.whatsapp === 'string' ? entrada.whatsapp.trim() : ''
@@ -46,7 +49,8 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
   const whatsappValido = !whatsapp || (whatsapp.length <= 32 && digitosWhatsapp.length >= 8 && digitosWhatsapp.length <= 15)
 
   if (
-    !carta || !duracion ||
+    (!carta && !personalizada) || !duracion ||
+    (personalizada && (detalleCarta.length < 10 || detalleCarta.length > 1000)) ||
     !esTexto(entrada.nombre, 100) ||
     !correoValido || !whatsappValido ||
     !fechaValida ||
@@ -64,7 +68,8 @@ function validarDatos(valor: unknown): DatosCotizacion | null {
     ciudad: entrada.ciudad.trim(),
     lugar: entrada.lugar.trim(),
     asistentes: Number(entrada.asistentes),
-    cartaId: carta.id,
+    cartaId: personalizada ? 'personalizada' : carta!.id,
+    detalleCarta,
     duracion,
     solicitaCartaDigital: entrada.solicitaCartaDigital,
   }
@@ -92,6 +97,35 @@ export async function POST(request: Request) {
   const datos = validarDatos(cuerpo)
   if (!datos) {
     return Response.json({ error: 'Revisa los datos de contacto y del evento antes de enviar.' }, { status: 400 })
+  }
+
+  if (datos.cartaId === 'personalizada') {
+    const detalleTexto = `Hola, ${datos.nombre}:\n\nRecibimos tu solicitud de carta personalizada para ${datos.asistentes} invitados el ${datos.fecha} en ${datos.lugar}, ${datos.ciudad}, durante ${datos.duracion} horas.\n\nTragos e ideas: ${datos.detalleCarta}\n\nRevisaremos la selección y te responderemos con una propuesta y su precio. Esta solicitud no es una cotización automática.\n\nUn abrazo,\nMatías Urquiza\nRUTABAR`
+    const htmlPersonalizado = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Recibimos tu solicitud RUTABAR</title></head><body style="margin:0;padding:24px;background:#fdf2f1;font-family:Arial,Helvetica,sans-serif;color:#251c1c"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;margin:auto;background:#fff"><tr><td style="padding:28px 34px;background:#6d0002;color:#fff"><strong style="font-size:24px;letter-spacing:2px">RUTABAR</strong><h1 style="margin:18px 0 0;font-size:23px">Recibimos tu idea</h1></td></tr><tr><td style="padding:30px 34px;line-height:1.65"><p>Hola, <strong>${escaparHtml(datos.nombre)}</strong>. Soy Matías Urquiza, dueño de RUTABAR. Gracias por pensar en nosotros para tu evento.</p><p>Recibimos tu solicitud de carta personalizada para <strong>${datos.asistentes} invitados</strong>, el <strong>${escaparHtml(datos.fecha)}</strong>, en <strong>${escaparHtml(datos.lugar)}, ${escaparHtml(datos.ciudad)}</strong>, durante <strong>${datos.duracion} horas</strong>.</p><p style="padding:16px;background:#fdf2f1;border-left:3px solid #c60015;white-space:pre-wrap">${escaparHtml(datos.detalleCarta)}</p><p>Revisaremos la selección y te responderemos con una propuesta y su precio. Esta solicitud aún no es una cotización.</p><p>Un abrazo,<br><strong>Matías Urquiza</strong><br>RUTABAR</p></td></tr></table></body></html>`
+    try {
+      const resend = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: remitente,
+          to: [datos.correo],
+          ...(datos.correo.toLowerCase() !== destinatario.toLowerCase() ? { bcc: [destinatario] } : {}),
+          reply_to: destinatario,
+          subject: 'Recibimos tu solicitud de carta personalizada · RUTABAR',
+          text: detalleTexto,
+          html: htmlPersonalizado,
+        }),
+        signal: AbortSignal.timeout(20_000),
+      })
+      if (!resend.ok) {
+        console.error('Resend rechazó una solicitud personalizada', { status: resend.status })
+        return Response.json({ error: 'El correo no se pudo enviar en este momento. Inténtalo otra vez.' }, { status: 502 })
+      }
+      return Response.json({ enviado: true }, { status: 200 })
+    } catch (error) {
+      console.error('No se pudo conectar con Resend', { tipo: error instanceof Error ? error.name : 'unknown' })
+      return Response.json({ error: 'No se pudo conectar con el servicio de correo. Inténtalo otra vez.' }, { status: 502 })
+    }
   }
 
   const total = calcularPrecioCotizacion(datos.cartaId, datos.duracion, datos.asistentes)

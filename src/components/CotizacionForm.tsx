@@ -7,6 +7,7 @@ type Props = {
   cartaInicial?: CartaCotizacionId
   asistentesIniciales?: number
   duracionInicial?: DuracionCotizacion
+  personalizadaInicial?: boolean
 }
 
 const WHATSAPP_COMERCIAL = process.env.NEXT_PUBLIC_WHATSAPP ?? ''
@@ -23,7 +24,7 @@ const COMUNAS_POR_PROVINCIA = [
   { provincia: 'Talagante', comunas: ['El Monte', 'Isla de Maipo', 'Padre Hurtado', 'Peñaflor', 'Talagante'] },
 ] as const
 
-export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInicial }: Props) {
+export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInicial, personalizadaInicial = false }: Props) {
   const flujoRef = useRef<HTMLDivElement>(null)
   const [paso, setPaso] = useState<1 | 2 | 3>(1)
   const [fecha, setFecha] = useState('')
@@ -31,7 +32,9 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const [otraCiudad, setOtraCiudad] = useState('')
   const [lugar, setLugar] = useState('')
   const [asistentes, setAsistentes] = useState(String(asistentesIniciales ?? CONFIG_COTIZACION.personasBase))
-  const [cartaId, setCartaId] = useState<CartaCotizacionId>(cartaInicial ?? 'reducida')
+  const [cartaId, setCartaId] = useState<CartaCotizacionId | 'personalizada'>(personalizadaInicial ? 'personalizada' : cartaInicial ?? 'reducida')
+  const [detalleCarta, setDetalleCarta] = useState('')
+  const [errorCarta, setErrorCarta] = useState('')
   const [duracion, setDuracion] = useState<DuracionCotizacion>(duracionInicial ?? 4)
   const [posicionHoras, setPosicionHoras] = useState<number>(duracionInicial ?? 4)
   const posicionHorasRef = useRef<number>(duracionInicial ?? 4)
@@ -48,7 +51,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const [cotizacionEnviada, setCotizacionEnviada] = useState(false)
 
   const numeroAsistentes = Number(asistentes)
-  const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId) ?? CONFIG_COTIZACION.cartas[1]
+  const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === cartaId)
+  const esPersonalizada = cartaId === 'personalizada'
   const ciudadCotizacion = ciudad === OTRA_COMUNA ? otraCiudad.trim() : ciudad
   const fechaVisible = fecha ? fecha.split('-').reverse().join('/') : 'Por definir'
   const progresoHoras = (posicionHoras - DURACION_MINIMA) / (DURACION_MAXIMA - DURACION_MINIMA)
@@ -133,7 +137,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       `Ciudad o comuna: ${ciudadCotizacion || '—'}`,
       `Lugar: ${lugar.trim() || '—'}`,
       `Asistentes: ${asistentes || '—'}`,
-      `Carta: ${carta.nombre} (${carta.bebidas} bebidas)`,
+      `Carta: ${esPersonalizada ? 'Personalizada' : `${carta?.nombre} (${carta?.bebidas} opciones)`}`,
+      ...(esPersonalizada ? [`Tragos deseados: ${detalleCarta.trim() || 'Por definir'}`] : []),
       `Duración: ${duracion} horas`,
       `Servicio: barra libre durante las ${duracion} horas contratadas.`,
       solicitaCartaDigital
@@ -143,10 +148,12 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }, [
     asistentes,
     carta,
+    detalleCarta,
     ciudad,
     ciudadCotizacion,
     correo,
     duracion,
+    esPersonalizada,
     fechaVisible,
     lugar,
     nombre,
@@ -173,6 +180,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   }
 
   function validarContacto(): boolean {
+    if (esPersonalizada && detalleCarta.trim().length < 10) {
+      setErrorContacto('Cuéntanos qué tragos quieres incluir en tu carta personalizada.')
+      return false
+    }
     const correoLimpio = correo.trim()
     const digitosWhatsApp = whatsapp.replace(/\D/g, '')
     const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoLimpio)
@@ -183,7 +194,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       return false
     }
     if (!correoLimpio) {
-      setErrorContacto('Ingresa tu correo para recibir la cotización y la carta en PDF.')
+      setErrorContacto(esPersonalizada ? 'Ingresa tu correo para recibir la respuesta a tu solicitud.' : 'Ingresa tu correo para recibir la cotización y la carta en PDF.')
       return false
     }
     if (correoLimpio && !correoValido) {
@@ -222,6 +233,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           lugar: lugar.trim(),
           asistentes: numeroAsistentes,
           cartaId,
+          detalleCarta: esPersonalizada ? detalleCarta.trim() : '',
           duracion,
           solicitaCartaDigital,
         }),
@@ -251,6 +263,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
     setLugar('')
     setAsistentes(String(CONFIG_COTIZACION.personasBase))
     setCartaId('reducida')
+    setDetalleCarta('')
+    setErrorCarta('')
     setDuracion(4)
     moverHoras(4)
     setNombre('')
@@ -277,7 +291,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               key={etiqueta}
             >
               <span className="cotizacion-flujo__numero">{numeroPaso}</span>
-              <span>{etiqueta}</span>
+              <span>{esPersonalizada && numeroPaso === 3 ? 'Enviar solicitud' : etiqueta}</span>
               </li>
             )
           })}
@@ -339,18 +353,27 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 2 de 3</p>
             <h2 className="h3" id="cotizacion-paso-2">Elegir servicio</h2>
-            <p>Elige la carta y las horas. Te enviaremos el precio final por correo.</p>
+            <p>{esPersonalizada ? 'Cuéntanos tu idea y elige las horas. Prepararemos el precio a medida.' : 'Elige la ruta y las horas. Te enviaremos el precio final por correo.'}</p>
           </div>
 
           <label className="campo cotizacion-flujo__carta-select">
             <span className="campo__label">Tipo de carta</span>
-            <select className="campo__input" value={cartaId} onChange={(evento) => setCartaId(evento.target.value as CartaCotizacionId)}>
+            <select className="campo__input" value={cartaId} onChange={(evento) => { setCartaId(evento.target.value as CartaCotizacionId | 'personalizada'); setErrorCarta('') }}>
               {CONFIG_COTIZACION.cartas.map((opcion) => (
                 <option value={opcion.id} key={opcion.id}>{opcion.nombre} · {opcion.bebidas} opciones</option>
               ))}
+              <option value="personalizada">Carta personalizada · precio a medida</option>
             </select>
-            <span className="cotizacion-flujo__ayuda">{carta.resumen}</span>
+            <span className="cotizacion-flujo__ayuda">{esPersonalizada ? 'La revisaremos contigo antes de confirmar un precio.' : carta?.resumen}</span>
           </label>
+
+          {esPersonalizada ? (
+            <label className="campo">
+              <span className="campo__label">¿Qué tragos te gustaría incluir? <span className="campo__valor">*</span></span>
+              <textarea className="campo__input" value={detalleCarta} onChange={(evento) => { setDetalleCarta(evento.target.value); setErrorCarta('') }} maxLength={1000} rows={4} placeholder="Ej.: clásicos con gin, dos sours y mocktails frutales…" required />
+              <span className="cotizacion-flujo__ayuda">Indica tus favoritos o el estilo que imaginas. Nos pondremos en contacto para afinar la selección.</span>
+            </label>
+          ) : null}
 
           <div className="cotizacion-flujo__horas">
             <div className="cotizacion-flujo__horas-encabezado">
@@ -412,8 +435,15 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
           <div className="cotizacion-flujo__acciones">
             <button className="boton boton--fantasma" type="button" onClick={() => setPaso(1)}>Volver</button>
-            <button className="boton" type="button" onClick={() => setPaso(3)}>Continuar</button>
+            <button className="boton" type="button" onClick={() => {
+              if (esPersonalizada && detalleCarta.trim().length < 10) {
+                setErrorCarta('Describe brevemente los tragos que te gustaría incluir.')
+                return
+              }
+              setPaso(3)
+            }}>Continuar</button>
           </div>
+          {errorCarta ? <p className="cotizacion-flujo__error" role="alert">{errorCarta}</p> : null}
         </section>
       ) : null}
 
@@ -421,8 +451,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
         <section className="cotizacion-flujo__panel" aria-labelledby="cotizacion-paso-3">
           <div className="cotizacion-flujo__encabezado">
             <p className="micro">Paso 3 de 3</p>
-            <h2 className="h3" id="cotizacion-paso-3">Recibir cotización</h2>
-            <p>Ingresa tu correo y te enviaremos el precio y la carta con fotos en PDF.</p>
+            <h2 className="h3" id="cotizacion-paso-3">{esPersonalizada ? 'Enviar solicitud' : 'Recibir cotización'}</h2>
+            <p>{esPersonalizada ? 'Te confirmaremos por correo que recibimos tu idea y prepararemos un precio a medida.' : 'Ingresa tu correo y te enviaremos el precio y la carta en PDF.'}</p>
           </div>
 
           <div className="cotizacion-flujo__campos">
@@ -439,7 +469,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
               <input className="campo__input" type="tel" value={whatsapp} onChange={(evento) => { setWhatsapp(evento.target.value); setErrorContacto('') }} autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" />
             </label>
           </div>
-          <p className="cotizacion-flujo__ayuda">El precio final, el detalle y la carta llegarán a ese correo.</p>
+          <p className="cotizacion-flujo__ayuda">{esPersonalizada ? 'Responderemos a ese correo con la propuesta personalizada.' : 'El precio final, el detalle y la carta llegarán a ese correo.'}</p>
 
           <label className="cotizacion-flujo__beneficio">
             <input type="checkbox" checked={solicitaCartaDigital} onChange={(evento) => setSolicitaCartaDigital(evento.target.checked)} />
@@ -452,7 +482,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
           <div className={enlaceWhatsApp ? 'cotizacion-flujo__envio cotizacion-flujo__envio--whatsapp' : 'cotizacion-flujo__envio'}>
             <button className="boton" type="button" onClick={enviarPorCorreo} disabled={enviando}>
-              {enviando ? 'Preparando tu PDF…' : 'Recibir cotización por correo'}
+              {enviando ? (esPersonalizada ? 'Enviando solicitud…' : 'Preparando tu PDF…') : (esPersonalizada ? 'Solicitar carta personalizada' : 'Recibir cotización por correo')}
             </button>
             {enlaceWhatsApp ? (
               <a className="boton boton--fantasma" href={enlaceWhatsApp} onClick={validarAntesDeEnviar} rel="noopener noreferrer" target="_blank">
@@ -492,8 +522,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
             />
           </figure>
           <div className="cotizacion-flujo__exito-contenido">
-            <h2 className="h2" id="cotizacion-enviada-titulo">¡Cotización enviada!</h2>
-            <p className="lead">Gracias, {nombre.trim()}. Revisa tu correo: enviamos el precio y la carta en PDF.</p>
+            <h2 className="h2" id="cotizacion-enviada-titulo">{esPersonalizada ? '¡Solicitud enviada!' : '¡Cotización enviada!'}</h2>
+            <p className="lead">{esPersonalizada ? `Gracias, ${nombre.trim()}. Revisa tu correo: recibimos tu idea y te responderemos con una propuesta.` : `Gracias, ${nombre.trim()}. Revisa tu correo: enviamos el precio y la carta en PDF.`}</p>
             <button className="boton" type="button" onClick={reiniciarCotizador}>Cotizar otro evento</button>
           </div>
         </section>

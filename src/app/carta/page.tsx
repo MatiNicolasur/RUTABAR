@@ -6,7 +6,7 @@ import { Reveal } from '@/components/Reveal'
 export const metadata: Metadata = {
   title: 'Carta',
   description:
-    'Conoce las tres modalidades de RUTABAR: barra reducida de 11 opciones, carta sin alcohol de 8 y carta completa de 24 bebidas.',
+    'Conoce Ruta Esencial de 10 opciones, Ruta Zero sin alcohol de 9 y Ruta Full con 25 opciones de barra libre.',
   alternates: { canonical: '/carta' },
 }
 
@@ -21,7 +21,7 @@ export default function PaginaCarta() {
         </div>
       </header>
 
-      <section className="seccion" aria-label="Carta completa">
+      <section className="seccion" aria-label="Carta de las rutas">
         <div className="lienzo">
           <CartaInteractiva />
         </div>
@@ -40,7 +40,7 @@ export default function PaginaCarta() {
               <ul className="lista-marcada">
                 <li>Barra libre durante las horas contratadas: se pueden pedir las preparaciones incluidas en la carta elegida.</li>
                 <li>La alternativa de carta se acuerda y se cierra al reservar.</li>
-                <li>La opción Solo sin alcohol incluye 4 mocktails y bebidas sin alcohol.</li>
+                <li>Ruta Zero incluye 4 mocktails y bebidas sin alcohol.</li>
                 <li>Podemos revisar alergias o restricciones si nos avisas con anticipación.</li>
               </ul>
             </Reveal>
