@@ -56,9 +56,12 @@ export function RutasServicio() {
                 <p className="rutas-servicio__bajada">{ruta.bajada}</p>
                 <p className="rutas-servicio__detalle">{ruta.detalle}</p>
                 <div className="rutas-servicio__pie">
-                  <p className="rutas-servicio__precio">{formatoPrecio.format(CONFIG_COTIZACION.cartas.find((carta) => carta.id === ruta.id)!.precios[5])}<span>40 personas · 5 horas · IVA incluido</span></p>
-                  <Link className="rutas-servicio__accion" href={`/cotizar?pack=${ruta.id satisfies CartaCotizacionId}`} aria-label={`Cotizar ${ruta.nombre} para mi evento`}>
-                    Cotizar esta ruta <span aria-hidden="true">↗</span>
+                  <div className="rutas-servicio__precio">
+                    <span>Para 40 personas · IVA incluido</span>
+                    <strong>{formatoPrecio.format(CONFIG_COTIZACION.cartas.find((carta) => carta.id === ruta.id)!.precios[5])}</strong>
+                  </div>
+                  <Link className="rutas-servicio__accion" href={`/cotizar?pack=${ruta.id satisfies CartaCotizacionId}`}>
+                    Cotizar {ruta.nombre} <span aria-hidden="true">↗</span>
                   </Link>
                 </div>
               </div>
@@ -73,9 +76,12 @@ export function RutasServicio() {
               <p className="rutas-servicio__bajada">Elige tu propia ruta</p>
               <p className="rutas-servicio__detalle">Escoge una de nuestras tres cartas y ajusta la barra libre entre 3 y 12 horas según tu evento.</p>
               <div className="rutas-servicio__pie">
-                <p className="rutas-servicio__precio">Precio según tu selección<span>40 a 300 personas · IVA incluido</span></p>
+                <div className="rutas-servicio__precio">
+                  <span>40 a 300 personas · IVA incluido</span>
+                  <strong>Precio según tu selección</strong>
+                </div>
                 <Link className="rutas-servicio__accion rutas-servicio__accion--personalizada" href="/cotizar?modo=flexible">
-                  Armar mi ruta <span aria-hidden="true">↗</span>
+                  Elegir carta y horas <span aria-hidden="true">↗</span>
                 </Link>
               </div>
             </div>
