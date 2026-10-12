@@ -177,14 +177,6 @@ body > footer {
   z-index: 1;
 }
 
-#contenido:has(> .hero2__preloader) {
-  z-index: 100;
-}
-
-#contenido.contenido--preloader {
-  z-index: 100;
-}
-
 .barra-safari {
   display: none;
 }

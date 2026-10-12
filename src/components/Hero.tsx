@@ -25,7 +25,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useId, useLayoutEffect, useState, type CSSProperties } from 'react'
+import { useId, useLayoutEffect, useState, type CSSProperties } from 'react'
 import { Icono } from './Icono'
 import { ParallaxScroll } from './ParallaxScroll'
 
@@ -82,8 +82,6 @@ export function Hero({
 }: Props) {
   const titleId = useId()
   const [usarImagenRespaldo, setUsarImagenRespaldo] = useState(false)
-  const [pausaCompleta, setPausaCompleta] = useState(false)
-  const [faseEntrada, setFaseEntrada] = useState<'espera' | 'sale' | 'hero'>('espera')
   const fraseRetrato = lineas.join(' ')
   const columnas = Array.from(
     { length: Math.max(2, Math.min(10, segmentos)) },
@@ -97,55 +95,6 @@ export function Hero({
     contenido?.classList.add('contenido--portada')
     return () => contenido?.classList.remove('contenido--portada')
   }, [diseno])
-
-  useLayoutEffect(() => {
-    if (diseno !== 'retrato') return
-
-    const contenido = document.getElementById('contenido')
-    const cabecera = document.querySelector('.cabecera')
-    contenido?.classList.toggle('contenido--preloader', faseEntrada !== 'hero')
-    cabecera?.setAttribute('data-entrada', faseEntrada)
-
-    return () => {
-      contenido?.classList.remove('contenido--preloader')
-      cabecera?.removeAttribute('data-entrada')
-    }
-  }, [diseno, faseEntrada])
-
-  useEffect(() => {
-    if (diseno !== 'retrato') return
-
-    const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
-      || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    // La espera corre desde que el navegador abrió la página, no desde que
-    // React terminó de hidratar; así el preloader no añade una pausa posterior.
-    const esperaRestante = animarIntro ? Math.max(0, 800 - window.performance.now()) : 0
-    const pausa = window.setTimeout(() => setPausaCompleta(true), esperaRestante)
-
-    return () => {
-      window.clearTimeout(pausa)
-    }
-  }, [diseno])
-
-  useEffect(() => {
-    if (diseno === 'retrato' && faseEntrada === 'espera' && pausaCompleta) {
-      setFaseEntrada('sale')
-    }
-  }, [diseno, faseEntrada, pausaCompleta])
-
-  useEffect(() => {
-    if (faseEntrada !== 'sale') return
-
-    const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
-      || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!animarIntro) {
-      setFaseEntrada('hero')
-      return
-    }
-
-    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 450)
-    return () => window.clearTimeout(respaldo)
-  }, [faseEntrada])
 
   const contenido = (
     <div className="lienzo hero__contenido">
@@ -216,27 +165,15 @@ export function Hero({
   if (diseno === 'retrato') {
     return (
       <>
-        {faseEntrada !== 'hero' ? (
-          <div
-            className={`hero2__preloader${faseEntrada === 'sale' ? ' hero2__preloader--saliendo' : ''}`}
-            role="status"
-            aria-label="Próximos a ser El mejor bar móvil en Santiago de Chile"
-            onTransitionEnd={(evento) => {
-              if (evento.target === evento.currentTarget && evento.propertyName === 'transform') {
-                setFaseEntrada('hero')
-              }
-            }}
-          >
+        <div className="hero2__preloader" aria-hidden="true">
             <p>
               <span><span className="hero2__preloader-pronto">Próximos a ser</span> El mejor bar móvil</span>
               <span>en Santiago de <span className="hero2__preloader-chile">Chile</span></span>
             </p>
-          </div>
-        ) : null}
+        </div>
         <section
-          className={`hero hero--retrato${faseEntrada === 'hero' ? ' hero--playing' : ''}`}
+          className="hero hero--retrato hero--playing"
           aria-labelledby={titleId}
-          inert={faseEntrada !== 'hero'}
         >
         {/* El dibujo de marca, gigante, centrado y en el rojo de marca: es el
          * fondo de la composición. Va suelto dentro del hero y no dentro del

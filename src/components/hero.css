@@ -329,14 +329,14 @@
 .hero2__preloader {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  z-index: 60;
   display: grid;
   place-items: center;
   padding: 2rem;
   background: var(--rojo-profundo);
   color: var(--sobre-rojo);
   transform: translate3d(0, 0, 0);
-  transition: transform 450ms cubic-bezier(0.35, 0, 0.16, 1);
+  animation: hero2-preloader-salir 450ms cubic-bezier(0.35, 0, 0.16, 1) 800ms both;
 }
 
 .hero2__preloader p {
@@ -406,14 +406,16 @@
   }
 }
 
-.hero2__preloader--saliendo {
-  transform: translate3d(-101%, 0, 0);
-  will-change: transform;
+@keyframes hero2-preloader-salir {
+  to {
+    transform: translate3d(-101%, 0, 0);
+    visibility: hidden;
+  }
 }
 
 @media (min-width: 48rem) and (prefers-reduced-motion: reduce) {
   .hero2__preloader {
-    transition: none;
+    animation: hero2-preloader-salir 1ms linear 200ms both;
   }
 }
 
@@ -574,23 +576,23 @@
   /* El radio final apenas cubre las esquinas: así la desaceleración sigue
    * viéndose hasta que termina la apertura. */
   .hero--playing .hero2__media {
-    animation: hero2-abrir 1300ms cubic-bezier(0.22, 0.72, 0.36, 1) both;
+    animation: hero2-abrir 1300ms cubic-bezier(0.22, 0.72, 0.36, 1) 1250ms both;
   }
 
   .hero--playing .hero2__foto {
-    animation: hero2-foto-asentar 1300ms var(--hero2-ease) both;
+    animation: hero2-foto-asentar 1300ms var(--hero2-ease) 1250ms both;
   }
 
   .hero--playing .hero2__firma {
-    animation: hero2-firmar 1100ms var(--hero2-ease) 1150ms both;
+    animation: hero2-firmar 1100ms var(--hero2-ease) 2400ms both;
   }
 
   .hero--playing .hero2__ubicacion {
-    animation: hero2-firmar 950ms var(--hero2-ease) 1750ms both;
+    animation: hero2-firmar 950ms var(--hero2-ease) 3000ms both;
   }
 
   .hero--playing .hero2__intro .fila {
-    animation: hero2-intro-slide 900ms var(--hero2-ease) 2200ms both;
+    animation: hero2-intro-slide 900ms var(--hero2-ease) 3450ms both;
   }
 }
 
