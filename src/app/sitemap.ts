@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
+import { SITIO } from '@/lib/seo'
 
-const BASE = 'https://rutabar.cl'
+const BASE = new URL(SITIO.url).origin
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const ahora = new Date()

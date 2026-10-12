@@ -1,6 +1,7 @@
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
-// La gestión financiera vive en el portal privado, fuera del sitio comercial.
+// La calculadora pública se encuentra en /cotizar; la gestión financiera sigue
+// en el portal privado y no se publica desde este dominio.
 export default function PaginaCotizador() {
-  notFound()
+  redirect('/cotizar')
 }

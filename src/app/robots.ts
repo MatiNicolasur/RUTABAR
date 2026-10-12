@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { SITIO } from '@/lib/seo'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,10 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // El cotizador es una herramienta interna: no debe indexarse.
-        disallow: ['/cotizador'],
       },
     ],
-    sitemap: 'https://rutabar.cl/sitemap.xml',
+    sitemap: new URL('/sitemap.xml', SITIO.url).toString(),
   }
 }

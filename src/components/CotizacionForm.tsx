@@ -493,7 +493,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           </div>
           <figure className="cotizacion-flujo__exito-gif">
             <img
-              src="/celebracion-cotizacion.gif"
+              src="/celebracion-cotizacion.webp"
               alt="Jimmy Fallon aplaude para celebrar el envío de la cotización"
               width={480}
               height={270}

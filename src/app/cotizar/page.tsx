@@ -1,16 +1,15 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CotizacionForm } from '@/components/CotizacionForm'
 import { Ranura } from '@/components/Ranura'
 import { PAGO } from '@/data/pago'
 import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
+import { metadataPagina } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Cotizar',
-  description:
-    'Elige uno de nuestros packs o arma tu propia ruta de barra libre. Recibe los detalles por correo.',
-  alternates: { canonical: '/cotizar' },
-}
+export const metadata = metadataPagina(
+  'Cotiza tu evento',
+  'Elige un pack o arma una ruta de barra libre para tu evento en Santiago. Recibe la cotización con el detalle por correo.',
+  '/cotizar',
+)
 
 type Parametros = {
   carta?: string

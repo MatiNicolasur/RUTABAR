@@ -37,7 +37,7 @@ export function TarjetaTrago({ trago }: { trago: TragoWeb }) {
     >
       <Image
         src={trago.imagen}
-        alt=""
+        alt={`${trago.nombre} servido en ${trago.vaso}.`}
         fill
         sizes="(min-width: 78rem) 25vw, (min-width: 62rem) 33vw, 45vw"
         className="trago-card__imagen"

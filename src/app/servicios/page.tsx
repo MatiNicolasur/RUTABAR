@@ -1,16 +1,16 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Icono } from '@/components/Icono'
 import { Ranura } from '@/components/Ranura'
 import { RutasServicio } from '@/components/RutasServicio'
 import { ServiciosInteractivos } from '@/components/ServiciosInteractivos'
 import { SEGMENTOS } from '@/data/servicios'
+import { metadataPagina } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Servicios',
-  description: 'Elige Ruta Esencial, Ruta Full, Ruta Zero o arma una ruta flexible. Barra libre atendida para eventos privados y de empresa.',
-  alternates: { canonical: '/servicios' },
-}
+export const metadata = metadataPagina(
+  'Servicios de barra libre',
+  'Packs de barra libre para matrimonios, celebraciones y empresas en Santiago. Servicio atendido, montaje y desmontaje.',
+  '/servicios',
+)
 
 export default function PaginaServicios() {
   const nombresIcono: Record<string, string> = { privados: '3', celebraciones: '15', empresas: '26' }
@@ -26,7 +26,10 @@ export default function PaginaServicios() {
       </header>
 
       <section className="seccion" aria-label="Tipos de evento que atendemos">
-        <div className="lienzo"><ServiciosInteractivos segmentos={SEGMENTOS} iconos={iconos} /></div>
+        <div className="lienzo">
+          <h2 className="solo-lectores">Eventos que atendemos</h2>
+          <ServiciosInteractivos segmentos={SEGMENTOS} iconos={iconos} />
+        </div>
       </section>
 
       <Ranura id="titulo-servicios-equipo" micro="Quién atiende" titulo="Cada trago tiene a alguien detrás." imagen="/fotos/bartender-sirviendo.jpg" imagenAlt="Bartender de RUTABAR sirviendo un cóctel a un invitado" medida="cuadrado" invertida enfoque="center 38%">

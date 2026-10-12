@@ -1,17 +1,12 @@
-/**
- * Datos del negocio en un solo lugar, para metadata, datos estructurados y
- * textos legales.
- *
- * El nombre y el dominio siguen pendientes de decisión: `RUTABAR` es el nombre
- * de trabajo. Cuando se cierre el definitivo, se cambia acá y se propaga a
- * títulos, Open Graph, sitemap y datos estructurados.
- */
+import type { Metadata } from 'next'
+
+/** Datos públicos del negocio en un solo lugar para SEO y datos estructurados. */
 
 export const SITIO = {
   nombre: 'RUTABAR',
   url: process.env.NEXT_PUBLIC_SITIO_URL ?? 'https://rutabar.cl',
   descripcion:
-    'Barra móvil con servicio de barra libre para eventos en Santiago de Chile. 13 cócteles, 4 mocktails, cristalería, montaje y cotización por escrito antes de reservar.',
+    'Barra móvil y barra libre para eventos en Santiago de Chile. Packs de cócteles, mocktails y servicio atendido para celebraciones y empresas.',
   ciudad: 'Santiago',
   region: 'Región Metropolitana',
   pais: 'CL',
@@ -31,6 +26,37 @@ export const PALABRAS_CLAVE = [
   'barra para matrimonios',
   'barra para eventos corporativos',
 ]
+
+export function metadataPagina(titulo: string, descripcion: string, ruta: string): Metadata {
+  const tituloSocial = `${titulo} · ${SITIO.nombre}`
+  return {
+    title: titulo,
+    description: descripcion,
+    alternates: { canonical: ruta },
+    openGraph: {
+      type: 'website',
+      locale: 'es_CL',
+      siteName: SITIO.nombre,
+      url: ruta,
+      title: tituloSocial,
+      description: descripcion,
+      images: [
+        {
+          url: '/og.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'RUTABAR, barra móvil de coctelería para eventos en Santiago',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: tituloSocial,
+      description: descripcion,
+      images: ['/og.jpg'],
+    },
+  }
+}
 
 /**
  * Datos estructurados del negocio.

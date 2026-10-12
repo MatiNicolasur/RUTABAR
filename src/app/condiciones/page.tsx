@@ -1,15 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CondicionesBloques } from '@/components/CondicionesBloques'
 import { Reveal } from '@/components/Reveal'
 import { PAGO } from '@/data/pago'
+import { metadataPagina } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Condiciones',
-  description:
-    'Deja listo tu evento: carta, traslado, horarios, pago, cambios y devoluciones acordados por escrito.',
-  alternates: { canonical: '/condiciones' },
-}
+export const metadata = metadataPagina(
+  'Condiciones del servicio',
+  'Revisa antes de reservar las condiciones de pago, traslado, horarios, cambios y devolución de RUTABAR.',
+  '/condiciones',
+)
 
 export default function PaginaCondiciones() {
 
@@ -25,6 +24,7 @@ export default function PaginaCondiciones() {
 
       <section className="seccion" aria-label="Condiciones del servicio">
         <div className="lienzo">
+          <h2 className="solo-lectores">Condiciones del servicio</h2>
           <CondicionesBloques limite={3} />
         </div>
       </section>

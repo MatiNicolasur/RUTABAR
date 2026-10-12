@@ -1,0 +1,22 @@
+# RUTABAR
+
+> Barra móvil de coctelería con servicio de barra libre para eventos en Santiago de Chile.
+
+RUTABAR lleva una barra atendida por bartenders a celebraciones privadas, matrimonios y eventos de empresa. El servicio incluye cristalería, hielo, insumos, montaje y desmontaje. La barra es libre durante las horas contratadas.
+
+## Rutas del sitio
+
+- [Inicio](https://rutabar.cl/): presentación del servicio y selección de rutas.
+- [Servicios](https://rutabar.cl/servicios): packs y modalidad de barra libre.
+- [Carta](https://rutabar.cl/carta): cócteles, mocktails, bebidas y agua.
+- [Cotizar](https://rutabar.cl/cotizar): solicitud de cotización para un evento.
+- [Condiciones](https://rutabar.cl/condiciones): pagos, traslados, horarios y condiciones del servicio.
+
+## Información comercial
+
+Los packs tienen un mínimo de 20 personas y cinco horas de servicio. También se puede solicitar una combinación de carta y duración personalizada. Los precios publicados incluyen IVA; traslado, disponibilidad y condiciones del recinto se confirman en la cotización.
+
+## Contacto
+
+- Correo: contacto@rutabar.cl
+

@@ -1,14 +1,13 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CartaInteractiva } from '@/components/CartaInteractiva'
 import { Reveal } from '@/components/Reveal'
+import { metadataPagina } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Carta',
-  description:
-    'Conoce Ruta Esencial de 10 opciones, Ruta Zero sin alcohol de 9 y Ruta Full con 25 opciones de barra libre.',
-  alternates: { canonical: '/carta' },
-}
+export const metadata = metadataPagina(
+  'Carta de cócteles y mocktails',
+  'Revisa los cócteles, mocktails, bebidas y aguas de RUTABAR. Elige entre Ruta Esencial, Ruta Full y Ruta Zero.',
+  '/carta',
+)
 
 export default function PaginaCarta() {
   return (
