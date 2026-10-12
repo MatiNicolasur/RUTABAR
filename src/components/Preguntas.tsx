@@ -30,7 +30,7 @@ const PREGUNTAS: Pregunta[] = [
   {
     pregunta: '¿Cómo se calcula el precio?',
     respuesta:
-      'Depende de la carta, la duración de 3 a 12 horas y los asistentes. Para 40 personas, el cotizador muestra las tarifas de cada alternativa; otros tamaños se calculan proporcionalmente.',
+      'Se calcula por persona, según la carta y las horas de barra libre. El mínimo es de 20 invitados. Recibes el total con IVA incluido por correo.',
   },
   {
     pregunta: '¿Puedo poner yo el alcohol?',

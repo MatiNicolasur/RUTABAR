@@ -378,7 +378,6 @@
   overflow: hidden;
   color: var(--rosa);
   opacity: 0.56;
-  filter: blur(2.6px);
   pointer-events: none;
 }
 

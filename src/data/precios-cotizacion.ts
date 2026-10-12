@@ -4,7 +4,7 @@
  */
 export const CONFIG_COTIZACION = {
   personasBase: 40,
-  asistentesMin: 40,
+  asistentesMin: 20,
   asistentesMax: 300,
   duraciones: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const,
   cartas: [

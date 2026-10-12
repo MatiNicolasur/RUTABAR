@@ -1,6 +1,7 @@
 .rutas-servicio {
-  background-color: var(--rojo-profundo);
-  color: var(--sobre-rojo);
+  --fuente-rutas: var(--fuente-display);
+  background-color: var(--papel);
+  color: var(--texto);
 }
 
 .rutas-servicio__encabezado {
@@ -9,11 +10,17 @@
 
 .rutas-servicio__encabezado .micro,
 .rutas-servicio__encabezado .lead {
-  color: var(--sobre-rojo-suave);
+  color: var(--texto-suave);
 }
 
 .rutas-servicio__encabezado .micro::before {
-  background: var(--rosa);
+  background: var(--rojo);
+}
+
+.rutas-servicio__encabezado .h2 {
+  color: var(--rojo-profundo);
+  font-family: var(--fuente-rutas);
+  font-variation-settings: 'wdth' 125;
 }
 
 .rutas-servicio__grid {
@@ -27,15 +34,16 @@
   grid-template-rows: auto 1fr;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgb(255 245 244 / 0.3);
+  border: 1px solid var(--papel-borde);
   border-radius: 24px;
   background: var(--papel);
   color: var(--texto);
-  box-shadow: 0 16px 32px rgb(0 0 0 / 0.12);
+  font-family: var(--fuente-texto);
+  box-shadow: 0 8px 28px rgb(19 19 17 / 0.06);
 }
 
 .rutas-servicio__card:focus-within {
-  outline: 2px solid var(--sobre-rojo);
+  outline: 2px solid var(--rojo-hondo);
   outline-offset: 5px;
 }
 
@@ -79,7 +87,8 @@
 }
 
 .rutas-servicio__card h3 {
-  font-family: var(--fuente-display);
+  font-family: var(--fuente-rutas);
+  font-variation-settings: 'wdth' 125;
   font-size: clamp(1.5rem, 2vw, 1.875rem);
   font-weight: 800;
   letter-spacing: -0.025em;
@@ -158,12 +167,20 @@
 
 .rutas-servicio__precio strong {
   color: var(--rojo-hondo);
-  font-family: var(--fuente-display);
+  font-family: var(--fuente-rutas);
+  font-variation-settings: 'wdth' 125;
   font-size: clamp(2rem, 2.5vw, 2.25rem);
   font-variant-numeric: tabular-nums;
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.1;
+}
+
+.rutas-servicio__valor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
 }
 
 .rutas-servicio__accion {

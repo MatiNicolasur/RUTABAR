@@ -624,11 +624,12 @@
 }
 
 .pagina-cabecera h1 {
-  font-family: var(--fuente-display);
+  font-family: var(--fuente-mano);
+  font-variation-settings: normal;
   font-size: clamp(2.1rem, 5.6vw, 3.9rem);
-  font-weight: 800;
-  line-height: 1.0;
-  letter-spacing: -0.04em;
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: 0.01em;
   text-wrap: balance;
 }
 
@@ -962,7 +963,7 @@
 .paquete__unidad, .paquete__condicion { color: var(--sobre-rojo-suave); }
 [id] { scroll-margin-block-start: 7rem; }
 
-.pagina-cabecera h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+.pagina-cabecera h1 { font-size: clamp(2.75rem, 6vw, 5rem); }
 .formulario .campo__ayuda, .condicion p { max-inline-size: 70ch; }
 
 .bloque-control__titulo h2 { font-size: clamp(1.5rem, 2.3vw, 1.9rem); }

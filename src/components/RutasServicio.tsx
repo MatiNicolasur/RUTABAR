@@ -74,8 +74,11 @@ export function RutasServicio() {
                   </ul>
                   <div className="rutas-servicio__pie">
                     <div className="rutas-servicio__precio">
-                      <span>Para {CONFIG_COTIZACION.personasBase} personas · IVA incluido</span>
-                      <strong>{formatoPrecio.format(carta.precios[HORAS_PACK])}</strong>
+                      <span>Mínimo {CONFIG_COTIZACION.asistentesMin} personas · IVA incluido</span>
+                      <div className="rutas-servicio__valor">
+                        <strong>{formatoPrecio.format(carta.precios[HORAS_PACK] / CONFIG_COTIZACION.personasBase)}</strong>
+                        <span>por persona</span>
+                      </div>
                     </div>
                     <Link className="rutas-servicio__accion" href={`/cotizar?pack=${ruta.id satisfies CartaCotizacionId}`}>
                       Cotizar {carta.nombre} <span aria-hidden="true">→</span>
@@ -100,7 +103,7 @@ export function RutasServicio() {
               </div>
               <div className="rutas-servicio__pie">
                 <div className="rutas-servicio__precio">
-                  <span>{CONFIG_COTIZACION.asistentesMin} a {CONFIG_COTIZACION.asistentesMax} personas · IVA incluido</span>
+                  <span>Mínimo {CONFIG_COTIZACION.asistentesMin} personas · IVA incluido</span>
                   <strong>Precio según tu selección</strong>
                 </div>
                 <Link className="rutas-servicio__accion rutas-servicio__accion--personalizada" href="/cotizar?modo=flexible">

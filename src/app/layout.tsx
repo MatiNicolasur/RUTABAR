@@ -18,16 +18,23 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { PALABRAS_CLAVE, SITIO, datosEstructurados } from '@/lib/seo'
 
 /**
- * Montserrat lleva todo el texto y los titulares; Mairo se reserva para los
- * acentos manuscritos. Van por separado a propósito: Mairo es una tipografía
- * de trazo hecho a mano, y usarla en párrafos o titulares largos la vuelve
- * ilegible.
+ * Archivo aporta los títulos de sección; Montserrat lleva los textos y Mairo
+ * identifica las cabeceras de vista y los acentos manuscritos de la marca.
  */
 const montserrat = Montserrat({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-montserrat',
   weight: ['400', '500', '600', '700', '800'],
+})
+
+const archivo = localFont({
+  src: '../fonts/archivo-variable.woff2',
+  display: 'swap',
+  variable: '--font-archivo',
+  weight: '100 900',
+  style: 'normal',
+  declarations: [{ prop: 'font-stretch', value: '62% 125%' }],
 })
 
 const mairo = localFont({
@@ -89,7 +96,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-CL" className={`${montserrat.variable} ${mairo.variable}`}>
+    <html lang="es-CL" className={`${montserrat.variable} ${archivo.variable} ${mairo.variable}`}>
       <body>
         <div className="barra-safari" aria-hidden="true" />
         <a className="saltar" href="#contenido">

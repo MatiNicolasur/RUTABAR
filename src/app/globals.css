@@ -43,7 +43,7 @@
   --error: #8c2f2a;
 
   /* --- Tipografía ------------------------------------------------------- */
-  --fuente-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --fuente-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --fuente-texto: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --fuente-mano: var(--font-mairo), var(--fuente-display);
 
@@ -248,6 +248,16 @@ ul,
 ol {
   padding: 0;
   list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fuente-display);
+  font-variation-settings: 'wdth' 125;
 }
 
 a {
