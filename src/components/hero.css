@@ -491,15 +491,15 @@
   }
 
   .hero--playing .hero2__firma {
-    animation: hero2-firmar 1100ms var(--hero2-ease) 1800ms both;
+    animation: hero2-firmar 1100ms var(--hero2-ease) 1600ms both;
   }
 
   .hero--playing .hero2__ubicacion {
-    animation: hero2-firmar 950ms var(--hero2-ease) 2400ms both;
+    animation: hero2-firmar 950ms var(--hero2-ease) 2200ms both;
   }
 
   .hero--playing .hero2__intro .fila {
-    animation: hero2-intro-slide 900ms var(--hero2-ease) 2850ms both;
+    animation: hero2-intro-slide 900ms var(--hero2-ease) 2650ms both;
   }
 }
 
