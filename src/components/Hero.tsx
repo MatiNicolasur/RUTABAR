@@ -17,10 +17,8 @@
  *    fotografía aparece después. Como el texto tiene que leerse sobre los dos
  *    fondos, el blanco cálido funciona en ambos.
  *
- * En `retrato`, el preloader termina su breve secuencia antes de revelar el
- * hero; no espera a la descarga de la foto para no retrasar el contenido en
- * redes lentas. En escritorio se respeta `prefers-reduced-motion`; la intro
- * móvil mantiene su secuencia porque el cliente pidió verla también en iPhone.
+ * En `retrato`, la imagen, la firma y las acciones están visibles desde el
+ * primer fotograma. El header conserva una entrada breve, sin bloquear el hero.
  */
 
 import Image from 'next/image'
@@ -165,14 +163,8 @@ export function Hero({
   if (diseno === 'retrato') {
     return (
       <>
-        <div className="hero2__preloader" aria-hidden="true">
-            <p>
-              <span><span className="hero2__preloader-pronto">Próximos a ser</span> El mejor bar móvil</span>
-              <span>en Santiago de <span className="hero2__preloader-chile">Chile</span></span>
-            </p>
-        </div>
         <section
-          className="hero hero--retrato hero--playing"
+          className="hero hero--retrato"
           aria-labelledby={titleId}
         >
         {/* El dibujo de marca, gigante, centrado y en el rojo de marca: es el
