@@ -117,7 +117,7 @@ export function Hero({
 
     const animarIntro = window.matchMedia('(max-width: 47.99rem)').matches
       || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 1350 : 200)
+    const pausa = window.setTimeout(() => setPausaCompleta(true), animarIntro ? 800 : 200)
 
     return () => {
       window.clearTimeout(pausa)
@@ -140,7 +140,7 @@ export function Hero({
       return
     }
 
-    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 650)
+    const respaldo = window.setTimeout(() => setFaseEntrada('hero'), 450)
     return () => window.clearTimeout(respaldo)
   }, [faseEntrada])
 
