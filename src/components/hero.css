@@ -360,6 +360,14 @@
   margin-block-start: 0.18em;
 }
 
+.hero2__preloader-pronto {
+  display: block;
+  margin-block-end: 0.55em;
+  font-size: clamp(0.95rem, 0.52em, 1.65rem);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+
 .hero2__preloader-chile {
   display: inline-block;
   font-family: var(--fuente-mano);
