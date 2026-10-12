@@ -28,10 +28,7 @@
 }
 
 .rutas-servicio__foto { background: var(--tinta); }
-.rutas-servicio__foto::before { position: absolute; z-index: 1; inset: -2%; content: ''; background: var(--ruta-imagen) center / cover no-repeat; filter: blur(3px); opacity: .65; mask-image: linear-gradient(#000 0%, #000 38%, transparent 68%); pointer-events: none; animation: rutas-fondo-vivo 8s ease-in-out infinite alternate; }
-@keyframes rutas-fondo-vivo { from { transform: translateX(-1.2%) scale(1.025); } to { transform: translateX(1.2%) scale(1.04); } }
-.rutas-servicio__foto::after { position: absolute; inset: 38% 0 0; content: ''; background: linear-gradient(transparent, rgb(12 0 3 / 0.72)); pointer-events: none; }
-.rutas-servicio__foto-dato { position: absolute; z-index: 2; inset-inline: 1.2rem; bottom: 1.1rem; color: #fff; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.rutas-servicio__foto-dato { position: absolute; z-index: 1; inset-inline: 1.2rem; bottom: 1.1rem; color: #fff; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-shadow: 0 1px 8px rgb(0 0 0 / .9); text-transform: uppercase; }
 
 .rutas-servicio__foto img {
   object-fit: cover;
@@ -152,8 +149,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rutas-servicio__card,
-  .rutas-servicio__foto::before,
   .rutas-servicio__foto img,
   .rutas-servicio__accion span { transition: none; }
-  .rutas-servicio__foto::before { animation: none; }
 }

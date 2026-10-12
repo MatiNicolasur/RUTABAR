@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { CSSProperties } from 'react'
 import { CONFIG_COTIZACION, type CartaCotizacionId } from '@/data/precios-cotizacion'
 
 const RUTAS = [
@@ -48,7 +47,7 @@ export function RutasServicio() {
         <div className="rutas-servicio__grid">
           {RUTAS.map((ruta) => (
             <article className="rutas-servicio__card" key={ruta.nombre}>
-              <div className="rutas-servicio__foto" style={{ '--ruta-imagen': `url(${ruta.imagen})` } as CSSProperties}>
+              <div className="rutas-servicio__foto">
                 <Image src={ruta.imagen} alt={ruta.imagenAlt} fill sizes="(min-width: 78rem) 25vw, (min-width: 42rem) 50vw, 100vw" />
                 <span className="rutas-servicio__foto-dato">{ruta.dato}</span>
               </div>
