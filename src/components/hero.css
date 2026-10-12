@@ -336,7 +336,7 @@
   background: var(--rojo-profundo);
   color: var(--sobre-rojo);
   transform: translate3d(0, 0, 0);
-  animation: hero2-preloader-salir 450ms cubic-bezier(0.35, 0, 0.16, 1) 800ms both;
+  animation: hero2-preloader-salir 350ms cubic-bezier(0.35, 0, 0.16, 1) 700ms both;
 }
 
 .hero2__preloader p {
@@ -386,11 +386,11 @@
 
 @media (prefers-reduced-motion: no-preference), (max-width: 47.99rem) {
   .hero2__preloader p > span:first-child {
-    animation: hero2-preloader-linea 400ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
+    animation: hero2-preloader-linea 300ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
   }
 
   .hero2__preloader p > span + span {
-    animation: hero2-preloader-linea 400ms cubic-bezier(0.22, 1, 0.36, 1) 350ms both;
+    animation: hero2-preloader-linea 350ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
   }
 }
 
@@ -576,23 +576,23 @@
   /* El radio final apenas cubre las esquinas: así la desaceleración sigue
    * viéndose hasta que termina la apertura. */
   .hero--playing .hero2__media {
-    animation: hero2-abrir 1800ms cubic-bezier(0.22, 0.72, 0.36, 1) both;
+    animation: hero2-abrir 1050ms cubic-bezier(0.22, 0.72, 0.36, 1) both;
   }
 
   .hero--playing .hero2__foto {
-    animation: hero2-foto-asentar 1800ms var(--hero2-ease) both;
+    animation: hero2-foto-asentar 1050ms var(--hero2-ease) both;
   }
 
   .hero--playing .hero2__firma {
-    animation: hero2-firmar 1100ms var(--hero2-ease) 2400ms both;
+    animation: hero2-firmar 1100ms var(--hero2-ease) 2200ms both;
   }
 
   .hero--playing .hero2__ubicacion {
-    animation: hero2-firmar 950ms var(--hero2-ease) 3000ms both;
+    animation: hero2-firmar 950ms var(--hero2-ease) 2800ms both;
   }
 
   .hero--playing .hero2__intro .fila {
-    animation: hero2-intro-slide 900ms var(--hero2-ease) 3450ms both;
+    animation: hero2-intro-slide 900ms var(--hero2-ease) 3250ms both;
   }
 }
 
