@@ -453,8 +453,9 @@
   align-self: center;
   inline-size: max-content;
   max-inline-size: calc(100vw - 2rem);
-  font-family: var(--fuente-mano);
+  font-family: var(--fuente-texto);
   font-size: clamp(1.8rem, 3.8vw, 2.4rem);
+  font-weight: 400;
   line-height: 1.1;
   white-space: pre-line;
   text-wrap: balance;
