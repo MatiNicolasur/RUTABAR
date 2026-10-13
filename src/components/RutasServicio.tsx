@@ -21,9 +21,9 @@ const RUTAS = [
     id: 'completa',
     bajada: 'La experiencia completa',
     incluye: [
-      '13 cócteles clásicos y de autor',
-      'Cuatro mocktails',
-      'Cerveza, vinos, bebidas, jugos y agua',
+      '7 cócteles clásicos: Aperol Spritz, Chelada/Michelada, Gin Tonic, Mojito, Moscow Mule, Pisco Sour y Tom Collins',
+      '5 cócteles de autor: Gin Tropical, Palomami, Passion Sour, Ramazzotti Rosato Spritz y Vodka Tropical',
+      '1 shot de tequila, 4 mocktails, cerveza, vinos, bebidas, jugos y agua',
     ],
     imagen: '/fotos/pack-ruta-full-movil.jpg',
     imagenAlt: 'Cócteles sobre una barra móvil negra en un matrimonio al aire libre con luces rojas',

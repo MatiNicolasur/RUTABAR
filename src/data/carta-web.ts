@@ -118,7 +118,7 @@ export const ALTERNATIVAS_CARTA = [
   {
     nombre: 'Ruta Full',
     cantidad: '25 opciones · 5 horas de referencia',
-    detalle: '13 cócteles, 4 mocktails y 8 opciones entre cerveza, vinos, bebidas, jugo y agua.',
+    detalle: '12 cócteles (7 clásicos y 5 de autor), 1 shot de tequila, 4 mocktails y 8 opciones entre cerveza, vinos, bebidas, jugo y agua.',
   },
   {
     nombre: 'Ruta Zero',

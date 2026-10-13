@@ -34,7 +34,7 @@ export const CONFIG_COTIZACION = {
       id: 'completa',
       nombre: 'Ruta Full',
       bebidas: 25,
-      resumen: '13 cócteles, 4 mocktails y 8 bebidas entre cerveza, vinos, refrescos, jugo y agua.',
+      resumen: '12 cócteles (7 clásicos y 5 de autor), 1 shot de tequila, 4 mocktails y 8 bebidas entre cerveza, vinos, refrescos, jugo y agua.',
       precios: { 3: 532_000, 4: 600_000, 5: 656_000, 6: 712_000, 7: 768_000, 8: 828_000, 9: 884_000, 10: 936_000, 11: 992_000, 12: 1_048_000 },
     },
   ],
