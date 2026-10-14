@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
-import { Montserrat } from 'next/font/google'
 import './globals.css'
 import '@/components/chrome.css'
 import '@/components/hero.css'
@@ -16,16 +15,19 @@ import '@/components/rutas-servicio.css'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { PALABRAS_CLAVE, SITIO, datosEstructurados } from '@/lib/seo'
+import Script from 'next/script'
+
+const GOOGLE_ANALYTICS_ID = 'G-WM1J2FQE7P'
 
 /**
  * Archivo aporta los títulos de sección; Montserrat lleva los textos y Mairo
  * identifica las cabeceras de vista y los acentos manuscritos de la marca.
  */
-const montserrat = Montserrat({
-  subsets: ['latin'],
+const montserrat = localFont({
+  src: '../fonts/montserrat-variable.ttf',
   display: 'swap',
   variable: '--font-montserrat',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: '100 900',
 })
 
 const archivo = localFont({
@@ -96,7 +98,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-CL" className={`${montserrat.variable} ${archivo.variable} ${mairo.variable}`}>
+    <html
+      lang="es-CL"
+      data-scroll-behavior="smooth"
+      className={`${montserrat.variable} ${archivo.variable} ${mairo.variable}`}
+    >
       <body>
         <div className="barra-safari" aria-hidden="true" />
         <a className="saltar" href="#contenido">
@@ -105,6 +111,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main id="contenido">{children}</main>
         <SiteFooter />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GOOGLE_ANALYTICS_ID}');
+          `}
+        </Script>
         <script
           type="application/ld+json"
           // Datos estructurados del negocio. El contenido es de confianza:
