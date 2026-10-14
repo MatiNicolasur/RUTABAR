@@ -460,7 +460,7 @@
   white-space: pre-line;
   text-wrap: balance;
   text-align: center;
-  color: #ffb4bd;
+  color: var(--sobre-rojo);
 }
 
 /* --- Entrada ------------------------------------------------------------- */
