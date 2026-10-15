@@ -83,6 +83,19 @@
   min-height: calc(var(--marca) + 2rem);
 }
 
+@media (min-width: 48rem) {
+  .cabecera {
+    /* Un sello algo más compacto en escritorio, manteniendo intacta la escala móvil. */
+    --marca: calc(var(--cabecera-alto) - 2.5rem - 1px);
+  }
+
+  .cabecera__interior {
+    /* Mantener el alto compartido con el hero y los anclajes. */
+    padding-block: 1rem;
+    min-height: var(--cabecera-alto);
+  }
+}
+
 @media (max-width: 47.99rem) {
   .cabecera { --marca: 3.5rem; }
 

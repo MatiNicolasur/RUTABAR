@@ -45,7 +45,6 @@ export function TarjetaBebida({ nombre, tipo, cartas, icono, tono }: Props) {
           }}
         >
           <span className="trago-card__nombre">{nombre}</span>
-          <span className="trago-card__mas" aria-hidden="true">+</span>
         </button>
       </h3>
       <div className="trago-card__info" id={detalleId} aria-hidden={!abierta}>

@@ -309,6 +309,7 @@
 
 .hero--retrato {
   --hero2-ease: cubic-bezier(0.42, 0, 0.58, 1);
+  --hero2-reveal-ease: cubic-bezier(0.22, 0.82, 0.36, 1);
   --alto-cabecera: var(--cabecera-alto);
   --alto-util: calc(100lvh - var(--alto-cabecera) - 4rem);
 
@@ -484,11 +485,11 @@
   /* El círculo, la foto y el texto entran juntos, sin una pantalla que los
    * oculte hasta que acaben sus animaciones. */
   .hero--playing .hero2__media {
-    animation: hero2-abrir 1800ms cubic-bezier(0.22, 0.72, 0.36, 1) both;
+    animation: hero2-abrir 1900ms var(--hero2-reveal-ease) both;
   }
 
   .hero--playing .hero2__foto {
-    animation: hero2-foto-asentar 1800ms var(--hero2-ease) both;
+    animation: hero2-foto-asentar 1900ms var(--hero2-reveal-ease) both;
   }
 
   .hero--playing .hero2__firma {

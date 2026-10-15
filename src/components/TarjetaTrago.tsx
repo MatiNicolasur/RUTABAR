@@ -56,7 +56,6 @@ export function TarjetaTrago({ trago }: { trago: TragoWeb }) {
           }}
         >
           <span className="trago-card__nombre">{trago.nombre}</span>
-          <span className="trago-card__mas" aria-hidden="true">+</span>
         </button>
       </h3>
 
