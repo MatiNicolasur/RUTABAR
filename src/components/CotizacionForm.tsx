@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
+import Image from 'next/image'
 import { CONFIG_COTIZACION, asistentesEnRango, type CartaCotizacionId, type DuracionCotizacion } from '@/data/precios-cotizacion'
 
 type Props = {
@@ -14,6 +15,12 @@ type Props = {
 const WHATSAPP_COMERCIAL = process.env.NEXT_PUBLIC_WHATSAPP ?? ''
 const PASOS = ['Elegir servicio', 'Datos del evento', 'Tus datos'] as const
 const ORDEN_PACKS: CartaCotizacionId[] = ['reducida', 'completa', 'sin-alcohol']
+const IMAGENES_CARTA: Record<CartaCotizacionId, string> = {
+  reducida: '/fotos/pack-ruta-esencial-movil.jpg',
+  completa: '/fotos/pack-ruta-full-movil.jpg',
+  'sin-alcohol': '/fotos/pack-ruta-zero-movil.jpg',
+}
+const IMAGEN_CARTA_PERSONALIZADA = '/fotos/cocteles-editorial.webp'
 const DURACION_MINIMA = CONFIG_COTIZACION.duraciones[0]
 const DURACION_MAXIMA = CONFIG_COTIZACION.duraciones[CONFIG_COTIZACION.duraciones.length - 1]
 const OTRA_COMUNA = 'otra'
@@ -300,11 +307,13 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__servicios" role="group" aria-label="Tipo de servicio">
             {ORDEN_PACKS.map((id) => CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === id)!).map((opcion) => (
               <button className={modo === 'pack' && cartaId === opcion.id ? 'cotizacion-flujo__servicio cotizacion-flujo__servicio--activo' : 'cotizacion-flujo__servicio'} type="button" key={opcion.id} aria-pressed={modo === 'pack' && cartaId === opcion.id} onClick={() => { setModo('pack'); setCartaId(opcion.id); setDuracion(5); moverHoras(5); setPaso(2) }}>
-                <strong>{opcion.nombre}</strong><span>{opcion.bebidas} opciones · 5 horas</span>
+                <Image className="cotizacion-flujo__servicio-imagen" src={IMAGENES_CARTA[opcion.id]} alt="" width={80} height={80} sizes="80px" />
+                <span className="cotizacion-flujo__servicio-texto"><strong>{opcion.nombre}</strong><span>{opcion.bebidas} opciones · 5 horas</span></span>
               </button>
             ))}
             <button className={modo === 'flexible' ? 'cotizacion-flujo__servicio cotizacion-flujo__servicio--activo' : 'cotizacion-flujo__servicio'} type="button" aria-pressed={modo === 'flexible'} onClick={() => { setModo('flexible'); setPaso(2) }}>
-              <strong>La carta y las horas que tú quieras</strong><span>Elige carta y duración entre 3 y 12 horas</span>
+              <Image className="cotizacion-flujo__servicio-imagen" src={IMAGEN_CARTA_PERSONALIZADA} alt="" width={80} height={80} sizes="80px" />
+              <span className="cotizacion-flujo__servicio-texto"><strong>La carta y las horas que tú quieras</strong><span>Elige carta y duración entre 3 y 12 horas</span></span>
             </button>
           </div>
         </section>
@@ -324,7 +333,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
                 <select className="campo__input" value={cartaId} onChange={(evento) => setCartaId(evento.target.value as CartaCotizacionId)}>
                   {CONFIG_COTIZACION.cartas.map((opcion) => <option value={opcion.id} key={opcion.id}>{opcion.nombre} · {opcion.bebidas} opciones</option>)}
                 </select>
-                <span className="cotizacion-flujo__ayuda">{carta?.resumen}</span>
+                <div className="cotizacion-flujo__carta-vista">
+                  <Image className="cotizacion-flujo__carta-vista-imagen" src={IMAGENES_CARTA[cartaId]} alt="" width={72} height={72} sizes="72px" />
+                  <span>{carta?.resumen}</span>
+                </div>
               </label>
           <div className="cotizacion-flujo__horas">
             <div className="cotizacion-flujo__horas-encabezado">
@@ -386,7 +398,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
             </>
           ) : (
-            <div className="cotizacion-flujo__pack-elegido"><strong>{carta?.nombre}</strong><span>{carta?.resumen}</span><small>5 horas · Barra libre</small></div>
+            <div className="cotizacion-flujo__pack-elegido">
+              <Image className="cotizacion-flujo__carta-vista-imagen" src={IMAGENES_CARTA[cartaId]} alt="" width={72} height={72} sizes="72px" />
+              <div className="cotizacion-flujo__pack-elegido-texto"><strong>{carta?.nombre}</strong><span>{carta?.resumen}</span><small>5 horas · Barra libre</small></div>
+            </div>
           )}
           <div className="cotizacion-flujo__campos">
             <label className="campo cotizacion-flujo__campo-evento">

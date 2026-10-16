@@ -92,7 +92,7 @@
   .cabecera__interior {
     /* Mantener el alto compartido con el hero y los anclajes. */
     padding-block: 1rem;
-    min-height: var(--cabecera-alto);
+    min-height: calc(var(--cabecera-alto) - 1px);
   }
 }
 

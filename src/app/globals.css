@@ -196,11 +196,11 @@ body > footer {
 /* En la portada, el hero comienza bajo la cabecera sticky en el flujo normal.
  * Este solape hace que ambos compartan el primer píxel de la ventana. */
 #contenido:has(> .hero--retrato) {
-  margin-block-start: calc(-1 * var(--cabecera-alto));
+  margin-block-start: calc(-1 * var(--cabecera-alto) - 1px);
 }
 
 #contenido.contenido--portada {
-  margin-block-start: calc(-1 * var(--cabecera-alto));
+  margin-block-start: calc(-1 * var(--cabecera-alto) - 1px);
 }
 
 h1,
