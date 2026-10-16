@@ -38,6 +38,7 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   const [paso, setPaso] = useState<1 | 2 | 3>(packInicial ? 2 : 1)
   const [modo, setModo] = useState<'pack' | 'flexible' | null>(packInicial ? 'pack' : modoInicial ?? null)
   const [fecha, setFecha] = useState('')
+  const [fechaMinima, setFechaMinima] = useState('')
   const [ciudad, setCiudad] = useState('')
   const [otraCiudad, setOtraCiudad] = useState('')
   const [asistentes, setAsistentes] = useState(String(asistentesIniciales ?? CONFIG_COTIZACION.personasBase))
@@ -65,6 +66,17 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
 
   useEffect(() => () => {
     if (animacionHorasRef.current !== null) cancelAnimationFrame(animacionHorasRef.current)
+  }, [])
+
+  useEffect(() => {
+    const partes = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Santiago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date())
+    const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]))
+    setFechaMinima(`${valores.year}-${valores.month}-${valores.day}`)
   }, [])
 
   useLayoutEffect(() => {
@@ -170,6 +182,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
   function validarEvento(): boolean {
     if (!fecha || !Number.isSafeInteger(numeroAsistentes)) {
       setErrorEvento('Completa la fecha y un número válido de asistentes.')
+      return false
+    }
+    if (fechaMinima && fecha < fechaMinima) {
+      setErrorEvento('La fecha del evento no puede ser anterior a hoy.')
       return false
     }
     if (!asistentesEnRango(numeroAsistentes)) {
@@ -406,7 +422,8 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
           <div className="cotizacion-flujo__campos">
             <label className="campo cotizacion-flujo__campo-evento">
               <span className="campo__label">Fecha del evento <span className="campo__valor">*</span></span>
-              <input className="campo__input" type="date" lang="es-CL" value={fecha} onInput={(evento) => { setFecha(evento.currentTarget.value); setErrorEvento('') }} onChange={(evento) => setFecha(evento.target.value)} required />
+              <input className="campo__input" type="date" lang="es-CL" min={fechaMinima || undefined} value={fecha} onInput={(evento) => { setFecha(evento.currentTarget.value); setErrorEvento('') }} onChange={(evento) => setFecha(evento.target.value)} required />
+              <span className="cotizacion-flujo__ayuda">La fecha debe ser hoy o posterior.</span>
             </label>
             <label className="campo cotizacion-flujo__campo-evento">
               <span className="campo__label">Número de asistentes <span className="campo__valor">*</span></span>

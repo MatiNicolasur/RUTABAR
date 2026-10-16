@@ -14,6 +14,7 @@ import '@/components/cotizacion.css'
 import '@/components/rutas-servicio.css'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { FloatingWhatsApp } from '@/components/FloatingWhatsApp'
 import { PALABRAS_CLAVE, SITIO, datosEstructurados } from '@/lib/seo'
 import Script from 'next/script'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -112,6 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main id="contenido">{children}</main>
         <SiteFooter />
+        <FloatingWhatsApp />
         <SpeedInsights />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}

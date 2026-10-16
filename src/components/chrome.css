@@ -468,6 +468,72 @@
 
 .cabecera__menu summary, .cabecera__menuPanel a { min-height: 44px; }
 
+/* Contacto rápido, separado del contenido y cómodo en pantallas táctiles. */
+.whatsapp-flotante {
+  position: fixed;
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+  z-index: 35;
+  display: inline-flex;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  padding: .75rem 1rem;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  background: #168a4a;
+  box-shadow: 0 8px 24px rgb(19 19 17 / .24);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 750;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.whatsapp-flotante svg {
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.whatsapp-flotante svg path + path {
+  fill: currentColor;
+  stroke: none;
+}
+
+.whatsapp-flotante:hover {
+  transform: translateY(-2px);
+  background: #11733d;
+  box-shadow: 0 12px 28px rgb(19 19 17 / .28);
+}
+
+.whatsapp-flotante:focus-visible {
+  outline: 3px solid var(--rojo);
+  outline-offset: 4px;
+}
+
+@media (max-width: 47.99rem) {
+  .whatsapp-flotante {
+    width: 3.5rem;
+    padding: .65rem;
+  }
+
+  .whatsapp-flotante__texto { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-flotante { transition: none; }
+}
+
 .pie__legal p { max-inline-size: 70ch; }
 
 @media (min-width: 62rem) {

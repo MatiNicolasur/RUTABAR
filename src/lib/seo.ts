@@ -10,7 +10,7 @@ export const SITIO = {
   ciudad: 'Santiago',
   region: 'Región Metropolitana',
   pais: 'CL',
-  telefono: process.env.NEXT_PUBLIC_WHATSAPP ?? '',
+  telefono: process.env.NEXT_PUBLIC_WHATSAPP || '56978661299',
   email: process.env.NEXT_PUBLIC_EMAIL ?? 'contacto@rutabar.cl',
 } as const
 
