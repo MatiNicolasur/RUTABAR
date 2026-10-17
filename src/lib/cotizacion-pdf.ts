@@ -76,7 +76,7 @@ function valor(page: PDFPage, etiqueta: string, texto: string, x: number, y: num
 function tragosDeCarta(cartaId: CartaCotizacionId): TragoWeb[] {
   if (cartaId === 'sin-alcohol') return CARTA_WEB.filter((trago) => trago.familia === 'sin-alcohol')
   if (cartaId === 'reducida') {
-    return CARTA_WEB.filter((trago) => ['mojito', 'gin-tonic', 'pisco-sour', 'vodka-tropical'].includes(trago.id))
+    return CARTA_WEB.filter((trago) => ['mojito', 'gin-tonic', 'pisco-sour', 'gin-tropical'].includes(trago.id))
   }
   return CARTA_WEB
 }
@@ -107,11 +107,10 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const tragos = tragosDeCarta(datos.cartaId)
   const items = [
     ...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
-    ...(datos.cartaId === 'reducida' ? [{
-      nombre: '3 mocktails a elección',
-      detalle: `Elige 3: ${MOCKTAILS_WEB.map((trago) => trago.nombre).join(', ')}.`,
-      icono: '24',
-    }] : []),
+    ...(datos.cartaId === 'reducida' ? [
+      { nombre: '3 mocktails a elección', detalle: 'Elige 3 de las siguientes 4 preparaciones sin alcohol.', icono: '24' },
+      ...MOCKTAILS_WEB.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
+    ] : []),
     { nombre: 'Bebidas y agua', detalle: bebidasDeCarta(datos.cartaId), icono: '2' },
   ]
   const fechaVisible = datos.fecha.split('-').reverse().join('/')
@@ -157,7 +156,8 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
     pagina.drawImage(icono, { x, y: y - 21, width: 21, height: 21 })
     linea(pagina, item.nombre, x + 27, y - 7, negrita, ajustar(item.nombre, negrita, 9.2, 228))
     const detalle = lineas(item.detalle, normal, 7, 228)
-    detalle.slice(0, 2).forEach((fragmento, sublinea) => linea(pagina, fragmento, x + 27, y - 17 - sublinea * 8, normal, 7, SUAVE))
+    if (detalle.length > 2) throw new Error(`La descripción de ${item.nombre} no cabe en la carta de cotización`)
+    detalle.forEach((fragmento, sublinea) => linea(pagina, fragmento, x + 27, y - 17 - sublinea * 8, normal, 7, SUAVE))
   }
 
   pagina.drawLine({ start: { x: MARGEN, y: 259 }, end: { x: ANCHO - MARGEN, y: 259 }, color: ROJO_CLARO, thickness: 0.8 })

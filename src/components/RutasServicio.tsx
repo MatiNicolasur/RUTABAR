@@ -10,7 +10,7 @@ const RUTAS = [
     id: 'reducida',
     bajada: 'Clásicos para celebrar',
     incluye: [
-      'Mojito, Gin Tonic, Pisco Sour y Vodka Tropical',
+      'Mojito, Gin Tonic, Pisco Sour y Gin Tropical',
       'Cerveza, vino tinto y vino blanco',
       'Tres mocktails y agua incluida',
     ],
@@ -22,7 +22,7 @@ const RUTAS = [
     bajada: 'La experiencia completa',
     incluye: [
       '7 cócteles clásicos: Aperol Spritz, Chelada/Michelada, Gin Tonic, Mojito, Moscow Mule, Pisco Sour y Tom Collins',
-      '5 cócteles de autor: Gin Tropical, Palomami, Passion Sour, Ramazzotti Rosato Spritz y Vodka Tropical',
+      '4 cócteles de autor: Gin Tropical, Palomami, Passion Sour y Ramazzotti Rosato Spritz',
       '1 shot de tequila, 4 mocktails, cerveza, vinos, bebidas, jugos y agua',
     ],
     imagen: '/fotos/pack-ruta-full-movil.jpg',
