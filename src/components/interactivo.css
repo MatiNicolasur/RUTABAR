@@ -455,10 +455,6 @@
   color: var(--rojo);
 }
 
-.serv-int__card .micro {
-  margin-block-start: 0.4rem;
-}
-
 .serv-int__cardTitulo {
   font-family: var(--fuente-mano);
   font-variation-settings: normal;
@@ -482,14 +478,6 @@
   text-wrap: pretty;
 }
 
-.serv-int__comun {
-  display: grid;
-  gap: 1.25rem;
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border-radius: var(--radio-suave);
-  background: var(--papel-hondo);
-}
-
 @media (min-width: 40rem) {
   .serv-int__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -500,36 +488,6 @@
 @media (min-width: 62rem) {
   .serv-int__cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.serv-int__ficha {
-  display: grid;
-  gap: 0.7rem;
-  padding-block: clamp(0.7rem, 2vw, 1.05rem);
-  border-block: 1px solid var(--papel-borde);
-}
-
-.serv-int__ficha > div {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.serv-int__ficha dt {
-  font-size: var(--texto-micro);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--texto-tenue);
-}
-
-.serv-int__ficha dd {
-  text-wrap: pretty;
-}
-
-@media (min-width: 40rem) {
-  .serv-int__ficha {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

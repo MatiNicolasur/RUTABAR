@@ -1,0 +1,173 @@
+/* Página de servicios: la propuesta, lo incluido y las modalidades se leen en ese orden. */
+.servicios-hero {
+  padding-block: clamp(2.5rem, 6vw, 5.25rem);
+  overflow: clip;
+  background-color: var(--rojo-hondo);
+  background-image: linear-gradient(120deg, rgb(109 0 2 / 0.82), rgb(138 0 25 / 0.22)), url('/papel-grano.svg');
+  background-blend-mode: normal, soft-light;
+}
+
+.servicios-hero__interior {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.servicios-hero__texto {
+  display: grid;
+  justify-items: start;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  min-inline-size: 0;
+}
+
+.servicios-hero h1 {
+  max-inline-size: 12ch;
+  font-size: clamp(3.5rem, 5.8vw, 6rem);
+  line-height: 1.02;
+}
+
+.servicios-hero .lead {
+  max-inline-size: 48ch;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.servicios-hero__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-block-start: 0.25rem;
+}
+
+.servicios-hero__enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-block-size: 3.25rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration-color: rgb(255 255 255 / 0.65);
+}
+
+.servicios-hero__enlace span {
+  font-size: 1.2em;
+  transition: transform var(--m-dur-1) var(--m-ease-out);
+}
+
+.servicios-hero__foto {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 4 / 5;
+  max-block-size: 35rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  border-radius: clamp(10px, 2vw, 22px);
+  background: var(--rojo-profundo);
+  box-shadow: 0 2rem 4rem rgb(35 0 5 / 0.22);
+}
+
+.servicios-hero__foto::after {
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgb(13 0 2 / 0.64));
+  content: '';
+  pointer-events: none;
+}
+
+.servicios-hero__foto img {
+  object-fit: cover;
+  object-position: center 38%;
+  transition: transform var(--m-dur-4) var(--m-ease-out);
+}
+
+.servicios-hero__foto figcaption {
+  position: absolute;
+  inset: auto 1.25rem 1.25rem;
+  z-index: 1;
+  color: #fff;
+  font-size: var(--texto-micro);
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .servicios-hero__foto:hover img { transform: scale(1.035); }
+  .servicios-hero__enlace:hover span { transform: translate(2px, -2px); }
+}
+
+.servicios-incluye .seccion__encabezado { max-inline-size: 54rem; }
+
+.servicios-eventos .seccion__encabezado { max-inline-size: 52rem; }
+.servicios-eventos .serv-int__card { background: var(--papel); }
+.servicios-eventos .serv-int__cardGancho { margin-block-start: 0.35rem; }
+
+.rutas-servicio__atajos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.rutas-servicio__atajos a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  min-block-size: 4.5rem;
+  padding: 0.85rem clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--papel-borde-fuerte);
+  border-radius: 12px;
+  background: var(--papel-hondo);
+  color: var(--rojo-profundo);
+  font-family: var(--fuente-display);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 700;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: border-color var(--m-dur-1) ease, background-color var(--m-dur-1) ease, transform var(--m-dur-1) ease;
+}
+
+.rutas-servicio__atajos a span:first-child {
+  color: var(--rojo-hondo);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.rutas-servicio__atajos a span:last-child { font-size: 1.25rem; }
+
+.rutas-servicio__card:target {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgb(198 0 21 / 0.18), 0 12px 32px rgb(19 19 17 / 0.08);
+}
+
+.rutas-servicio__grid:target > .rutas-servicio__card:not(.rutas-servicio__card--personalizada) {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgb(198 0 21 / 0.18), 0 12px 32px rgb(19 19 17 / 0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rutas-servicio__atajos a:hover {
+    border-color: var(--rojo);
+    background: #fff;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .servicios-hero { padding-block: 2.5rem 1.5rem; }
+  .servicios-hero__interior { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .servicios-hero h1 { max-inline-size: 12ch; font-size: clamp(2.75rem, 11vw, 4rem); }
+  .servicios-hero__foto { aspect-ratio: 16 / 10; max-block-size: 15rem; }
+  .servicios-hero__foto figcaption { inset: auto 0.9rem 0.8rem; }
+  .rutas-servicio__atajos { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .servicios-hero__foto img,
+  .servicios-hero__enlace span,
+  .rutas-servicio__atajos a { transition: none; }
+}

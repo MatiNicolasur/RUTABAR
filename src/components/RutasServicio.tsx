@@ -21,9 +21,9 @@ const RUTAS = [
     id: 'completa',
     bajada: 'La experiencia completa',
     incluye: [
-      '7 cócteles clásicos: Aperol Spritz, Chelada/Michelada, Gin Tonic, Mojito, Moscow Mule, Pisco Sour y Tom Collins',
-      '4 cócteles de autor: Gin Tropical, Palomami, Passion Sour y Ramazzotti Rosato Spritz',
-      '1 shot de tequila, 4 mocktails, cerveza, vinos, bebidas, jugos y agua',
+      '7 cócteles clásicos y 4 de autor',
+      '1 shot de tequila y 4 mocktails',
+      'Cerveza, vinos, bebidas, jugos y agua',
     ],
     imagen: '/fotos/pack-ruta-full-movil.jpg',
     imagenAlt: 'Cócteles sobre una barra móvil negra en un matrimonio al aire libre con luces rojas',
@@ -43,17 +43,25 @@ const RUTAS = [
 
 const formatoPrecio = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 })
 
-export function RutasServicio() {
+export function RutasServicio({ vista = 'inicio' }: { vista?: 'inicio' | 'servicios' }) {
+  const esServicios = vista === 'servicios'
   return (
-    <section className="seccion rutas-servicio" aria-labelledby="titulo-rutas-servicio">
+    <section className="seccion rutas-servicio" id={esServicios ? 'modalidades' : undefined} aria-labelledby="titulo-rutas-servicio">
       <div className="lienzo">
         <div className="seccion__encabezado rutas-servicio__encabezado">
-          <p className="micro">Servicios</p>
-          <h2 className="h2" id="titulo-rutas-servicio">Elige tu ruta.</h2>
-          <p className="lead">Barra libre para tu evento. Elige un pack de cinco horas o ajusta la carta y duración.</p>
+          <p className="micro">{esServicios ? 'Modalidades' : 'Servicios'}</p>
+          <h2 className="h2" id="titulo-rutas-servicio">{esServicios ? 'Dos formas de armar tu barra.' : 'Elige tu ruta.'}</h2>
+          <p className="lead">{esServicios ? 'Elige un pack de cinco horas o combina la carta y la duración a tu medida. Siempre con barra libre de la carta elegida.' : 'Barra libre para tu evento. Elige un pack de cinco horas o ajusta la carta y duración.'}</p>
         </div>
 
-        <div className="rutas-servicio__grid">
+        {esServicios ? (
+          <nav className="rutas-servicio__atajos" aria-label="Ir a una modalidad">
+            <a href="#packs-cinco-horas"><span>01</span><span className="rutas-servicio__atajoTexto">Packs de 5 horas</span><span aria-hidden="true">↓</span></a>
+            <a href="#ruta-flexible"><span>02</span><span className="rutas-servicio__atajoTexto">Carta y horas a tu medida</span><span aria-hidden="true">↓</span></a>
+          </nav>
+        ) : null}
+
+        <div className="rutas-servicio__grid" id={esServicios ? 'packs-cinco-horas' : undefined}>
           {RUTAS.map((ruta) => {
             const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === ruta.id)!
             const tituloId = `titulo-pack-${ruta.id}`
@@ -89,7 +97,7 @@ export function RutasServicio() {
             )
           })}
 
-          <article className="rutas-servicio__card rutas-servicio__card--personalizada" aria-labelledby="titulo-pack-flexible">
+          <article className="rutas-servicio__card rutas-servicio__card--personalizada" id={esServicios ? 'ruta-flexible' : undefined} aria-labelledby="titulo-pack-flexible">
             <div className="rutas-servicio__personalizada-arte" aria-hidden="true"><Sello tamano={180} /></div>
             <div className="rutas-servicio__cuerpo">
               <div className="rutas-servicio__intro">
