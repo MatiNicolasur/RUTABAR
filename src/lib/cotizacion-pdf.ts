@@ -13,6 +13,7 @@ export type CotizacionPdfDatos = {
   ciudad: string
   lugar: string
   asistentes: number
+  whatsapp?: string
   cartaId: CartaCotizacionId
   duracion: DuracionCotizacion
   total: number
@@ -105,6 +106,8 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const logo = await pdf.embedPng(await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'logo-blanco.png')))
   const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === datos.cartaId)!
   const tragos = tragosDeCarta(datos.cartaId)
+  // Las tarifas configuradas ya incluyen IVA; se reconstruye la base neta para mostrarla junto a "+ IVA".
+  const totalNeto = Math.round(datos.total / 1.19)
   const items = [
     ...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
     ...(datos.cartaId === 'reducida' ? [
@@ -125,15 +128,17 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   valor(pagina, 'Fecha', fechaVisible, MARGEN, 732, 102, negrita)
   valor(pagina, 'Comuna', datos.ciudad, 164, 732, 260, negrita)
   valor(pagina, 'Invitados', `${datos.asistentes} personas`, 455, 732, 102, negrita)
-  valor(pagina, 'Carta', carta.nombre, MARGEN, 692, 240, negrita)
-  valor(pagina, 'Duración', `${datos.duracion} horas de barra libre`, 312, 692, 245, negrita)
+  valor(pagina, 'Carta', carta.nombre, MARGEN, 692, 160, negrita)
+  valor(pagina, 'Duración', `${datos.duracion} horas de barra libre`, 220, 692, 170, negrita)
+  if (datos.whatsapp) valor(pagina, 'WhatsApp', datos.whatsapp, 420, 692, 137, negrita)
 
   pagina.drawRectangle({ x: MARGEN, y: 599, width: ANCHO - MARGEN * 2, height: 59, color: ROJO_CLARO })
-  linea(pagina, 'TOTAL CON IVA INCLUIDO', MARGEN + 12, 642, negrita, 8.5, ROJO)
-  linea(pagina, clp(datos.total), MARGEN + 12, 613, negrita, ajustar(clp(datos.total), negrita, 23, 185), ROJO)
-  linea(pagina, `${clp(datos.porPersona)} por persona`, 242, 616, normal, 8.5, SUAVE)
+  linea(pagina, 'VALOR NETO', MARGEN + 12, 642, negrita, 8.5, ROJO)
+  linea(pagina, `${clp(totalNeto)} + IVA`, MARGEN + 12, 613, negrita, ajustar(`${clp(totalNeto)} + IVA`, negrita, 21, 180), ROJO)
+  linea(pagina, 'TOTAL CON IVA INCLUIDO', 242, 642, negrita, 7.2, ROJO)
+  linea(pagina, clp(datos.total), 242, 615, negrita, ajustar(clp(datos.total), negrita, 13, 145))
   linea(pagina, `Reserva: ${clp(datos.montoReserva)}`, 400, 638, normal, 8, TINTA)
-  linea(pagina, `Evento: ${clp(datos.montoSaldo)}`, 400, 622, normal, 8, TINTA)
+  linea(pagina, `Saldo: ${clp(datos.montoSaldo)}`, 400, 622, normal, 8, TINTA)
   linea(pagina, 'Pago: 50% al reservar y 50% el día del evento.', MARGEN, 582, normal, 8.5, SUAVE)
 
   linea(pagina, carta.nombre, MARGEN, 552, mairo, 24, ROJO)

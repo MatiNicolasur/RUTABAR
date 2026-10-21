@@ -60,7 +60,19 @@ async function main() {
     assert.match(String(envio?.html), /Matías Urquiza/)
     assert.match(String(envio?.html), /src="cid:rutabar-logo"/)
     assert.doesNotMatch(String(envio?.html), /Condiciones de pago|Total final|Precio por persona/)
-    assert.doesNotMatch(String(envio?.text), /\$|50%|Condiciones del servicio/)
+    assert.doesNotMatch(String(envio?.text), /\$|Condiciones del servicio/)
+    assert.deepEqual(envio?.reply_to, 'contacto@rutabar.cl')
+    for (const formato of ['text', 'html']) {
+      const contenido: string = String(envio?.[formato])
+      assert.match(contenido, /14\/11\/2026/)
+      assert.match(contenido, /tentativa y está sujeta a disponibilidad/)
+      assert.match(contenido, /revisará la agenda/)
+      assert.match(contenido, /datos de transferencia para abonar el 50%/)
+      assert.match(contenido, /comprobante de pago/)
+      assert.match(contenido, /al validar el abono, te confirmaremos la reserva/)
+      assert.match(contenido, /50% restante se paga el día del evento/)
+      assert.equal((contenido.match(/¿/g) ?? []).length, 2)
+    }
 
     const adjuntos = envio?.attachments as { filename: string; content: string }[]
     assert.equal(adjuntos.length, 2)
@@ -94,6 +106,8 @@ async function main() {
     assert.equal(llamadas, 3)
     assert.match(String(envio?.subject), /carta personalizada/i)
     assert.match(String(envio?.text), /Mojito, gin tonic/)
+    assert.match(String(envio?.text), /tentativa y está sujeta a disponibilidad/)
+    assert.match(String(envio?.html), /50% restante se paga el día del evento/)
     assert.equal(envio?.attachments, undefined, 'La solicitud personalizada no debe enviar un precio ni un PDF de carta fija')
     const personalizadaIncompleta = await POST(new Request('http://localhost/api/cotizaciones', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -109,7 +123,7 @@ async function main() {
     assert.equal(llamadas, 3)
     const pack = await POST(new Request('http://localhost/api/cotizaciones', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...datos, modo: 'pack', duracion: 5, asistentes: 20 }),
+      body: JSON.stringify({ ...datos, whatsapp: '+56 9 1111 2222', modo: 'pack', duracion: 5, asistentes: 20 }),
     }))
     assert.equal(pack.status, 200)
     assert.equal(llamadas, 4)
@@ -124,10 +138,10 @@ async function main() {
       assert(stream instanceof PDFRawStream)
       return Buffer.from(decodePDFRawStream(stream).decode()).toString('latin1')
     }).join('\n')
-    for (const monto of ['$324.000', '$16.200', '$162.000']) {
+    for (const monto of ['$272.269 + IVA', '$324.000', '$162.000', '+56 9 1111 2222']) {
       assert(operaciones.includes(Buffer.from(monto).toString('hex').toUpperCase()), `Falta ${monto} en el PDF del pack`)
     }
-    process.stdout.write('Envío simulado correcto: correo breve, logo incrustado y cotización en PDF.\n')
+    process.stdout.write('Envío simulado correcto: correo, PDF con neto + IVA, pago 50/50 y WhatsApp del cliente.\n')
   } finally {
     globalThis.fetch = fetchOriginal
   }

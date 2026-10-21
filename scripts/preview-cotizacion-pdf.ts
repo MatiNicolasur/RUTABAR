@@ -15,6 +15,7 @@ async function main() {
     ciudad: 'Santiago',
     lugar: 'Patio de eventos',
     asistentes,
+    whatsapp: '+56 9 1234 5678',
     cartaId,
     duracion,
     total,
