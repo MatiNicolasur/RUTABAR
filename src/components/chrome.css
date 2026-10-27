@@ -8,13 +8,12 @@
  */
 
 .cabecera {
-  /* Un solo número manda sobre el alto de la cabecera y el tamaño del logo.
-   * El sello va deliberadamente grande: es la marca entera —isotipo y nombre
-   * en el mismo trazo— así que no necesita que nadie le escriba el nombre al
-   * lado. En móvil baja lo justo para que el botón de acción siga entrando. */
+  /* Este valor conserva la altura de referencia de la cabecera; el sello se
+   * dibuja a la mitad de ese ancho en .cabecera__sello. */
   --marca: calc(var(--cabecera-alto) - 2rem - 1px);
 
-  position: relative;
+  position: sticky;
+  inset-block-start: 0;
   z-index: 40;
   background: rgb(255 251 250 / 0.9);
   backdrop-filter: saturate(160%) blur(14px);
@@ -84,7 +83,7 @@
 
 @media (min-width: 48rem) {
   .cabecera {
-    /* Un sello algo más compacto en escritorio, manteniendo intacta la escala móvil. */
+    /* Ajusta la referencia de alto en escritorio sin cambiar la escala móvil. */
     --marca: calc(var(--cabecera-alto) - 2.5rem - 1px);
   }
 
@@ -146,7 +145,7 @@
   color: var(--rojo);
   flex-shrink: 0;
   display: block;
-  width: var(--marca);
+  width: calc(var(--marca) / 2);
   height: auto;
   transition: transform var(--m-dur-3) var(--m-ease-back);
 }
