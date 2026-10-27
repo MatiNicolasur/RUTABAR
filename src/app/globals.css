@@ -120,8 +120,7 @@ html {
   background-color: var(--rojo-profundo);
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* Respeta la altura real del header para que los anclajes no queden debajo. */
-  scroll-padding-block-start: calc(var(--cabecera-alto) + 0.5rem);
+  scroll-padding-block-start: 0.5rem;
   scrollbar-width: none;
 }
 
@@ -193,8 +192,8 @@ body > footer {
   }
 }
 
-/* En la portada, el hero comienza bajo la cabecera sticky en el flujo normal.
- * Este solape hace que ambos compartan el primer píxel de la ventana. */
+/* En la portada, el hero se solapa bajo la cabecera en el flujo normal para
+ * que ambos compartan el primer píxel de la ventana. */
 #contenido:has(> .hero--retrato) {
   margin-block-start: calc(-1 * var(--cabecera-alto) - 1px);
 }

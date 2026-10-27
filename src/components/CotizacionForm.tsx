@@ -87,11 +87,10 @@ export function CotizacionForm({ cartaInicial, asistentesIniciales, duracionInic
       if (!flujo) return
 
       const altoVisible = window.visualViewport?.height ?? window.innerHeight
-      const altoCabecera = document.querySelector<HTMLElement>('.cabecera')?.getBoundingClientRect().height ?? 0
       const margen = 16
-      const espacioDisponible = Math.max(0, altoVisible - altoCabecera - margen * 2)
+      const espacioDisponible = Math.max(0, altoVisible - margen * 2)
       const rectangulo = flujo.getBoundingClientRect()
-      const posicionVisible = altoCabecera + margen + Math.max(0, (espacioDisponible - rectangulo.height) / 2)
+      const posicionVisible = margen + Math.max(0, (espacioDisponible - rectangulo.height) / 2)
       const destino = Math.max(0, window.scrollY + rectangulo.top - posicionVisible)
 
       if (Math.abs(window.scrollY - destino) > 12) {
