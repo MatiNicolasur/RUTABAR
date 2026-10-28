@@ -8,7 +8,7 @@
 :root {
   /* Alto exacto de la cabecera: el inicio puede extender su fondo por debajo
    * de ella sin dejar a la vista el color del body. */
-  --cabecera-alto: calc(clamp(3.96rem, 2.88rem + 3.168vw, 6.12rem) + 3.44rem + 1px);
+  --cabecera-alto: calc(clamp(1.98rem, 1.44rem + 1.584vw, 3.06rem) + 1.72rem + 0.5px);
 
   /* --- Color de marca --------------------------------------------------- */
   /* Rojos */
@@ -86,13 +86,13 @@
 @media (min-width: 62rem) {
   :root {
     /* En escritorio, el sello conserva la misma reducción proporcional. */
-    --cabecera-alto: calc(clamp(3.564rem, 2.592rem + 2.8512vw, 5.508rem) + 3.296rem + 1px);
+    --cabecera-alto: calc(clamp(1.782rem, 1.296rem + 1.4256vw, 2.754rem) + 1.648rem + 0.5px);
   }
 }
 
 @media (max-width: 47.99rem) {
   :root {
-    --cabecera-alto: calc(5.5rem + env(safe-area-inset-top));
+    --cabecera-alto: calc(2.75rem + env(safe-area-inset-top));
   }
 }
 

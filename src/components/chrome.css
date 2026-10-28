@@ -8,9 +8,8 @@
  */
 
 .cabecera {
-  /* Este valor conserva la altura de referencia de la cabecera; el sello se
-   * dibuja a la mitad de ese ancho en .cabecera__sello. */
-  --marca: calc(var(--cabecera-alto) - 2rem - 1px);
+  /* Conserva la escala del sello aunque la barra ocupe la mitad de alto. */
+  --marca: calc(var(--cabecera-alto) + var(--cabecera-alto) - 2rem - 1px);
 
   position: sticky;
   inset-block-start: 0;
@@ -83,23 +82,32 @@
 
 @media (min-width: 48rem) {
   .cabecera {
-    /* Ajusta la referencia de alto en escritorio sin cambiar la escala móvil. */
-    --marca: calc(var(--cabecera-alto) - 2.5rem - 1px);
+    /* Conserva la escala del sello en escritorio al reducir la barra. */
+    --marca: calc(var(--cabecera-alto) + var(--cabecera-alto) - 2.5rem - 1px);
   }
 
   .cabecera__interior {
-    /* Mantener el alto compartido con el hero y los anclajes. */
-    padding-block: 1rem;
+    padding-block: 0.25rem;
     min-height: calc(var(--cabecera-alto) - 1px);
   }
+}
+
+@media (min-width: 62rem) {
+  .cabecera__interior { padding-block: 0.5rem; }
 }
 
 @media (max-width: 47.99rem) {
   .cabecera { --marca: 3.5rem; }
 
   .cabecera__interior {
-    min-height: var(--cabecera-alto);
-    padding-block-start: calc(1rem + env(safe-area-inset-top));
+    min-height: calc(var(--cabecera-alto) - 1px);
+    padding-block: 0;
+    padding-block-start: env(safe-area-inset-top);
+  }
+
+  .cabecera__menu summary {
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
   }
 }
 
