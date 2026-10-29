@@ -14,9 +14,12 @@ export type CotizacionPdfDatos = {
   lugar: string
   asistentes: number
   whatsapp?: string
-  cartaId: CartaCotizacionId
+  cartaId: CartaCotizacionId | 'personalizada'
+  cartaNombre?: string
+  items?: Array<{ nombre: string; detalle: string; icono: string }>
   duracion: DuracionCotizacion
   total: number
+  totalNeto?: number
   porPersona: number
   montoReserva: number
   montoSaldo: number
@@ -104,19 +107,20 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const negrita = await pdf.embedFont(StandardFonts.HelveticaBold)
   const mairo = await pdf.embedFont(await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'Mairo.ttf')))
   const logo = await pdf.embedPng(await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'logo-blanco.png')))
-  const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === datos.cartaId)!
-  const tragos = tragosDeCarta(datos.cartaId)
+  const carta = CONFIG_COTIZACION.cartas.find((opcion) => opcion.id === datos.cartaId)
+  const cartaNombre = datos.cartaNombre || carta?.nombre || 'Carta personalizada'
   // Las tarifas configuradas ya incluyen IVA; se reconstruye la base neta para mostrarla junto a "+ IVA".
-  const totalNeto = Math.round(datos.total / 1.19)
-  const items = [
+  const totalNeto = datos.totalNeto ?? Math.round(datos.total / 1.19)
+  const tragos = carta ? tragosDeCarta(carta.id) : []
+  const items = datos.items ?? [
     ...tragos.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
     ...(datos.cartaId === 'reducida' ? [
       { nombre: '3 mocktails a elección', detalle: 'Elige 3 de las siguientes 4 preparaciones sin alcohol.', icono: '24' },
       ...MOCKTAILS_WEB.map((trago) => ({ nombre: trago.nombre, detalle: trago.descripcion, icono: trago.icono })),
     ] : []),
-    { nombre: 'Bebidas y agua', detalle: bebidasDeCarta(datos.cartaId), icono: '2' },
+    { nombre: 'Bebidas y agua', detalle: carta ? bebidasDeCarta(carta.id) : '', icono: '2' },
   ]
-  const fechaVisible = datos.fecha.split('-').reverse().join('/')
+  const fechaVisible = datos.fecha ? datos.fecha.split('-').reverse().join('/') : 'Por confirmar'
   const pagina = pdf.addPage([ANCHO, ALTO])
 
   pagina.drawRectangle({ x: 0, y: 750, width: ANCHO, height: ALTO - 750, color: ROJO })
@@ -128,9 +132,10 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   valor(pagina, 'Fecha', fechaVisible, MARGEN, 732, 102, negrita)
   valor(pagina, 'Comuna', datos.ciudad, 164, 732, 260, negrita)
   valor(pagina, 'Invitados', `${datos.asistentes} personas`, 455, 732, 102, negrita)
-  valor(pagina, 'Carta', carta.nombre, MARGEN, 692, 160, negrita)
+  valor(pagina, 'Carta', cartaNombre, MARGEN, 692, 160, negrita)
   valor(pagina, 'Duración', `${datos.duracion} horas de barra libre`, 220, 692, 170, negrita)
   if (datos.whatsapp) valor(pagina, 'WhatsApp', datos.whatsapp, 420, 692, 137, negrita)
+  valor(pagina, 'Lugar', datos.lugar || 'Por confirmar', MARGEN, 652, ANCHO - MARGEN * 2, negrita)
 
   pagina.drawRectangle({ x: MARGEN, y: 599, width: ANCHO - MARGEN * 2, height: 59, color: ROJO_CLARO })
   linea(pagina, 'VALOR NETO', MARGEN + 12, 642, negrita, 8.5, ROJO)
@@ -141,7 +146,7 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   linea(pagina, `Saldo: ${clp(datos.montoSaldo)}`, 400, 622, normal, 8, TINTA)
   linea(pagina, 'Pago: 50% al reservar y 50% el día del evento.', MARGEN, 582, normal, 8.5, SUAVE)
 
-  linea(pagina, carta.nombre, MARGEN, 552, mairo, 24, ROJO)
+  linea(pagina, cartaNombre, MARGEN, 552, mairo, 24, ROJO)
   linea(pagina, 'Preparaciones incluidas durante las horas contratadas', 300, 552, normal, 8, SUAVE)
   pagina.drawLine({ start: { x: MARGEN, y: 541 }, end: { x: ANCHO - MARGEN, y: 541 }, color: ROJO_CLARO, thickness: 0.8 })
 

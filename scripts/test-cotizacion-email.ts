@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { PDFArray, PDFDocument, PDFRawStream, decodePDFRawStream } from 'pdf-lib'
 import { POST } from '../src/app/api/cotizaciones/route'
+import { POST as generarPdfDescargable } from '../src/app/api/cotizaciones/pdf/route'
 import { generarCotizacionPdf } from '../src/lib/cotizacion-pdf'
 import { calcularPrecioCotizacion, CONFIG_COTIZACION, type CartaCotizacionId } from '../src/data/precios-cotizacion'
 
@@ -10,6 +11,43 @@ async function main() {
       assert.equal(calcularPrecioCotizacion(carta.id, horas, 40), carta.precios[horas])
     }
   }
+  const precioPdf = calcularPrecioCotizacion('completa', 4, 40)
+  const pdfDescargable = await generarPdfDescargable(new Request('http://localhost/api/cotizaciones/pdf', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: 'Cliente de prueba', fecha: '2026-11-14', ciudad: 'Santiago', lugar: 'Patio de eventos',
+      asistentes: 40, whatsapp: '56912345678', cartaId: 'completa', duracion: 4,
+      total: precioPdf, totalNeto: Math.round(precioPdf / 1.19), porPersona: precioPdf / 40,
+      montoReserva: precioPdf / 2, montoSaldo: precioPdf / 2, solicitaCartaDigital: false,
+    }),
+  }))
+  assert.equal(pdfDescargable.status, 200)
+  assert.match(pdfDescargable.headers.get('content-type') || '', /application\/pdf/)
+  assert.equal((await PDFDocument.load(Buffer.from(await pdfDescargable.arrayBuffer()))).getPageCount(), 1)
+
+  const pdfPersonalizado = await generarPdfDescargable(new Request('http://localhost/api/cotizaciones/pdf', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: 'Cliente de prueba', fecha: '', ciudad: 'Por confirmar', lugar: 'Casa', asistentes: 40,
+      whatsapp: '', cartaId: 'personalizada', cartaNombre: 'Carta a elección', duracion: 4,
+      total: 600000, totalNeto: Math.round(600000 / 1.19), porPersona: 15000,
+      montoReserva: 300000, montoSaldo: 300000, solicitaCartaDigital: false,
+      items: [{ nombre: 'Mojito de la casa', detalle: 'Preparado con ron, limón y menta.', icono: '24' }],
+    }),
+  }))
+  assert.equal(pdfPersonalizado.status, 200)
+  assert.equal((await PDFDocument.load(Buffer.from(await pdfPersonalizado.arrayBuffer()))).getPageCount(), 1)
+  const pdfCartaMuyLarga = await generarPdfDescargable(new Request('http://localhost/api/cotizaciones/pdf', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: 'Cliente de prueba', fecha: '', ciudad: 'Santiago', lugar: 'Casa', asistentes: 40,
+      cartaId: 'personalizada', cartaNombre: 'Carta a elección', duracion: 4,
+      total: 600000, totalNeto: 504202, porPersona: 15000, montoReserva: 300000, montoSaldo: 300000,
+      solicitaCartaDigital: false,
+      items: Array.from({ length: 17 }, (_, index) => ({ nombre: `Trago ${index}`, detalle: '', icono: '24' })),
+    }),
+  }))
+  assert.equal(pdfCartaMuyLarga.status, 400)
   assert.equal(calcularPrecioCotizacion('reducida', 5, 80), 1_096_000)
   for (const [cartaId, porPersona] of [
     ['reducida', 13_200], ['completa', 16_200], ['sin-alcohol', 11_200],
