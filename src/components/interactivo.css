@@ -28,15 +28,15 @@
   border-block-end: 1px solid var(--papel-borde);
 }
 
-.carta-int__familias,
-.carta-int__perfiles {
+.carta-int__familias {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
 .carta-int__tab {
-  padding: 0.55rem 1.1rem;
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
   border: 1px solid var(--papel-borde-fuerte);
   border-radius: var(--radio-pastilla);
   background: transparent;
@@ -53,29 +53,6 @@
   background: var(--rojo);
   border-color: var(--rojo);
   color: var(--sobre-rojo);
-}
-
-.carta-int__chip {
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--papel-borde);
-  border-radius: var(--radio-pastilla);
-  background: transparent;
-  font-size: var(--texto-micro);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--texto-suave);
-  cursor: pointer;
-  transition:
-    background-color var(--m-dur-1) var(--m-ease-out),
-    border-color var(--m-dur-1) var(--m-ease-out),
-    color var(--m-dur-1) var(--m-ease-out);
-}
-
-.carta-int__chip[aria-pressed='true'] {
-  border-color: var(--rojo);
-  background: rgb(198 0 21 / 0.08);
-  color: var(--rojo);
 }
 
 .carta-int__cuenta {
@@ -112,16 +89,9 @@
   }
 }
 
-/* El filtrado lo hace el CSS: los tragos llegan renderizados desde el
- * servidor y acá solo se ocultan los que no corresponden. Así los 35 iconos
- * de marca nunca entran al bundle del navegador. */
+/* El filtro por categoría solo oculta tarjetas; no reconstruye la carta. */
 .carta-int[data-familia='con-alcohol'] .trago-card:not([data-familia='con-alcohol']),
-.carta-int[data-familia='sin-alcohol'] .trago-card:not([data-familia='sin-alcohol']),
-.carta-int[data-perfil='burbujeante'] .trago-card:not([data-perfil='burbujeante']),
-.carta-int[data-perfil='citrico'] .trago-card:not([data-perfil='citrico']),
-.carta-int[data-perfil='dulce'] .trago-card:not([data-perfil='dulce']),
-.carta-int[data-perfil='seco'] .trago-card:not([data-perfil='seco']),
-.carta-int[data-perfil='herbal'] .trago-card:not([data-perfil='herbal']) {
+.carta-int[data-familia='sin-alcohol'] .trago-card:not([data-familia='sin-alcohol']) {
   display: none;
 }
 

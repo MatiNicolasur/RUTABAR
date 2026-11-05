@@ -1,9 +1,9 @@
 'use client'
 
 import { useId, useState, type ReactNode } from 'react'
-import { ETIQUETA_PERFIL, PERFILES, type FamiliaTrago, type PerfilTrago } from '@/data/carta-web'
+import type { FamiliaTrago } from '@/data/carta-web'
 
-type Resumen = { id: string; familia: FamiliaTrago; perfil: PerfilTrago }
+type Resumen = { id: string; familia: FamiliaTrago }
 
 type Props = {
   /** Solo lo necesario para contar: los tragos en sí llegan como `children`. */
@@ -23,22 +23,19 @@ type Props = {
  */
 export function CartaFiltro({ tragos, children }: Props) {
   const [familia, setFamilia] = useState<FamiliaTrago | 'todas'>('todas')
-  const [perfil, setPerfil] = useState<PerfilTrago | null>(null)
   const id = useId()
 
-  const visibles = tragos.filter(
-    (t) => (familia === 'todas' || t.familia === familia) && (!perfil || t.perfil === perfil),
-  ).length
+  const visibles = tragos.filter((trago) => familia === 'todas' || trago.familia === familia).length
 
   const familias: { valor: FamiliaTrago | 'todas'; etiqueta: string }[] = [
-    { valor: 'todas', etiqueta: `Toda la carta (${tragos.length})` },
+    { valor: 'todas', etiqueta: `Todos (${tragos.length})` },
     {
       valor: 'con-alcohol',
-      etiqueta: `Con alcohol (${tragos.filter((t) => t.familia === 'con-alcohol').length})`,
+      etiqueta: `Cócteles (${tragos.filter((trago) => trago.familia === 'con-alcohol').length})`,
     },
     {
       valor: 'sin-alcohol',
-      etiqueta: `Sin alcohol (${tragos.filter((t) => t.familia === 'sin-alcohol').length})`,
+      etiqueta: `Mocktails (${tragos.filter((trago) => trago.familia === 'sin-alcohol').length})`,
     },
   ]
 
@@ -46,14 +43,13 @@ export function CartaFiltro({ tragos, children }: Props) {
     <div
       className="carta-int"
       data-familia={familia}
-      data-perfil={perfil ?? 'todos'}
       aria-labelledby={id}
     >
       <div className="carta-int__barra">
         {/* Botones con aria-pressed en vez de role="tablist": el patrón de
          * pestañas de ARIA exige navegación con flechas, y a medio implementar
          * es peor que no usarlo. */}
-        <div className="carta-int__familias" role="group" aria-label="Familia de la carta">
+        <div className="carta-int__familias" role="group" aria-label="Categoría de tragos">
           {familias.map((opcion) => (
             <button
               key={opcion.valor}
@@ -67,27 +63,6 @@ export function CartaFiltro({ tragos, children }: Props) {
           ))}
         </div>
 
-        <div className="carta-int__perfiles" role="group" aria-label="Filtrar por perfil">
-          <button
-            type="button"
-            className="carta-int__chip"
-            aria-pressed={perfil === null}
-            onClick={() => setPerfil(null)}
-          >
-            Todos los perfiles
-          </button>
-          {PERFILES.map((p) => (
-            <button
-              key={p}
-              type="button"
-              className="carta-int__chip"
-              aria-pressed={perfil === p}
-              onClick={() => setPerfil(perfil === p ? null : p)}
-            >
-              {ETIQUETA_PERFIL[p]}
-            </button>
-          ))}
-        </div>
       </div>
 
       <p className="carta-int__cuenta" id={id} aria-live="polite">

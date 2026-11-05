@@ -70,6 +70,22 @@ export const CARTA_WEB: TragoWeb[] = [
     descripcion: 'Pisco Sour Campanario, listo para servir y decorar.', vaso: 'Copa sour 250 ml', garnish: 'Guarnición cítrica', icono: '5', imagen: '/tragos/pisco-sour.webp',
   }),
   trago({
+    id: 'piscola', nombre: 'Piscola', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Pisco Alto del Carmen 35°',
+    descripcion: 'Pisco Alto del Carmen 35° con Coca-Cola Original, limón y hielo.', vaso: 'Vaso alto 400 ml', garnish: 'Limón fresco', icono: '22', imagen: '/tragos/pisco-sour.webp',
+  }),
+  trago({
+    id: 'fernet-coca-cola', nombre: 'Fernet con Coca-Cola', familia: 'con-alcohol', perfil: 'herbal', base: 'Fernet Branca',
+    descripcion: 'Fernet Branca con Coca-Cola Original y hielo.', vaso: 'Vaso alto 400 ml', garnish: 'Sin garnish', icono: '22', imagen: '/tragos/gin-tonic.webp',
+  }),
+  trago({
+    id: 'schop-pilsen-lager', nombre: 'Schop Pilsen Lager', familia: 'con-alcohol', perfil: 'seco', base: 'Pilsen Lager de barril',
+    descripcion: 'Pilsen Lager servida fría desde barril.', vaso: 'Shopero 330 ml', garnish: 'Servicio frío', icono: '21', imagen: '/tragos/chelada-michelada.webp',
+  }),
+  trago({
+    id: 'copa-espumante-brut', nombre: 'Copa de espumante Brut', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Espumante Undurraga Brut',
+    descripcion: 'Espumante Brut Undurraga, servido frío.', vaso: 'Copa flauta 125 ml', garnish: 'Sin garnish', icono: '6', imagen: '/tragos/aperol-spritz.webp',
+  }),
+  trago({
     id: 'ramazzotti-rosato-spritz', nombre: 'Ramazzotti Rosato Spritz', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Ramazzotti Rosato',
     descripcion: 'Ramazzotti Rosato, espumante brut y soda con naranja.', vaso: 'Copa de vino 350 ml', garnish: 'Rodaja de naranja', icono: '8', imagen: '/tragos/ramazzotti-rosato-spritz.webp',
   }),
@@ -118,8 +134,8 @@ export const ALTERNATIVAS_CARTA = [
   },
   {
     nombre: 'Ruta Full',
-    cantidad: '24 opciones · 5 horas de referencia',
-    detalle: '11 cócteles (7 clásicos y 4 de autor), 1 shot de tequila, 4 mocktails y 8 opciones entre cerveza, vinos, bebidas, jugo y agua.',
+    cantidad: '27 opciones · 5 horas de referencia',
+    detalle: 'Cócteles clásicos y de autor, Piscola, Fernet con Coca-Cola, Schop Pilsen Lager, copa de espumante Brut, mocktails y bebidas.',
   },
   {
     nombre: 'Ruta Zero',
