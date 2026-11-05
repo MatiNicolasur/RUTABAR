@@ -64,6 +64,16 @@ function lineas(texto: string, font: PDFFont, size: number, ancho: number): stri
   return resultado
 }
 
+function lineaRecortada(texto: string, font: PDFFont, size: number, ancho: number): string {
+  const limpio = seguro(texto)
+  if (font.widthOfTextAtSize(limpio, size) <= ancho) return limpio
+  let recortado = limpio
+  while (recortado && font.widthOfTextAtSize(`${recortado}...`, size) > ancho) {
+    recortado = recortado.slice(0, -1)
+  }
+  return recortado.trimEnd() ? `${recortado.trimEnd()}...` : ''
+}
+
 function parrafo(page: PDFPage, texto: string, x: number, y: number, ancho: number, font: PDFFont, size: number, color = TINTA, interlineado = size * 1.35) {
   for (const fragmento of lineas(texto, font, size, ancho)) {
     linea(page, fragmento, x, y, font, size, color)
@@ -153,6 +163,7 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
   const iconos = new Map<string, PDFImage>()
   const filas = Math.ceil(items.length / 2)
   const altoFila = Math.min(29.5, 266 / filas)
+  const cartaCompacta = items.length > 18
   for (const [indice, item] of items.entries()) {
     const columna = Math.floor(indice / filas)
     const fila = indice % filas
@@ -163,11 +174,18 @@ export async function generarCotizacionPdf(datos: CotizacionPdfDatos): Promise<U
       icono = await pdf.embedPng(await readFile(path.join(process.cwd(), 'public', 'carta-pdf', 'iconos', `${item.icono}.png`)))
       iconos.set(item.icono, icono)
     }
-    pagina.drawImage(icono, { x, y: y - 21, width: 21, height: 21 })
-    linea(pagina, item.nombre, x + 27, y - 7, negrita, ajustar(item.nombre, negrita, 9.2, 228))
-    const detalle = lineas(item.detalle, normal, 7, 228)
-    if (detalle.length > 2) throw new Error(`La descripción de ${item.nombre} no cabe en la carta de cotización`)
-    detalle.forEach((fragmento, sublinea) => linea(pagina, fragmento, x + 27, y - 17 - sublinea * 8, normal, 7, SUAVE))
+    const iconoSize = cartaCompacta ? 16 : 21
+    const textoX = x + (cartaCompacta ? 21 : 27)
+    const textoAncho = 268 - (textoX - x) - 8
+    pagina.drawImage(icono, { x, y: y - iconoSize, width: iconoSize, height: iconoSize })
+    linea(pagina, item.nombre, textoX, y - 7, negrita, ajustar(item.nombre, negrita, cartaCompacta ? 8.2 : 9.2, textoAncho))
+    if (cartaCompacta) {
+      const detalle = lineaRecortada(item.detalle, normal, 6.2, textoAncho)
+      if (detalle) linea(pagina, detalle, textoX, y - 14.5, normal, 6.2, SUAVE)
+    } else {
+      const detalle = lineas(item.detalle, normal, 7, textoAncho)
+      detalle.slice(0, 2).forEach((fragmento, sublinea) => linea(pagina, fragmento, textoX, y - 17 - sublinea * 8, normal, 7, SUAVE))
+    }
   }
 
   pagina.drawLine({ start: { x: MARGEN, y: 259 }, end: { x: ANCHO - MARGEN, y: 259 }, color: ROJO_CLARO, thickness: 0.8 })
