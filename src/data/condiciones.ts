@@ -13,7 +13,7 @@ export const CONDICIONES: BloqueCondiciones[] = [
     puntos: [
       'La carta queda cerrada al momento de la reserva.',
       'La barra libre incluye las bebidas y preparaciones detalladas en la cotización.',
-      'No incluye marcas ni preparaciones fuera de la alternativa acordada.',
+      'Las marcas indicadas en la carta corresponden a los productos considerados en la cotización.',
     ],
   },
   {

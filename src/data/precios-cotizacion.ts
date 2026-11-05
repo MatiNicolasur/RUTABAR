@@ -33,8 +33,8 @@ export const CONFIG_COTIZACION = {
     {
       id: 'completa',
       nombre: 'Ruta Full',
-      bebidas: 27,
-      resumen: 'Cócteles clásicos y de autor, Piscola, Fernet con Coca-Cola, Schop Pilsen Lager, copa de espumante Brut, mocktails y bebidas.',
+      bebidas: 30,
+      resumen: "Cócteles clásicos y de autor, Old Fashioned, Manhattan y whisky con Coca-Cola con Jack Daniel's Old No. 7; tequila Don Julio Blanco, Piscola, Fernet con Coca-Cola, Schop Pilsen Lager, copa de espumante Brut, mocktails y bebidas.",
       precios: { 3: 532_000, 4: 600_000, 5: 656_000, 6: 712_000, 7: 768_000, 8: 828_000, 9: 884_000, 10: 936_000, 11: 992_000, 12: 1_048_000 },
     },
   ],
