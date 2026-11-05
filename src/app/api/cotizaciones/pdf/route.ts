@@ -14,7 +14,7 @@ function monto(valor: unknown): valor is number {
 }
 
 function validarItems(valor: unknown): valor is ItemCarta[] {
-  return Array.isArray(valor) && valor.length > 0 && valor.length <= 18 && valor.every((item) => {
+  return Array.isArray(valor) && valor.length > 0 && valor.length <= 30 && valor.every((item) => {
     if (!item || typeof item !== 'object' || Array.isArray(item)) return false
     const entrada = item as Record<string, unknown>
     return texto(entrada.nombre, 60) && texto(entrada.detalle, 180, true) && entrada.icono === '24'
