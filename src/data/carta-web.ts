@@ -50,18 +50,6 @@ export const CARTA_WEB: TragoWeb[] = [
     descripcion: 'Gin, Red Bull Yellow, maracuyá y limón.', vaso: 'Vaso alto 400 ml', garnish: 'Naranja fresca', icono: '4', imagen: '/tragos/gin-tropical.webp',
   }),
   trago({
-    id: 'old-fashioned-jack-daniels', nombre: "Old Fashioned - Jack Daniel's Old No. 7", familia: 'con-alcohol', perfil: 'seco', base: "Whiskey Jack Daniel's Old No. 7",
-    descripcion: "Jack Daniel's Old No. 7, Angostura, azúcar y naranja.", vaso: 'Vaso bajo rocks', garnish: 'Piel de naranja', icono: '3', imagen: '/tragos/tom-collins.webp',
-  }),
-  trago({
-    id: 'manhattan-jack-daniels', nombre: "Manhattan - Jack Daniel's Old No. 7", familia: 'con-alcohol', perfil: 'seco', base: "Whiskey Jack Daniel's Old No. 7",
-    descripcion: "Jack Daniel's Old No. 7, vermouth Cinzano Rosso y Angostura.", vaso: 'Copa coupe', garnish: 'Piel de naranja', icono: '6', imagen: '/tragos/aperol-spritz.webp',
-  }),
-  trago({
-    id: 'whisky-coca-cola-jack-daniels', nombre: "Whisky con Coca-Cola - Jack Daniel's Old No. 7", familia: 'con-alcohol', perfil: 'dulce', base: "Whiskey Jack Daniel's Old No. 7",
-    descripcion: "Jack Daniel's Old No. 7 con Coca-Cola Original y hielo.", vaso: 'Vaso alto 400 ml', garnish: 'Sin garnish', icono: '22', imagen: '/tragos/moscow-mule.webp',
-  }),
-  trago({
     id: 'mojito', nombre: 'Mojito', familia: 'con-alcohol', perfil: 'herbal', base: 'Ron',
     descripcion: 'Ron Maddero blanco, limón, menta, azúcar y soda.', vaso: 'Vaso alto 400 ml', garnish: 'Menta fresca', icono: '7', imagen: '/tragos/mojito.webp',
   }),
@@ -70,8 +58,8 @@ export const CARTA_WEB: TragoWeb[] = [
     descripcion: 'Vodka Absolut, ginger beer Jesuita y limón.', vaso: 'Vaso alto 400 ml', garnish: 'Limón', icono: '19', imagen: '/tragos/moscow-mule.webp',
   }),
   trago({
-    id: 'palomami', nombre: 'Palomami', familia: 'con-alcohol', perfil: 'citrico', base: 'Tequila Don Julio Blanco',
-    descripcion: 'Tequila Don Julio Blanco, Fanta Pomelo y limón con sal.', vaso: 'Vaso alto 400 ml', garnish: 'Guarnición cítrica y sal', icono: '27', imagen: '/tragos/palomami.webp',
+    id: 'palomami', nombre: 'Palomami', familia: 'con-alcohol', perfil: 'citrico', base: 'Tequila',
+    descripcion: 'Tequila José Cuervo, Fanta Pomelo y limón con sal.', vaso: 'Vaso alto 400 ml', garnish: 'Guarnición cítrica y sal', icono: '27', imagen: '/tragos/palomami.webp',
   }),
   trago({
     id: 'passion-sour', nombre: 'Passion Sour', familia: 'con-alcohol', perfil: 'citrico', base: 'Pisco',
@@ -82,28 +70,12 @@ export const CARTA_WEB: TragoWeb[] = [
     descripcion: 'Pisco Sour Campanario, listo para servir y decorar.', vaso: 'Copa sour 250 ml', garnish: 'Guarnición cítrica', icono: '5', imagen: '/tragos/pisco-sour.webp',
   }),
   trago({
-    id: 'piscola', nombre: 'Piscola', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Pisco Alto del Carmen 35°',
-    descripcion: 'Pisco Alto del Carmen 35° con Coca-Cola Original, limón y hielo.', vaso: 'Vaso alto 400 ml', garnish: 'Limón fresco', icono: '22', imagen: '/tragos/pisco-sour.webp',
-  }),
-  trago({
-    id: 'fernet-coca-cola', nombre: 'Fernet con Coca-Cola', familia: 'con-alcohol', perfil: 'herbal', base: 'Fernet Branca',
-    descripcion: 'Fernet Branca con Coca-Cola Original y hielo.', vaso: 'Vaso alto 400 ml', garnish: 'Sin garnish', icono: '22', imagen: '/tragos/gin-tonic.webp',
-  }),
-  trago({
-    id: 'schop-pilsen-lager', nombre: 'Schop Pilsen Lager', familia: 'con-alcohol', perfil: 'seco', base: 'Pilsen Lager de barril',
-    descripcion: 'Pilsen Lager servida fría desde barril.', vaso: 'Shopero 330 ml', garnish: 'Servicio frío', icono: '21', imagen: '/tragos/chelada-michelada.webp',
-  }),
-  trago({
-    id: 'copa-espumante-brut', nombre: 'Copa de espumante Brut', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Espumante Undurraga Brut',
-    descripcion: 'Espumante Brut Undurraga, servido frío.', vaso: 'Copa flauta 125 ml', garnish: 'Sin garnish', icono: '6', imagen: '/tragos/aperol-spritz.webp',
-  }),
-  trago({
     id: 'ramazzotti-rosato-spritz', nombre: 'Ramazzotti Rosato Spritz', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Ramazzotti Rosato',
     descripcion: 'Ramazzotti Rosato, espumante brut y soda con naranja.', vaso: 'Copa de vino 350 ml', garnish: 'Rodaja de naranja', icono: '8', imagen: '/tragos/ramazzotti-rosato-spritz.webp',
   }),
   trago({
-    id: 'tequilazo', nombre: 'Tequilazo - Tequila Don Julio Blanco', familia: 'con-alcohol', perfil: 'seco', base: 'Tequila Don Julio Blanco',
-    descripcion: 'Shot de tequila Don Julio Blanco con sal y limón.', vaso: 'Shot 60 ml', garnish: 'Limón y sal', icono: '3', imagen: '/tragos/tequilazo.webp',
+    id: 'tequilazo', nombre: 'Tequilazo', familia: 'con-alcohol', perfil: 'seco', base: 'Tequila',
+    descripcion: 'Shot de tequila con sal y limón.', vaso: 'Shot 60 ml', garnish: 'Limón y sal', icono: '3', imagen: '/tragos/tequilazo.webp',
   }),
   trago({
     id: 'tom-collins', nombre: 'Tom Collins', familia: 'con-alcohol', perfil: 'burbujeante', base: 'Gin',
@@ -146,8 +118,8 @@ export const ALTERNATIVAS_CARTA = [
   },
   {
     nombre: 'Ruta Full',
-    cantidad: '30 opciones · 5 horas de referencia',
-    detalle: "Cócteles clásicos y de autor, Old Fashioned, Manhattan y whisky con Coca-Cola preparados con Jack Daniel's Old No. 7, tequila Don Julio Blanco, Piscola, Fernet con Coca-Cola, Schop Pilsen Lager, copa de espumante Brut, mocktails y bebidas.",
+    cantidad: '24 opciones · 5 horas de referencia',
+    detalle: '11 cócteles (7 clásicos y 4 de autor), 1 shot de tequila, 4 mocktails y 8 opciones entre cerveza, vinos, bebidas, jugo y agua.',
   },
   {
     nombre: 'Ruta Zero',
